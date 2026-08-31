@@ -1,0 +1,6 @@
+{
+  "name": "JobCraft 求职工作台",
+  "description": "围绕岗位申请组织个人求职资产，通过AI将JD分析、经历资产、定制简历、面试准备与复盘串联成闭环的智能求职工作台。",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
