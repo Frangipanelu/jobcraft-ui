@@ -153,8 +153,10 @@ export const NewExperienceModal: React.FC<NewExperienceModalProps> = ({ isOpen, 
                 <option value="project">项目经历</option>
                 <option value="work">工作经历</option>
                 <option value="internship">实习经历</option>
+                <option value="education">教育经历</option>
                 <option value="competition">竞赛与开源</option>
                 <option value="paper">论文与专利</option>
+                <option value="other">其他经历</option>
               </select>
             </div>
           </div>

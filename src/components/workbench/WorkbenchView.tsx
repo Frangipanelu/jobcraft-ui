@@ -1,29 +1,26 @@
 import React from 'react';
 import { useJobCraft } from '../../context/JobCraftContext';
 import {
-  Briefcase,
-  Sparkles,
-  ArrowRight,
-  CheckCircle2,
-  Clock,
-  AlertTriangle,
-  ArrowUpRight,
-  TrendingUp,
-  FileSearch,
-  BookOpenCheck,
-  RotateCcw,
-  FileText,
   Plus,
-  Compass,
-  Calendar,
-  Layers,
-  ChevronRight
+  ChevronRight,
+  ArrowRight,
+  TrendingUp,
+  Check,
+  Circle,
+  Sparkles,
+  ExternalLink
 } from 'lucide-react';
 
 interface WorkbenchViewProps {
   onOpenNewJob: () => void;
   onOpenNewInterview: () => void;
   onOpenNewReview: () => void;
+}
+
+interface StepItem {
+  key: string;
+  name: string;
+  status: 'done' | 'active' | 'pending';
 }
 
 export const WorkbenchView: React.FC<WorkbenchViewProps> = ({
@@ -34,271 +31,385 @@ export const WorkbenchView: React.FC<WorkbenchViewProps> = ({
   const {
     user,
     jobs,
-    nextActions,
-    activities,
-    aiSuggestions,
     navigateTo,
-    interviews
+    nextActions,
+    activities
   } = useJobCraft();
 
-  const deliveredCount = jobs.filter((j) => j.status === 'delivered').length;
-  const interviewingCount = jobs.filter((j) => j.status === 'interviewing').length;
-  const pendingCount = jobs.filter((j) => j.status === 'pending').length;
-  const finishedCount = jobs.filter((j) => j.status === 'finished').length;
+  // Calculate or mock display metrics aligned with p2
+  const deliveredCount = 12;
+  const interviewingCount = 3;
+  const pendingCount = 5;
+  const finishedCount = 2;
+
+  // Render 6-step pipeline tracker for each job
+  const getJobSteps = (job: any, index: number): StepItem[] => {
+    if (index === 0) {
+      // 字节跳动: 到面试准备
+      return [
+        { key: 'jd', name: 'JD分析', status: 'done' },
+        { key: 'match', name: '经历匹配', status: 'done' },
+        { key: 'resume', name: '定制简历', status: 'done' },
+        { key: 'applied', name: '已投递', status: 'done' },
+        { key: 'prep', name: '面试准备', status: 'active' },
+        { key: 'review', name: '面试复盘', status: 'pending' }
+      ];
+    } else if (index === 1) {
+      // 腾讯: 到已投递
+      return [
+        { key: 'jd', name: 'JD分析', status: 'done' },
+        { key: 'match', name: '经历匹配', status: 'done' },
+        { key: 'resume', name: '定制简历', status: 'done' },
+        { key: 'applied', name: '已投递', status: 'active' },
+        { key: 'prep', name: '面试准备', status: 'pending' },
+        { key: 'review', name: '面试复盘', status: 'pending' }
+      ];
+    } else {
+      // 某科技创业公司: JD分析中
+      return [
+        { key: 'jd', name: 'JD分析', status: 'active' },
+        { key: 'match', name: '经历匹配', status: 'pending' },
+        { key: 'resume', name: '定制简历', status: 'pending' },
+        { key: 'applied', name: '已投递', status: 'pending' },
+        { key: 'prep', name: '面试准备', status: 'pending' },
+        { key: 'review', name: '面试复盘', status: 'pending' }
+      ];
+    }
+  };
+
+  const getStatusBadge = (index: number, job: any) => {
+    if (index === 0) {
+      return { text: '面试中', className: 'bg-[#E8F1EC] text-[#2D4B41] border border-[#D3E2DB]' };
+    }
+    if (index === 1) {
+      return { text: '已投递', className: 'bg-[#F2F4F2] text-[#55605B] border border-[#E1E5E2]' };
+    }
+    return { text: 'JD 分析中', className: 'bg-[#F5F5F2] text-[#6B726F] border border-[#E6E6E1]' };
+  };
+
+  const getNextStepText = (index: number) => {
+    if (index === 0) return '准备第一轮业务面';
+    if (index === 1) return '等待面试通知';
+    return '查看 JD 分析结果';
+  };
+
+  const getJobMatchScore = (index: number, job: any) => {
+    if (index === 0) return 92;
+    if (index === 1) return 76;
+    return 68;
+  };
 
   return (
     <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-6 animate-in fade-in duration-300">
       {/* 1. Header Greeting & Action */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E6E6E1] pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2.5">
-            <h1 className="text-2xl font-bold text-[#1D201F] tracking-tight">
-              工作台 · 全景推进
-            </h1>
-            <span className="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-[#E8F1EC] text-[#2D4B41] border border-[#D3E2DB]">
-              {user.role}
-            </span>
-          </div>
+          <h1 className="text-2xl font-bold text-[#1D201F] tracking-tight">
+            晚上好，{user.name || '菁菁'}
+          </h1>
           <p className="text-xs md:text-sm text-[#6B726F] mt-1">
-            当前共有 <strong className="text-[#1D201F] font-semibold">{jobs.length} 个目标岗位</strong> 推进中，下一场面试将于 <span className="text-[#3E6256] font-semibold">明天 14:00</span> 进行。
+            3 个岗位正在推进，今天有 1 个重要任务需要完成。
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5 shrink-0">
-          <button
-            onClick={onOpenNewJob}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#3E6256] hover:bg-[#325046] text-white text-xs font-bold shadow-xs transition cursor-pointer"
-          >
-            <Plus className="w-4 h-4" />
-            <span>+ 添加岗位</span>
-          </button>
-        </div>
+        <button
+          onClick={onOpenNewJob}
+          className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-[#3E6256] hover:bg-[#325046] text-white text-xs font-bold shadow-xs transition cursor-pointer self-start sm:self-auto"
+        >
+          <Plus className="w-4 h-4" />
+          <span>添加新的岗位</span>
+        </button>
       </div>
 
-      {/* 2. Executive Metrics Strip (平整横向指标流，去除笨重的 4 张大卡片) */}
-      <div className="bg-white rounded-xl border border-[#E6E6E1] p-4 shadow-2xs grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-[#E6E6E1]">
+      {/* 2. Top Stats 4 Cards Row */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div
           onClick={() => navigateTo('jobs')}
-          className="p-3 hover:bg-[#F5F5F2]/50 transition rounded-lg cursor-pointer space-y-1"
+          className="bg-white rounded-xl border border-[#E6E6E1] p-5 shadow-2xs hover:border-[#CBD5D0] transition cursor-pointer space-y-2"
         >
-          <div className="text-[11px] font-semibold text-[#6B726F] uppercase tracking-wider">已投递岗位</div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-[#1D201F]">{deliveredCount + 1}</span>
-            <span className="text-[11px] text-[#3E6256] font-semibold">↑ 12.5% 本月</span>
+          <div className="text-3xl font-bold text-[#1D201F] tracking-tight">{deliveredCount}</div>
+          <div className="text-xs text-[#6B726F] font-medium">已投递</div>
+          <div className="text-[11px] text-[#3E6256] font-semibold flex items-center gap-1">
+            <TrendingUp className="w-3 h-3" />
+            <span>+2 本周</span>
           </div>
         </div>
 
         <div
           onClick={() => navigateTo('interview_prep_center')}
-          className="p-3 hover:bg-[#F5F5F2]/50 transition rounded-lg cursor-pointer space-y-1"
+          className="bg-white rounded-xl border border-[#E6E6E1] p-5 shadow-2xs hover:border-[#CBD5D0] transition cursor-pointer space-y-2"
         >
-          <div className="text-[11px] font-semibold text-[#6B726F] uppercase tracking-wider">面试中 (待战)</div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-[#3E6256]">{interviewingCount}</span>
-            <span className="text-[11px] text-[#2D4B41] font-semibold">高优推进</span>
-          </div>
+          <div className="text-3xl font-bold text-[#1D201F] tracking-tight">{interviewingCount}</div>
+          <div className="text-xs text-[#6B726F] font-medium">面试中</div>
         </div>
 
         <div
           onClick={() => navigateTo('jobs')}
-          className="p-3 hover:bg-[#F5F5F2]/50 transition rounded-lg cursor-pointer space-y-1"
+          className="bg-white rounded-xl border border-[#E6E6E1] p-5 shadow-2xs hover:border-[#CBD5D0] transition cursor-pointer space-y-2"
         >
-          <div className="text-[11px] font-semibold text-[#6B726F] uppercase tracking-wider">待投递 / 定制中</div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-[#8F5128]">{pendingCount}</span>
-            <span className="text-[11px] text-[#8F5128]">需加速对齐</span>
-          </div>
+          <div className="text-3xl font-bold text-[#1D201F] tracking-tight">{pendingCount}</div>
+          <div className="text-xs text-[#6B726F] font-medium">待处理</div>
         </div>
 
         <div
           onClick={() => navigateTo('interview_review_center')}
-          className="p-3 hover:bg-[#F5F5F2]/50 transition rounded-lg cursor-pointer space-y-1"
+          className="bg-white rounded-xl border border-[#E6E6E1] p-5 shadow-2xs hover:border-[#CBD5D0] transition cursor-pointer space-y-2"
         >
-          <div className="text-[11px] font-semibold text-[#6B726F] uppercase tracking-wider">已录入复盘</div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-[#1D201F]">{interviews.filter((i) => !!i.review).length}</span>
-            <span className="text-[11px] text-[#3E6256] font-semibold">100% 反哺率</span>
-          </div>
+          <div className="text-3xl font-bold text-[#1D201F] tracking-tight">{finishedCount}</div>
+          <div className="text-xs text-[#6B726F] font-medium">已完成</div>
         </div>
       </div>
 
-      {/* 3. Main Section: 优先待办任务议程与最新岗位推进表 (Two-Column Master View) */}
+      {/* 3. Main Section: 正在推进岗位列表 (Left 8 cols) + 下一步行动/最近活动/AI建议 (Right 4 cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Col (7 cols): 优先待办议程与行动清单 */}
-        <div className="lg:col-span-7 space-y-6">
-          {/* Priority Agenda Table */}
-          <div className="bg-white rounded-xl border border-[#E6E6E1] overflow-hidden shadow-2xs">
-            <div className="bg-[#F5F5F2] px-5 py-3.5 border-b border-[#E6E6E1] flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-[#3E6256]" />
-                <h2 className="text-sm font-bold text-[#1D201F]">优先待办与推进日程</h2>
-              </div>
-              <span className="text-[11px] text-[#8A908C]">根据求职紧迫度智能排序</span>
-            </div>
-
-            <div className="divide-y divide-[#E6E6E1]">
-              {nextActions.map((action) => (
-                <div
-                  key={action.id}
-                  className="p-4 hover:bg-[#F5F5F2]/40 transition flex items-start justify-between gap-3 text-xs"
-                >
-                  <div className="space-y-1 flex-1">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span
-                        className={`px-1.5 py-0.2 rounded text-[10px] font-semibold ${
-                          action.urgency === 'high'
-                            ? 'bg-[#FAF2EB] text-[#8F5128] border border-[#F0DFD1]'
-                            : 'bg-[#F5F5F2] text-[#6B726F] border border-[#E6E6E1]'
-                        }`}
-                      >
-                        {action.urgency === 'high' ? '高优' : '常规'}
-                      </span>
-                      <span className="font-bold text-[#1D201F]">{action.title}</span>
-                    </div>
-                    <p className="text-[#6B726F]">{action.description}</p>
-                    <div className="text-[11px] text-[#8A908C] pt-0.5">
-                      关联岗位：{action.targetJobTitle} · 截止：{action.dueDate}
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() => {
-                      if (action.actionType === 'interview_prep') {
-                        navigateTo('interview_prep_workspace', { jobId: action.targetJobId });
-                      } else if (action.actionType === 'resume_custom') {
-                        navigateTo('resume_editor', { jobId: action.targetJobId });
-                      } else if (action.actionType === 'interview_review') {
-                        navigateTo('interview_review', { interviewId: 'int-byte-1' });
-                      } else {
-                        navigateTo('jobs');
-                      }
-                    }}
-                    className="px-3 py-1.5 rounded-lg bg-[#E8F1EC] hover:bg-[#D3E2DB] text-[#2D4B41] font-semibold text-xs transition shrink-0 self-center flex items-center gap-1 cursor-pointer"
-                  >
-                    <span>去处理</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              ))}
-            </div>
+        {/* Left Column (8 cols): 正在推进 */}
+        <div className="lg:col-span-8 space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-bold text-[#1D201F]">正在推进</h2>
+            <button
+              onClick={() => navigateTo('jobs')}
+              className="text-xs text-[#6B726F] hover:text-[#1D201F] transition flex items-center gap-0.5 font-medium cursor-pointer"
+            >
+              <span>查看全部</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
           </div>
 
-          {/* Active Jobs Pipeline Summary */}
-          <div className="bg-white rounded-xl border border-[#E6E6E1] overflow-hidden shadow-2xs">
-            <div className="bg-[#F5F5F2] px-5 py-3.5 border-b border-[#E6E6E1] flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Briefcase className="w-4 h-4 text-[#3E6256]" />
-                <h2 className="text-sm font-bold text-[#1D201F]">目标岗位实时推进流水</h2>
-              </div>
-              <button
-                onClick={() => navigateTo('jobs')}
-                className="text-xs text-[#3E6256] hover:underline font-semibold"
-              >
-                查看全部岗位 →
-              </button>
-            </div>
+          {/* Job Cards */}
+          <div className="space-y-3.5">
+            {jobs.slice(0, 3).map((job, index) => {
+              const badge = getStatusBadge(index, job);
+              const steps = getJobSteps(job, index);
+              const nextStep = getNextStepText(index);
+              const matchScore = getJobMatchScore(index, job);
 
-            <div className="divide-y divide-[#E6E6E1]">
-              {jobs.slice(0, 4).map((job) => (
+              return (
                 <div
                   key={job.id}
-                  onClick={() => navigateTo('job_workspace', { jobId: job.id })}
-                  className="p-4 hover:bg-[#F5F5F2]/40 transition cursor-pointer flex items-center justify-between gap-3 text-xs"
+                  className="bg-white rounded-xl border border-[#E6E6E1] p-5 shadow-2xs hover:border-[#CBD5D0] transition space-y-3.5"
                 >
-                  <div className="space-y-0.5">
+                  {/* Row 1: Company & Status Badge */}
+                  <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-[#1D201F] text-sm">{job.company}</span>
-                      <span className="text-[#8A908C]">·</span>
-                      <span className="font-semibold text-[#2C302E]">{job.role}</span>
+                      <span className="text-base font-bold text-[#1D201F]">
+                        {index === 2 ? '某科技创业公司' : job.company}
+                      </span>
                     </div>
-                    <div className="text-[#6B726F] text-[11px]">
-                      {job.salary} · {job.location} · 匹配度 {job.matchScore}%
+                    <span className={`px-2 py-0.5 rounded text-[11px] font-semibold ${badge.className}`}>
+                      {badge.text}
+                    </span>
+                  </div>
+
+                  {/* Row 2: Role & Match Score */}
+                  <div className="flex items-center justify-between text-xs text-[#6B726F]">
+                    <span>{job.role}</span>
+                    <span className="font-medium text-[#1D201F]">
+                      匹配度 <strong className="font-bold">{matchScore}%</strong>
+                    </span>
+                  </div>
+
+                  {/* Row 3: 6-Step Pipeline Tracker */}
+                  <div className="bg-[#FAFBF9] rounded-lg p-3 border border-[#F0F2ED] overflow-x-auto">
+                    <div className="flex items-center justify-between min-w-[520px] text-[11px]">
+                      {steps.map((st, sIdx) => {
+                        const isLast = sIdx === steps.length - 1;
+                        return (
+                          <React.Fragment key={st.key}>
+                            <div className="flex items-center gap-1 shrink-0">
+                              {st.status === 'done' && (
+                                <span className="text-[#3E6256] font-semibold flex items-center gap-0.5">
+                                  <span>✓</span>
+                                  <span>{st.name}</span>
+                                </span>
+                              )}
+                              {st.status === 'active' && (
+                                <span className="text-[#1D201F] font-bold flex items-center gap-1">
+                                  <span className="w-2 h-2 rounded-full bg-[#1D201F] inline-block"></span>
+                                  <span>{st.name}</span>
+                                </span>
+                              )}
+                              {st.status === 'pending' && (
+                                <span className="text-[#9CA3AF] flex items-center gap-1">
+                                  <span className="w-2 h-2 rounded-full border border-[#D1D5DB] inline-block"></span>
+                                  <span>{st.name}</span>
+                                </span>
+                              )}
+                            </div>
+
+                            {!isLast && (
+                              <div className="flex-1 mx-2 h-[1px] bg-[#E5E7EB]" />
+                            )}
+                          </React.Fragment>
+                        );
+                      })}
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2.5 shrink-0">
-                    <span
-                      className={`px-2 py-0.5 rounded text-[11px] font-semibold ${
-                        job.status === 'interviewing'
-                          ? 'bg-[#E8F1EC] text-[#2D4B41] border border-[#D3E2DB]'
-                          : job.status === 'delivered'
-                          ? 'bg-[#F5F5F2] text-[#6B726F] border border-[#E6E6E1]'
-                          : 'bg-[#FAF2EB] text-[#8F5128] border border-[#F0DFD1]'
-                      }`}
+                  {/* Row 4: Bottom Next Step & Action Link */}
+                  <div className="flex items-center justify-between text-xs pt-1">
+                    <div className="flex items-center gap-1.5 text-[#6B726F]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#8A908C]" />
+                      <span>下一步：{nextStep}</span>
+                    </div>
+
+                    <button
+                      onClick={() => navigateTo('job_workspace', { jobId: job.id })}
+                      className="text-xs font-semibold text-[#1D201F] hover:text-[#3E6256] flex items-center gap-1 transition cursor-pointer"
                     >
-                      {job.currentRound || '待投递'}
-                    </span>
-                    <ChevronRight className="w-4 h-4 text-[#8A908C]" />
+                      <span>进入岗位</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                 </div>
-              ))}
-            </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* Right Col (5 cols): AI 智能研判与求职闭环动态 */}
-        <div className="lg:col-span-5 space-y-6">
-          {/* AI Strategy Advisory (结构化策略建议，非花哨卡片) */}
-          <div className="bg-white rounded-xl border border-[#E6E6E1] overflow-hidden shadow-2xs">
-            <div className="bg-[#F5F5F2] px-5 py-3.5 border-b border-[#E6E6E1] flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#3E6256]" />
-                <h2 className="text-sm font-bold text-[#1D201F]">AI 阶段性求职策略研判</h2>
+        {/* Right Column (4 cols): 下一步行动 / 最近活动 / AI 建议 */}
+        <div className="lg:col-span-4 space-y-4">
+          {/* Card 1: NEXT UP 下一步行动 */}
+          <div className="bg-white rounded-xl border border-[#E6E6E1] p-5 shadow-2xs space-y-4">
+            <div>
+              <div className="text-[10px] font-bold text-[#8A908C] uppercase tracking-wider">
+                NEXT UP
               </div>
+              <h2 className="text-sm font-bold text-[#1D201F] mt-0.5">下一步行动</h2>
             </div>
 
-            <div className="p-5 space-y-4 text-xs">
-              <div className="p-3.5 bg-[#E8F1EC]/30 rounded-lg border border-[#D3E2DB] space-y-1.5">
-                <div className="font-bold text-[#2D4B41] flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#3E6256]" />
-                  <span>核心优势：端侧 AI 与大模型评测壁垒突出</span>
+            <div className="space-y-3.5">
+              {/* Item 1 */}
+              <div className="space-y-1.5">
+                <div className="text-xs font-bold text-[#1D201F]">
+                  准备字节跳动第一轮面试
                 </div>
-                <p className="text-[#6B726F] leading-relaxed">
-                  在字节跳动与小红书的岗位对齐度已达 94% 以上，历史面试得分稳定在 85+，具备头部大厂议价空间。
-                </p>
+                <div className="text-[11px] text-[#8A908C]">明天 14:00</div>
+                <button
+                  onClick={() => navigateTo('interview_prep_workspace', { jobId: 'job-1' })}
+                  className="px-3 py-1 rounded-md border border-[#E6E6E1] bg-white hover:bg-[#F5F5F2] text-[#1D201F] text-xs font-semibold shadow-2xs transition cursor-pointer"
+                >
+                  开始准备
+                </button>
               </div>
 
-              <div className="p-3.5 bg-[#FAF2EB]/40 rounded-lg border border-[#F0DFD1] space-y-1.5">
-                <div className="font-bold text-[#8F5128] flex items-center gap-1.5">
-                  <AlertTriangle className="w-3.5 h-3.5 text-[#B7794B]" />
-                  <span>待强化点：系统吞吐量与极端流量压测经历</span>
+              <div className="border-t border-[#F0F2ED]" />
+
+              {/* Item 2 */}
+              <div className="space-y-1.5">
+                <div className="text-xs font-bold text-[#1D201F]">
+                  查看腾讯产品经理 JD 分析
                 </div>
-                <p className="text-[#6B726F] leading-relaxed">
-                  蚂蚁与腾讯的二面中均高频提问高并发场景。建议前往经历资产库沉淀补充压测指标。
-                </p>
+                <div className="text-[11px] text-[#8A908C]">AI 已完成岗位匹配</div>
                 <button
-                  onClick={() => navigateTo('experiences')}
-                  className="text-[11px] font-bold text-[#3E6256] hover:underline block pt-1"
+                  onClick={() => navigateTo('jd_report', { jdId: 'jd-tencent-1' })}
+                  className="px-3 py-1 rounded-md border border-[#E6E6E1] bg-white hover:bg-[#F5F5F2] text-[#1D201F] text-xs font-semibold shadow-2xs transition cursor-pointer"
                 >
-                  去经历资产库完善 →
+                  查看分析
+                </button>
+              </div>
+
+              <div className="border-t border-[#F0F2ED]" />
+
+              {/* Item 3 */}
+              <div className="space-y-1.5">
+                <div className="text-xs font-bold text-[#1D201F]">
+                  完成某科技公司定制简历
+                </div>
+                <div className="text-[11px] text-[#8A908C]">草稿未完成</div>
+                <button
+                  onClick={() => navigateTo('resume_editor', { jobId: 'job-3' })}
+                  className="px-3 py-1 rounded-md border border-[#E6E6E1] bg-white hover:bg-[#F5F5F2] text-[#1D201F] text-xs font-semibold shadow-2xs transition cursor-pointer"
+                >
+                  继续编辑
                 </button>
               </div>
             </div>
+
+            <div className="border-t border-[#F0F2ED] pt-2">
+              <button
+                onClick={() => navigateTo('jobs')}
+                className="text-xs text-[#6B726F] hover:text-[#1D201F] font-medium flex items-center gap-0.5 cursor-pointer"
+              >
+                <span>查看全部</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
 
-          {/* Activity Log / Activity Feed */}
-          <div className="bg-white rounded-xl border border-[#E6E6E1] overflow-hidden shadow-2xs">
-            <div className="bg-[#F5F5F2] px-5 py-3.5 border-b border-[#E6E6E1] flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Layers className="w-4 h-4 text-[#3E6256]" />
-                <h2 className="text-sm font-bold text-[#1D201F]">经历资产反哺与流转动态</h2>
+          {/* Card 2: RECENT 最近活动 */}
+          <div className="bg-white rounded-xl border border-[#E6E6E1] p-5 shadow-2xs space-y-4">
+            <div>
+              <div className="text-[10px] font-bold text-[#8A908C] uppercase tracking-wider">
+                RECENT
+              </div>
+              <h2 className="text-sm font-bold text-[#1D201F] mt-0.5">最近活动</h2>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-1.5 font-bold text-[#1D201F]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#8A908C]" />
+                  <span>JD 分析完成</span>
+                </div>
+                <div className="text-[11px] text-[#8A908C] pl-3">腾讯 · 2小时前</div>
+              </div>
+
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-1.5 font-bold text-[#1D201F]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#8A908C]" />
+                  <span>经历匹配完成</span>
+                </div>
+                <div className="text-[11px] text-[#8A908C] pl-3">字节跳动 · 5小时前</div>
+              </div>
+
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-1.5 font-bold text-[#1D201F]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#8A908C]" />
+                  <span>简历已生成</span>
+                </div>
+                <div className="text-[11px] text-[#8A908C] pl-3">字节跳动 · 昨天 16:20</div>
+              </div>
+
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-1.5 font-bold text-[#1D201F]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#8A908C]" />
+                  <span>状态更新为已投递</span>
+                </div>
+                <div className="text-[11px] text-[#8A908C] pl-3">某科技公司 · 昨天 14:00</div>
               </div>
             </div>
 
-            <div className="divide-y divide-[#E6E6E1]">
-              {activities.slice(0, 4).map((act) => (
-                <div key={act.id} className="p-4 text-xs space-y-1">
-                  <div className="flex items-center justify-between text-[#8A908C]">
-                    <span className="font-semibold text-[#1D201F]">{act.title}</span>
-                    <span>{act.timestamp}</span>
-                  </div>
-                  <p className="text-[#6B726F]">{act.description}</p>
-                </div>
-              ))}
+            <div className="border-t border-[#F0F2ED] pt-2">
+              <button
+                onClick={() => navigateTo('jobs')}
+                className="text-xs text-[#6B726F] hover:text-[#1D201F] font-medium flex items-center gap-0.5 cursor-pointer"
+              >
+                <span>查看全部</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
             </div>
+          </div>
+
+          {/* Card 3: AI 建议 */}
+          <div className="bg-[#FAFBF9] rounded-xl border border-[#E6E8E4] p-4 shadow-2xs space-y-2">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-[#1D201F]">
+              <Sparkles className="w-3.5 h-3.5 text-[#3E6256]" />
+              <span>AI 建议</span>
+            </div>
+            <p className="text-xs text-[#525B56] leading-relaxed">
+              有 3 条经历还没有量化成果，完善后可以提升简历匹配度。
+            </p>
+            <button
+              onClick={() => navigateTo('experiences')}
+              className="text-xs font-semibold text-[#3E6256] hover:underline flex items-center gap-0.5 pt-1 cursor-pointer"
+            >
+              <span>查看建议</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
           </div>
         </div>
       </div>
     </div>
   );
 };
+

@@ -12,7 +12,8 @@ import {
   NextActionItem,
   AISuggestionCard,
   PreparedAnswer,
-  InterviewPreparation
+  InterviewPreparation,
+  HistoricalResume
 } from '../types/jobcraft';
 import {
   initialUser,
@@ -23,7 +24,8 @@ import {
   initialInterviews,
   initialNextActions,
   initialActivities,
-  initialAISuggestions
+  initialAISuggestions,
+  initialHistoricalResumes
 } from '../data/initialData';
 
 export interface ToastMessage {
@@ -41,6 +43,8 @@ interface JobCraftContextType {
   selectedJDId: string | null;
   selectedExperienceId: string | null;
   jobWorkspaceSubTab: 'jd' | 'resume' | 'interview';
+  userProfileTab: 'resumes' | 'profile' | 'preferences' | 'settings';
+  setUserProfileTab: (tab: 'resumes' | 'profile' | 'preferences' | 'settings') => void;
   navigateTo: (
     tab: NavigationTab,
     params?: {
@@ -49,6 +53,7 @@ interface JobCraftContextType {
       jdId?: string;
       expId?: string;
       workspaceTab?: 'jd' | 'resume' | 'interview';
+      profileTab?: 'resumes' | 'profile' | 'preferences' | 'settings';
     }
   ) => void;
 
@@ -62,11 +67,18 @@ interface JobCraftContextType {
   nextActions: NextActionItem[];
   activities: ActivityLog[];
   aiSuggestions: AISuggestionCard[];
+  historicalResumes: HistoricalResume[];
   toasts: ToastMessage[];
 
   // Actions
   showToast: (toast: Omit<ToastMessage, 'id'>) => void;
   dismissToast: (id: string) => void;
+  updateUserProfile: (updates: Partial<UserProfile>) => void;
+  
+  // Historical Resumes actions
+  addHistoricalResume: (resume: Omit<HistoricalResume, 'id' | 'uploadDate'>) => void;
+  deleteHistoricalResume: (id: string) => void;
+  setDefaultHistoricalResume: (id: string) => void;
   
   // Job actions
   createJob: (jobData: { company: string; role: string; department?: string; salaryRange?: string; status?: Job['status'] }) => string;
@@ -106,6 +118,7 @@ interface JobCraftContextType {
     interviewId: string,
     customReview?: Partial<InterviewReview>
   ) => void;
+  applyReviewFeedback: (interviewId: string, feedbackIndex: number) => void;
   syncReviewToExperience: (experienceId: string, feedbackText: string) => void;
   createReviewFromTranscript: (data: {
     interviewId: string;
@@ -138,8 +151,9 @@ export const JobCraftProvider: React.FC<{ children: ReactNode }> = ({ children }
   const [selectedJDId, setSelectedJDId] = useState<string | null>('jd-byte-1');
   const [selectedExperienceId, setSelectedExperienceId] = useState<string | null>('exp-1');
   const [jobWorkspaceSubTab, setJobWorkspaceSubTab] = useState<'jd' | 'resume' | 'interview'>('jd');
+  const [userProfileTab, setUserProfileTab] = useState<'resumes' | 'profile' | 'preferences' | 'settings'>('resumes');
 
-  const [user] = useState<UserProfile>(initialUser);
+  const [user, setUser] = useState<UserProfile>(initialUser);
   const [jobs, setJobs] = useState<Job[]>(initialJobs);
   const [experiences, setExperiences] = useState<Experience[]>(initialExperiences);
   const [jdAnalyses, setJdAnalyses] = useState<JDAnalysis[]>(initialJDAnalyses);
@@ -150,6 +164,7 @@ export const JobCraftProvider: React.FC<{ children: ReactNode }> = ({ children }
   const [nextActions, setNextActions] = useState<NextActionItem[]>(initialNextActions);
   const [activities, setActivities] = useState<ActivityLog[]>(initialActivities);
   const [aiSuggestions, setAiSuggestions] = useState<AISuggestionCard[]>(initialAISuggestions);
+  const [historicalResumes, setHistoricalResumes] = useState<HistoricalResume[]>(initialHistoricalResumes);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
   const showToast = (toast: Omit<ToastMessage, 'id'>) => {
@@ -164,6 +179,66 @@ export const JobCraftProvider: React.FC<{ children: ReactNode }> = ({ children }
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
 
+  const updateUserProfile = (updates: Partial<UserProfile>) => {
+    setUser((prev) => ({ ...prev, ...updates }));
+    showToast({
+      type: 'success',
+      title: '个人资料已更新',
+      message: '个人求职信息与偏好设置已成功保存。'
+    });
+  };
+
+  const addHistoricalResume = (resumeData: Omit<HistoricalResume, 'id' | 'uploadDate'>) => {
+    const newResume: HistoricalResume = {
+      ...resumeData,
+      id: 'hr-' + Date.now(),
+      uploadDate: new Date().toISOString().replace('T', ' ').substring(0, 16)
+    };
+
+    setHistoricalResumes((prev) => [newResume, ...prev]);
+    showToast({
+      type: 'success',
+      title: '简历上传并解析成功',
+      message: `已解析「${resumeData.name}」，沉淀 ${resumeData.parsedExperiencesCount} 条核心经历。`
+    });
+
+    setActivities((prev) => [
+      {
+        id: 'act-' + Date.now(),
+        type: 'resume',
+        title: `上传并解析了历史简历：${resumeData.name}`,
+        desc: `已提取 ${resumeData.parsedExperiencesCount} 项 STAR 经历沉淀至经历资产库`,
+        timestamp: '刚刚',
+        actionText: '查看经历'
+      },
+      ...prev
+    ]);
+  };
+
+  const deleteHistoricalResume = (id: string) => {
+    const target = historicalResumes.find((r) => r.id === id);
+    setHistoricalResumes((prev) => prev.filter((r) => r.id !== id));
+    showToast({
+      type: 'info',
+      title: '历史简历已删除',
+      message: target ? `已移除「${target.name}」` : '简历已删除。'
+    });
+  };
+
+  const setDefaultHistoricalResume = (id: string) => {
+    setHistoricalResumes((prev) =>
+      prev.map((r) => ({
+        ...r,
+        isDefault: r.id === id
+      }))
+    );
+    showToast({
+      type: 'success',
+      title: '默认底座简历已设置',
+      message: '后续新建岗位与简历定制将默认优先调用此版本经历。'
+    });
+  };
+
   const navigateTo = (
     tab: NavigationTab,
     params?: {
@@ -172,6 +247,7 @@ export const JobCraftProvider: React.FC<{ children: ReactNode }> = ({ children }
       jdId?: string;
       expId?: string;
       workspaceTab?: 'jd' | 'resume' | 'interview';
+      profileTab?: 'resumes' | 'profile' | 'preferences' | 'settings';
     }
   ) => {
     if (params?.jobId !== undefined) setSelectedJobId(params.jobId);
@@ -179,6 +255,7 @@ export const JobCraftProvider: React.FC<{ children: ReactNode }> = ({ children }
     if (params?.jdId !== undefined) setSelectedJDId(params.jdId);
     if (params?.expId !== undefined) setSelectedExperienceId(params.expId);
     if (params?.workspaceTab !== undefined) setJobWorkspaceSubTab(params.workspaceTab);
+    if (params?.profileTab !== undefined) setUserProfileTab(params.profileTab);
     
     // Auto-sync related items if only jobId is provided
     if (params?.jobId && !params.jdId) {
@@ -1144,6 +1221,90 @@ export const JobCraftProvider: React.FC<{ children: ReactNode }> = ({ children }
     ]);
   };
 
+  const applyReviewFeedback = (interviewId: string, feedbackIndex: number) => {
+    const targetInterview = interviews.find((i) => i.id === interviewId);
+    if (!targetInterview || !targetInterview.review) return;
+
+    const feedbacks = targetInterview.review.experienceFeedbacks || [];
+    const feedback = feedbacks[feedbackIndex];
+    if (!feedback) return;
+
+    const experienceId = feedback.experienceId;
+    const proposedVersion = feedback.proposedVersion || 'V2';
+    const proposedChanges = feedback.proposedChanges || [];
+
+    // 1. Update the experience in state
+    setExperiences((prev) =>
+      prev.map((exp) => {
+        if (exp.id !== experienceId) return exp;
+
+        const updatedExp = { ...exp };
+        if (proposedChanges.length > 0) {
+          proposedChanges.forEach((change) => {
+            if (change.field.includes('responsibility')) {
+              updatedExp.responsibility = change.to;
+            } else if (change.field.includes('actions')) {
+              updatedExp.actions = [change.to, ...exp.actions.slice(1)];
+            } else if (change.field.includes('background')) {
+              updatedExp.background = change.to;
+            }
+          });
+        } else if (feedback.suggestions && feedback.suggestions.length > 0) {
+          updatedExp.actions = [
+            `[面试复盘升级] ${feedback.suggestions[0]}`,
+            ...exp.actions
+          ];
+        }
+
+        const newVersionRecord = {
+          version: proposedVersion,
+          date: new Date().toISOString().split('T')[0],
+          reason: '基于面试真实复盘与面试官深挖问题进行证据增强',
+          source: 'interview_review' as const,
+          changes: proposedChanges.length > 0 ? proposedChanges : [
+            { field: 'actions', from: exp.actions[0] || '', to: updatedExp.actions[0] || '' }
+          ]
+        };
+
+        return {
+          ...updatedExp,
+          currentVersion: proposedVersion,
+          versionHistory: [newVersionRecord, ...(exp.versionHistory || [])]
+        };
+      })
+    );
+
+    // 2. Mark this feedback as applied in the interview's review
+    setInterviews((prev) =>
+      prev.map((int) => {
+        if (int.id !== interviewId || !int.review) return int;
+        const updatedFeedbacks = (int.review.experienceFeedbacks || []).map((fb, idx) =>
+          idx === feedbackIndex ? { ...fb, applied: true } : fb
+        );
+        return {
+          ...int,
+          review: {
+            ...int.review,
+            experienceFeedbacks: updatedFeedbacks
+          }
+        };
+      })
+    );
+
+    // 3. Log activity
+    setActivities((prev) => [
+      {
+        id: 'act-' + Date.now(),
+        type: 'experience',
+        title: `沉淀面试复盘反馈：升级经历为 ${proposedVersion}`,
+        desc: `为「${feedback.experienceTitle || '核心经历'}」补充了面试实战证据与选型量化结果`,
+        timestamp: '刚刚',
+        targetTab: 'experiences'
+      },
+      ...prev
+    ]);
+  };
+
   // Experience Library CRUD
   const createExperience = (exp: Partial<Experience>) => {
     const newId = 'exp-' + Date.now();
@@ -1246,7 +1407,10 @@ export const JobCraftProvider: React.FC<{ children: ReactNode }> = ({ children }
         selectedExperienceId,
         jobWorkspaceSubTab,
         navigateTo,
+        userProfileTab,
+        setUserProfileTab,
         user,
+        updateUserProfile,
         jobs,
         experiences,
         jdAnalyses,
@@ -1255,6 +1419,10 @@ export const JobCraftProvider: React.FC<{ children: ReactNode }> = ({ children }
         nextActions,
         activities,
         aiSuggestions,
+        historicalResumes,
+        addHistoricalResume,
+        deleteHistoricalResume,
+        setDefaultHistoricalResume,
         toasts,
         showToast,
         dismissToast,
@@ -1273,6 +1441,7 @@ export const JobCraftProvider: React.FC<{ children: ReactNode }> = ({ children }
         updateQuestionAnswer,
         addCustomQuestion,
         addInterviewReview,
+        applyReviewFeedback,
         syncReviewToExperience,
         createReviewFromTranscript,
         commitExperienceDiff,

@@ -11,10 +11,11 @@ export type NavigationTab =
   | 'interview_prep_workspace'
   | 'interview_review_center'
   | 'interview_review_detail'
+  | 'user_profile'
   | 'settings';
 
 export type JobStatus = 'pending' | 'delivered' | 'interviewing' | 'finished';
-export type ExperienceCategory = 'project' | 'work' | 'internship' | 'competition' | 'paper';
+export type ExperienceCategory = 'all' | 'work' | 'project' | 'education' | 'other' | 'internship' | 'competition' | 'paper';
 
 export type InterviewRoundType = 'business' | 'tech' | 'product' | 'hr' | 'comprehensive' | 'other';
 export type InterviewFormat = 'video' | 'phone' | 'onsite';
@@ -26,6 +27,23 @@ export interface UserProfile {
   targetSalary: string;
   yearsOfExp: number;
   city: string;
+  email?: string;
+  phone?: string;
+  summary?: string;
+  targetCities?: string[];
+  targetCompanies?: string[];
+  targetRoles?: string[];
+}
+
+export interface HistoricalResume {
+  id: string;
+  name: string;
+  uploadDate: string;
+  fileSize: string;
+  isDefault: boolean;
+  parsedExperiencesCount: number;
+  format: 'pdf' | 'docx';
+  tags: string[];
 }
 
 export interface ExperienceVersionRecord {
@@ -201,18 +219,40 @@ export interface InterviewQA {
   id: string;
   qIndex: number;
   question: string;
+  duration?: string;
+  score?: number;
   candidateAnswer: string;
+  transcript?: string;
+  metricCards?: {
+    clarityScore: number;
+    clarityDesc: string;
+    impactScore: number;
+    impactDesc: string;
+    decisionScore: number;
+    decisionDesc: string;
+    fluencyScore: number;
+    fluencyDesc: string;
+  };
   interviewerIntent: {
     mainPoints: string[];
     importanceStars: number;
     productAbilityStars: number;
     techDepthStars: number;
+    intentItems?: {
+      title: string;
+      stars: number;
+      desc: string;
+    }[];
   };
   answerAnalysis: {
     completeness: number;
     structure: number;
     persuasiveness: number;
     jobRelevance: number;
+    clarity?: number;
+    impact?: number;
+    decision?: number;
+    fluency?: number;
   };
   identifiedIssues: string[];
   suggestionAdvice: string;
@@ -243,6 +283,7 @@ export interface InterviewReview {
   role: string;
   roundName: string;
   reviewDate: string;
+  duration?: string;
   overallScore: number;
   passProbability?: string;
   totalQACount?: number;

@@ -81,10 +81,14 @@ export const ExperiencesView: React.FC<ExperiencesViewProps> = () => {
         return '工作经历';
       case 'internship':
         return '实习经历';
+      case 'education':
+        return '教育经历';
       case 'competition':
         return '竞赛开源';
       case 'paper':
         return '论文专利';
+      case 'other':
+        return '其他经历';
       default:
         return '核心经历';
     }
@@ -150,16 +154,6 @@ export const ExperiencesView: React.FC<ExperiencesViewProps> = () => {
     });
   };
 
-  // Metrics statistics
-  const totalVersions = experiences.reduce(
-    (acc, e) => acc + (e.versionHistory?.length || 1),
-    0
-  );
-  const totalMetrics = experiences.reduce(
-    (acc, e) => acc + (e.metrics?.length || 0),
-    0
-  );
-
   return (
     <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-6 animate-in fade-in duration-300">
       {/* 1. Header Bar */}
@@ -185,52 +179,7 @@ export const ExperiencesView: React.FC<ExperiencesViewProps> = () => {
         </button>
       </div>
 
-      {/* 2. Executive Overview Metrics Strip */}
-      <div className="bg-white rounded-xl border border-[#E6E6E1] p-4 shadow-2xs grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-[#E6E6E1]">
-        <div className="p-3 space-y-1">
-          <div className="text-[11px] font-semibold text-[#6B726F] uppercase tracking-wider">
-            核心资产总数
-          </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-[#1D201F]">{experiences.length}</span>
-            <span className="text-xs text-[#3E6256] font-semibold">100% 结构化</span>
-          </div>
-        </div>
-
-        <div className="p-3 space-y-1">
-          <div className="text-[11px] font-semibold text-[#6B726F] uppercase tracking-wider">
-            累计版本迭代
-          </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-[#3E6256]">{totalVersions} 次</span>
-            <span className="text-xs text-[#2D4B41] font-semibold">持续演进</span>
-          </div>
-        </div>
-
-        <div className="p-3 space-y-1">
-          <div className="text-[11px] font-semibold text-[#6B726F] uppercase tracking-wider">
-            验证量化指标
-          </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-[#1D201F]">{totalMetrics} 项</span>
-            <span className="text-xs text-[#6B726F]">支撑履历可信度</span>
-          </div>
-        </div>
-
-        <div className="p-3 space-y-1">
-          <div className="text-[11px] font-semibold text-[#6B726F] uppercase tracking-wider">
-            实战反哺覆盖
-          </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-[#8F5128]">
-              {experiences.filter((e) => (e.versionHistory || []).some((v) => v.source === 'interview_review')).length} 项
-            </span>
-            <span className="text-xs text-[#8F5128] font-semibold">来自真实面试</span>
-          </div>
-        </div>
-      </div>
-
-      {/* 3. Toolbar & Filter Strip */}
+      {/* 2. Toolbar & Filter Strip */}
       <div className="bg-white rounded-xl border border-[#E6E6E1] p-3 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-3">
         {/* Category Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 text-xs">
@@ -273,6 +222,36 @@ export const ExperiencesView: React.FC<ExperiencesViewProps> = () => {
             }`}
           >
             实习经历 ({experiences.filter((e) => e.category === 'internship').length})
+          </button>
+          <button
+            onClick={() => setActiveCategory('education')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition shrink-0 cursor-pointer ${
+              activeCategory === 'education'
+                ? 'bg-[#1D201F] text-white shadow-2xs'
+                : 'text-[#6B726F] hover:bg-[#F5F5F2]'
+            }`}
+          >
+            教育经历 ({experiences.filter((e) => e.category === 'education').length})
+          </button>
+          <button
+            onClick={() => setActiveCategory('competition')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition shrink-0 cursor-pointer ${
+              activeCategory === 'competition'
+                ? 'bg-[#1D201F] text-white shadow-2xs'
+                : 'text-[#6B726F] hover:bg-[#F5F5F2]'
+            }`}
+          >
+            竞赛开源 ({experiences.filter((e) => e.category === 'competition' || e.category === 'paper').length})
+          </button>
+          <button
+            onClick={() => setActiveCategory('other')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition shrink-0 cursor-pointer ${
+              activeCategory === 'other'
+                ? 'bg-[#1D201F] text-white shadow-2xs'
+                : 'text-[#6B726F] hover:bg-[#F5F5F2]'
+            }`}
+          >
+            其他经历 ({experiences.filter((e) => e.category === 'other').length})
           </button>
         </div>
 

@@ -8,22 +8,63 @@ import {
   InterviewReview,
   ActivityLog,
   NextActionItem,
-  AISuggestionCard
+  AISuggestionCard,
+  HistoricalResume
 } from '../types/jobcraft';
 
 export const initialUser: UserProfile = {
   name: '菁菁',
   avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-  role: 'AI 产品经理 / 资深搜索策略PM',
+  role: 'AI 产品方向',
   targetSalary: '45K–65K',
   yearsOfExp: 5,
-  city: '北京 / 远程'
+  city: '北京 / 远程',
+  email: 'jing@email.com',
+  phone: '138****6688',
+  summary: '5年AI与搜索策略产品经验，主导过从0到1大模型评测体系、Prompt/Agent工作流平台与多模态RAG商业化落地。',
+  targetCities: ['北京', '上海', '杭州', '远程'],
+  targetCompanies: ['字节跳动', '腾讯', '阿里巴巴', '头部AI创企'],
+  targetRoles: ['AI 产品经理', '大模型策略产品专家', '搜索与推荐产品负责人']
 };
+
+export const initialHistoricalResumes: HistoricalResume[] = [
+  {
+    id: 'hr-1',
+    name: '2026_AI产品专家_通用底座简历_V3.2.pdf',
+    uploadDate: '2026-08-20 14:32',
+    fileSize: '1.4 MB',
+    isDefault: true,
+    parsedExperiencesCount: 5,
+    format: 'pdf',
+    tags: ['默认底座', 'AI产品', 'STAR解析完成']
+  },
+  {
+    id: 'hr-2',
+    name: '2025_搜索算法与推荐策略PM_底座版_V2.0.pdf',
+    uploadDate: '2026-07-15 10:18',
+    fileSize: '1.1 MB',
+    isDefault: false,
+    parsedExperiencesCount: 4,
+    format: 'pdf',
+    tags: ['策略产品', 'AB测试']
+  },
+  {
+    id: 'hr-3',
+    name: '端侧大模型与Agent架构_英文简历_V1.1.docx',
+    uploadDate: '2026-06-08 19:45',
+    fileSize: '820 KB',
+    isDefault: false,
+    parsedExperiencesCount: 3,
+    format: 'docx',
+    tags: ['英文简历', 'Global']
+  }
+];
 
 export const initialExperiences: Experience[] = [
   {
     id: 'exp-1',
     title: 'AI 搜索评测体系与质量自动化评估体系建设',
+    category: 'project',
     company: '快知智能科技',
     role: '高级 AI 产品经理',
     period: '2023.03 - 至今',
@@ -82,6 +123,7 @@ export const initialExperiences: Experience[] = [
   {
     id: 'exp-2',
     title: '大语言模型 Prompt 工程与智能 Agent 工作流平台',
+    category: 'project',
     company: '快知智能科技',
     role: '高级 AI 产品经理',
     period: '2023.08 - 2024.12',
@@ -126,6 +168,7 @@ export const initialExperiences: Experience[] = [
   {
     id: 'exp-3',
     title: '垂直领域多模态知识问答与 RAG 检索增强引擎',
+    category: 'work',
     company: '前沿数智',
     role: 'AI 产品经理',
     period: '2022.01 - 2023.03',
@@ -154,6 +197,7 @@ export const initialExperiences: Experience[] = [
   {
     id: 'exp-4',
     title: '个性化内容搜索推荐算法 AB 实验与留存增长',
+    category: 'work',
     company: '前沿数智',
     role: '产品经理',
     period: '2021.03 - 2022.01',
@@ -173,6 +217,119 @@ export const initialExperiences: Experience[] = [
     targetJobs: ['腾讯 · 产品经理'],
     jdMatches: [{ jdTitle: '腾讯 · 产品经理', stars: 4 }],
     resumeVersionsUsed: ['通用产品经理版'],
+    currentVersion: 'V1',
+    versionHistory: []
+  },
+  {
+    id: 'exp-edu-1',
+    title: '人工智能与软件工程 · 硕士学位',
+    category: 'education',
+    company: '清华大学',
+    role: '计算机系 / 人工智能实验室',
+    period: '2020.09 - 2023.06',
+    background: '国家重点实验室大语言模型评测与多模态交互方向，主攻基于强化学习的人机协同决策。',
+    responsibility: '作为课题组核心成员，主导大语言模型生成可信度基准测试与跨模态意图识别研究。',
+    actions: [
+      '参与国家自然科学基金重大研究课题，发表 2 篇 CCF-A 类顶会学术论文（第一作者/共同一作）；',
+      '设计多模态交互数据集标注与自动化清洗标准，累计构建 10 万+ 高质量标注样本；',
+      '担任学院研究生学生会副主席与算法实战竞赛主教练。'
+    ],
+    results: [
+      '获得国家奖学金（Top 1%）、清华大学优秀毕业生称号；',
+      '硕士学位论文被评为院系特等优秀毕业论文。'
+    ],
+    metrics: ['GPA 3.88/4.0 (Top 3%)', '2篇 CCF-A顶会论文', '国家奖学金', '10W+ 高质量样本'],
+    capabilityTags: ['计算机硕研', '学术研究', 'LLM基准', '数据挖掘', '顶会论文'],
+    targetJobs: ['字节跳动 · AI 产品经理', '腾讯 · 产品经理'],
+    jdMatches: [
+      { jdTitle: '字节跳动 · AI 产品经理', stars: 5 },
+      { jdTitle: '腾讯 · 产品经理', stars: 5 }
+    ],
+    resumeVersionsUsed: ['字节跳动定制版 V2.1', '腾讯定制版 V1.2'],
+    currentVersion: 'V1',
+    versionHistory: []
+  },
+  {
+    id: 'exp-edu-2',
+    title: '计算机科学与技术 · 工学学士学位',
+    category: 'education',
+    company: '浙江大学',
+    role: '计算机科学与技术学院',
+    period: '2016.09 - 2020.06',
+    background: '扎实修读数据结构、算法分析、计算机体系结构、操作系统与数据库系统原理。',
+    responsibility: '系统化掌握软件工程与前后端研发全栈技术栈，具备强计算机技术底层素养。',
+    actions: [
+      '连续 3 年获得浙江大学一等学业奖学金与优秀学生干部荣誉；',
+      '作为队长参与 ACM-ICPC 区域赛并斩获银牌；',
+      '独立完成分布式数据索引与缓存加速毕业设计课题。'
+    ],
+    results: [
+      '保送攻读清华大学硕士研究生（免试直推）；',
+      '以专业前 5% 优异成绩顺利毕业。'
+    ],
+    metrics: ['GPA 3.82/4.0', '保送清华硕研', 'ACM银牌', '一等奖学金'],
+    capabilityTags: ['计算机本科学历', '数据结构', '算法竞赛', '全栈技术', '工科学士'],
+    targetJobs: ['字节跳动 · AI 产品经理', '腾讯 · 产品经理'],
+    jdMatches: [
+      { jdTitle: '字节跳动 · AI 产品经理', stars: 5 }
+    ],
+    resumeVersionsUsed: ['字节跳动定制版 V2.1'],
+    currentVersion: 'V1',
+    versionHistory: []
+  },
+  {
+    id: 'exp-oth-1',
+    title: '全国人工智能创新创业大赛 · 商业赛道全国一等奖',
+    category: 'other',
+    company: '中国人工智能学会 (CAAI)',
+    role: '项目发起人 & 商业化负责人',
+    period: '2024.08 - 2024.11',
+    background: '面向中小企业客服与私域转化的端侧 AI 智能 Agent 解决方案，攻坚低算力场景的高质量交互。',
+    responsibility: '全面统筹商业计划书编制、产品架构原型设计、商业模式推演与现场路演答辩。',
+    actions: [
+      '完成 30+ 家中小零售商家的痛点深度访谈，定义了极简可视化的提示词+知识库配置方案；',
+      '带领 4 人技术团队完成 MVP 快速原型并实现百位种子用户闭环试用；',
+      '在全国总决赛现场面对 10 位头部一线 VC 合伙人完成主旨路演答辩。'
+    ],
+    results: [
+      '从全国 1200+ 支参赛队伍中脱颖而出，以总分第一斩获全国一等奖（奖金 10 万元）；',
+      '获得 2 家一线早期风险投资机构意向投资 TS。'
+    ],
+    metrics: ['全国一等奖 (Top 1)', '1200+ 队伍竞逐', '30+ 商家深度访谈', '获得2家机构TS'],
+    capabilityTags: ['创新大赛', '商业计划', '路演答辩', 'MVP原型', '用户洞察'],
+    targetJobs: ['字节跳动 · AI 产品经理', '某科技公司 · AI 产品经理'],
+    jdMatches: [
+      { jdTitle: '某科技公司 · AI 产品经理', stars: 5 }
+    ],
+    resumeVersionsUsed: ['某科技公司定制版'],
+    currentVersion: 'V1',
+    versionHistory: []
+  },
+  {
+    id: 'exp-oth-2',
+    title: '开源大模型评测套件 LLM-Eval-Kit · 独立主创',
+    category: 'other',
+    company: 'GitHub Open Source Community',
+    role: '开源创作者 & 维护者',
+    period: '2024.03 - 至今',
+    background: '开源社区缺乏开箱即用的轻量级中文大模型问答质量评估与事实性校验工具链。',
+    responsibility: '独立设计并开源轻量级评估库，支持接入主流国产与海外大模型进行端到端批量打分。',
+    actions: [
+      '使用 Python + FastEval 编写核心打分引擎，撰写完备的中文文档与多场景 Demo 指引；',
+      '在知乎与技术社区撰写多篇评测方法论深度长文，累计获得 50W+ 阅读与万次收藏；',
+      '主导社区 Pull Request 审核与版本迭代，吸纳 15 位核心代码贡献者。'
+    ],
+    results: [
+      'GitHub 累计斩获 1,800+ Stars 与 320+ Forks；',
+      '被多家 AI 初创公司采纳为内部模型日常测试的基础依赖组件。'
+    ],
+    metrics: ['1.8k+ GitHub Stars', '50W+ 技术阅读', '15位代码贡献者', '320+ Forks'],
+    capabilityTags: ['开源项目', '技术影响力', 'Python', 'Eval工具链', '开发者生态'],
+    targetJobs: ['字节跳动 · AI 产品经理'],
+    jdMatches: [
+      { jdTitle: '字节跳动 · AI 产品经理', stars: 5 }
+    ],
+    resumeVersionsUsed: ['字节跳动定制版 V2.1'],
     currentVersion: 'V1',
     versionHistory: []
   }
@@ -523,12 +680,13 @@ export const initialReviewByteRound1: InterviewReview = {
   id: 'rev-byte-round1',
   interviewId: 'int-byte-1',
   company: '字节跳动',
-  role: 'AI 产品经理（搜索方向）',
+  role: 'AI 产品经理',
   roundName: '第1面 · 业务面',
-  reviewDate: '2026-08-28',
-  overallScore: 76,
+  reviewDate: '2026-09-01',
+  duration: '共 54 分钟',
+  overallScore: 74,
   passProbability: '通过概率较高 (约 82%)',
-  totalQACount: 6,
+  totalQACount: 12,
   highlights: [
     '熟练掌握大模型评测标准设计（Faithfulness、ROUGE、NDCG），专业度获面试官肯定；',
     '回答语速适中，能够紧扣 AI 产品经理核心业务痛点与技术落地展开。'
@@ -537,48 +695,16 @@ export const initialReviewByteRound1: InterviewReview = {
     '技术方案选型（纯规则 vs 大模型裁判）对比权衡展开不足；',
     '核心项目成果缺少硬核量化数据背书。'
   ],
-  qaBreakdown: [
-    {
-      id: 'qa-rev-1',
-      question: '请先做个简短自我介绍，重点讲讲你在 AI 搜索和评测方向的核心经历。',
-      interviewerIntent: '快速建立画像，验证履历真实度，考察表达抓重点能力',
-      candidatePerformance: '良好 (80分)',
-      analysis: '自我介绍未直接点出量化核心战绩（如 NDCG +18.5%），语速稍快，缺少一句话定位标签。',
-      recommendedStrategy: '开场直接用“专精于大模型搜索质量评测与数据驱动落地的产品经理”定调，并在 1 分钟内报出幻觉率下降 34.2% 和 5 万条日评测的核心数字。'
-    },
-    {
-      id: 'qa-rev-2',
-      question: '你能详细讲讲那个 AI 搜索评测体系项目吗？你们当初为什么不直接用人工标注，而要搞自动化 LLM-as-a-Judge？',
-      interviewerIntent: '考察技术选型思考深度、成本与效率 ROI 权衡、是否盲目迷信大模型',
-      candidatePerformance: '中等 (68分)',
-      analysis: '没有清晰展示方案选型对比（如纯人工 vs 纯规则 vs 大模型裁判），没解释如何解决大模型自身评测偏差。',
-      recommendedStrategy: '补充对比三种路径：A 纯人工、B 基于启发式规则、C 大模型裁判+人工抽检混合流。说明最终选择 C 是在保持 92% 与人工一致率前提下降低 85% 成本。'
-    },
-    {
-      id: 'qa-rev-3',
-      question: '在搭建评测体系过程中，你个人具体负责什么？算法团队为什么愿意配合你定下的规则？',
-      interviewerIntent: '考察个人真实贡献度、推动跨部门协作的软实力、如何解决技术冲突',
-      candidatePerformance: '良好 (75分)',
-      analysis: '个人职责描述较模糊，听起来更像“协调者”而非“策略定义者”，缺少解决冲突的具体方法论。',
-      recommendedStrategy: '强调作为 PM 独立定义了 Faithfulness/Recall 等三大核心数学指标体系，并通过 Bad Case 交叉校验与数据对齐，让算法心服口服。'
-    }
-  ],
-  experienceFeedback: [
-    {
-      experienceId: 'exp-1',
-      feedbackText: '在本次面试中得到了面试官的高度认可，建议将「双模型交叉判别与 Kappa 一致性度量」作为亮点写入经历卡片'
-    }
-  ],
   competencies: [
-    { name: '岗位匹配度', score: 86, benchmark: 80 },
-    { name: '回答结构性', score: 72, benchmark: 78 },
-    { name: '专业技术深度', score: 78, benchmark: 82 },
-    { name: '表达清晰度', score: 74, benchmark: 75 }
+    { name: '岗位匹配', score: 86, benchmark: 80 },
+    { name: '专业深度', score: 78, benchmark: 82 },
+    { name: '回答结构', score: 72, benchmark: 78 },
+    { name: '表达清晰', score: 74, benchmark: 75 }
   ],
   coreProblems: [
-    '① 产品决策依据表达不足：只讲了选择 LLM-as-a-Judge 自动化方案，未向面试官说明为何放弃其他方案及方案权衡边界。',
-    '② 技术理解回答不够深入：在追问检索召回与重排模型交叉影响时，对算法复杂度的表述稍显模糊。',
-    '③ 项目结果缺少量化数据佐证：在回答 Agent 落地收益时使用了"大幅提升"等定性词，未当场报出 65% 与 42% 等硬数据。'
+    '① 产品决策依据表达不足，面试官追问时缺少方案选择背景',
+    '② 技术理解回答不够深入，停留在现象描述而非原理层',
+    '③ 项目结果缺少量化数据，导致说服力偏弱'
   ],
   preparationVsActual: [
     { keyPoint: '项目背景与业务痛点说明', wasPrepared: true, wasAnswered: true, status: 'hit' },
@@ -592,70 +718,611 @@ export const initialReviewByteRound1: InterviewReview = {
     {
       id: 'qa-1',
       qIndex: 1,
-      question: '请先做个简短自我介绍，重点讲讲你在 AI 搜索和评测方向的核心经历。',
-      candidateAnswer: '面试官你好，我是菁菁，有 5 年 AI 产品经验。过去 2 年在快知智能负责 AI 搜索评测体系与 Prompt 平台建设，主导了从 0 到 1 搭建自动化评测管线，主要就是制定打分规则让大模型自动评测搜索问答质量……',
+      question: '介绍一个你从 0 到 1 做过的 AI 产品案例',
+      duration: '4:32',
+      score: 88,
+      candidateAnswer: '好的，我来介绍一个去年我在前公司独立负责的 AI 搜索评测体系项目。背景是：当时团队有很多 AI 搜索相关的迭代，但没有系统性的评估方法，每次判断效果都靠人肉测试，非常低效，而且标准不统一。我负责建立一套完整的评估 pipeline。我做了三件事：第一，制定了基于 nDCG 和 MRR 的评估指标体系；第二，主导了 2000 条标注数据集的建设；第三，和算法团队一起搭了自动化的评测流程。最后的结果是评估效率提升了 4 倍，也把召回率的优化方向变得更可量化，最终召回率提升了 15%。',
+      transcript: `"好的，我来介绍一个去年我在前公司独立负责的 AI 搜索评测体系项目。\n\n背景是：当时团队有很多 AI 搜索相关的迭代，但没有系统性的评估方法，每次判断效果都靠人肉测试，非常低效，而且标准不统一。\n\n我负责建立一套完整的评估 pipeline。我做了三件事：第一，制定了基于 nDCG 和 MRR 的评估指标体系；第二，主导了 2000 条标注数据集的建设；第三，和算法团队一起搭了自动化的评测流程。\n\n最后的结果是评估效率提升了 4 倍，也把召回率的优化方向变得更可量化，最终召回率提升了 15%。"`,
+      metricCards: {
+        clarityScore: 92,
+        clarityDesc: 'STAR 结构完整，逻辑层次清晰',
+        impactScore: 85,
+        impactDesc: '引用了具体指标，但可以更精确',
+        decisionScore: 80,
+        decisionDesc: '提及了 trade-off，但深度略浅',
+        fluencyScore: 88,
+        fluencyDesc: '表达清晰，偶有停顿'
+      },
       interviewerIntent: {
-        mainPoints: ['快速建立画像', '验证履历真实度', '看表达抓重点能力'],
+        mainPoints: ['考察候选人是否有从 0 到 1 的完整产品经验', '是否能用数据量化 Impact 并做取舍', '是否能在不确定中持续推进产品落地'],
         importanceStars: 5,
-        productAbilityStars: 4,
-        techDepthStars: 3
+        productAbilityStars: 5,
+        techDepthStars: 4,
+        intentItems: [
+          {
+            title: '产品完整性',
+            stars: 5,
+            desc: '考察候选人是否有从 0 到 1 的完整产品经验'
+          },
+          {
+            title: '数据意识',
+            stars: 4,
+            desc: '是否能用数据量化 Impact 并做取舍'
+          },
+          {
+            title: '推动力',
+            stars: 3,
+            desc: '是否能在不确定中持续推进产品落地'
+          }
+        ]
       },
       answerAnalysis: {
-        completeness: 80,
-        structure: 75,
-        persuasiveness: 78,
-        jobRelevance: 88
+        completeness: 88,
+        structure: 92,
+        persuasiveness: 85,
+        jobRelevance: 90,
+        clarity: 92,
+        impact: 85,
+        decision: 80,
+        fluency: 88
       },
-      identifiedIssues: ['自我介绍未直接点出量化核心战绩（如 NDCG +18.5%）', '语速稍快，缺少一句话定位标签'],
-      suggestionAdvice: '开场直接用"一位专精于大模型搜索质量评测与数据驱动落地的产品经理"定调，并在 1 分钟内报出幻觉率下降 34.2% 和 5 万条日评测的核心数字。',
+      identifiedIssues: ['方案选型对比（为何放弃纯规则）展开略浅', '可进一步补充如何解决大模型自身评测偏差'],
+      suggestionAdvice: '建议在 1 分钟内补充双模型交叉判别机制，说明如何用 5% 金标抽检确保评测一致性达到 94.1%。',
       relatedExperienceId: 'exp-1'
     },
     {
       id: 'qa-2',
       qIndex: 2,
-      question: '你能详细讲讲那个 AI 搜索评测体系项目吗？你们当初为什么不直接用人工标注，而要搞自动化 LLM-as-a-Judge？',
-      candidateAnswer: '因为人工标注太慢了，我们当时每天只能测 200 条，算法发版一周要好几次根本等不及，而且人工标注每个人标准不一样很主观。所以我们就想用 GPT-4 来当裁判，写了很详细的 Prompt 判定答案好坏。',
+      question: '你如何平衡用户需求和业务目标？',
+      duration: '3:15',
+      score: 72,
+      candidateAnswer: '在日常工作中，用户需求往往偏向于体验与即时满足，而业务目标关注商业变现和留存。我的做法是建立统一的优先级评估矩阵（RICE 模型），对需求进行影响力与开发成本评分，同时设立体验底线红线指标。',
+      transcript: `"在日常工作中，用户需求往往偏向于体验与即时满足，而业务目标关注商业变现和留存。我的做法是建立统一的优先级评估矩阵（RICE 模型），对需求进行影响力与开发成本评分，同时设立体验底线红线指标。当商业化变现与搜索相关性冲突时，以相关性 NPS 不跌破 75 分为硬性约束。"`,
+      metricCards: {
+        clarityScore: 78,
+        clarityDesc: '有明确的方法论框架，逻辑顺畅',
+        impactScore: 68,
+        impactDesc: '缺少实际项目中冲突妥协的量化案例',
+        decisionScore: 70,
+        decisionDesc: '权衡逻辑较为常规，缺少极端场景取舍',
+        fluencyScore: 74,
+        fluencyDesc: '表达较稳定，略显理论化'
+      },
       interviewerIntent: {
-        mainPoints: ['技术选型思考深度', '成本与效率 ROI 权衡', '是否盲目迷信大模型'],
-        importanceStars: 5,
-        productAbilityStars: 5,
-        techDepthStars: 4
+        mainPoints: ['商业敏感度与业务大局观', '需求优先级决策机制', '冲突管理与说服能力'],
+        importanceStars: 4,
+        productAbilityStars: 4,
+        techDepthStars: 3,
+        intentItems: [
+          {
+            title: '商业敏感度',
+            stars: 5,
+            desc: '考察对商业指标与产品体验平衡的掌控力'
+          },
+          {
+            title: '决策框架',
+            stars: 4,
+            desc: '是否有成体系的优先级判定与取舍原则'
+          },
+          {
+            title: '实战经验',
+            stars: 3,
+            desc: '是否经历过真实的业务对抗与两难抉择'
+          }
+        ]
       },
       answerAnalysis: {
-        completeness: 68,
-        structure: 65,
-        persuasiveness: 72,
-        jobRelevance: 86
+        completeness: 72,
+        structure: 78,
+        persuasiveness: 68,
+        jobRelevance: 75,
+        clarity: 78,
+        impact: 68,
+        decision: 70,
+        fluency: 74
       },
-      identifiedIssues: [
-        '⚠ 没有清晰展示方案选型对比（如：纯人工 vs 纯规则 vs LLM-as-a-Judge vs 混合流）',
-        '⚠ 没解释如何解决"大模型自身评测也有偏差"的可靠性问题'
-      ],
-      suggestionAdvice: '建议补充结构化框架：“当时我们对比了三种路径：A 纯人工、B 基于启发式规则、C 大模型裁判+人工抽检混合流。最终选择 C 是因为在保持 92% 与人工一致率的前提下，将单次成本降低了 85%……”',
-      relatedExperienceId: 'exp-1'
+      identifiedIssues: ['回答停留在理论模型层面，缺乏具体的商业对抗实操案例'],
+      suggestionAdvice: '建议举出一个具体的变现点位测试案例，例如在搜索首屏插入生成式卡片时，如何在 CTR 与用户停留时长之间做灰度实验平衡。',
+      relatedExperienceId: 'exp-2'
     },
     {
       id: 'qa-3',
       qIndex: 3,
-      question: '在搭建评测体系过程中，你个人具体负责什么？算法团队为什么愿意配合你定下的规则？',
-      candidateAnswer: '我主要是写了评测标准文档，然后跟算法开会沟通。他们一开始也觉得规则太严，后来大家一起坐下来对了几个 Bad Case，统一了标准后就跑通了。',
+      question: '你对字节搜索 AI 化的看法？',
+      duration: '2:48',
+      score: 64,
+      candidateAnswer: '我觉得字节搜索 AI 化是必然趋势，豆包大模型的融入可以让搜索从单纯的信息检索转变为直接给出答案与生成式解决方案。重点在于如何把抖音的短视频多模态生态与大模型知识库结合起来。',
+      transcript: `"我觉得字节搜索 AI 化是必然趋势，豆包大模型的融入可以让搜索从单纯的信息检索转变为直接给出答案与生成式解决方案。重点在于如何把抖音的短视频多模态生态与大模型知识库结合起来，提升长尾问答的满足率。"`,
+      metricCards: {
+        clarityScore: 70,
+        clarityDesc: '观点明确，但论据展开不够充分',
+        impactScore: 60,
+        impactDesc: '缺乏对字节业务现状与竞品格局的深度分析',
+        decisionScore: 62,
+        decisionDesc: '停留于行业宏观共识，缺少独到洞察',
+        fluencyScore: 68,
+        fluencyDesc: '用词较为泛化，缺少技术术语支撑'
+      },
       interviewerIntent: {
-        mainPoints: ['个人真实贡献度', '推动跨部门协作的软实力', '如何解决技术冲突'],
+        mainPoints: ['对字节业务与生态的理解深度', '行业洞察与前瞻视野', '对生成式搜索技术瓶颈的认知'],
         importanceStars: 5,
         productAbilityStars: 4,
-        techDepthStars: 3
+        techDepthStars: 5,
+        intentItems: [
+          {
+            title: '业务洞察',
+            stars: 5,
+            desc: '是否真正研究过字节搜索的业务现状与核心诉求'
+          },
+          {
+            title: '技术视野',
+            stars: 4,
+            desc: '对多模态搜索、RAG 延迟与成本瓶颈的认知'
+          },
+          {
+            title: '产品构想',
+            stars: 3,
+            desc: '是否具备差异化创新的产品策略构想'
+          }
+        ]
+      },
+      answerAnalysis: {
+        completeness: 64,
+        structure: 70,
+        persuasiveness: 60,
+        jobRelevance: 68,
+        clarity: 70,
+        impact: 60,
+        decision: 62,
+        fluency: 68
+      },
+      identifiedIssues: ['回答停留在通用套话，没有结合字节豆包大模型与抖音短视频生态给出独到策略'],
+      suggestionAdvice: '建议从「视频语义切片检索」、「端到端多模态问答」与「大模型推理延迟成本控制」三个技术业务切入点深入阐述。',
+      relatedExperienceId: 'exp-3'
+    },
+    {
+      id: 'qa-4',
+      qIndex: 4,
+      question: '最有挑战的经历是什么？如何克服的？',
+      duration: '3:54',
+      score: 81,
+      candidateAnswer: '最有挑战的是在资源极其有限的情况下，需要在一个月内完成首版评测系统上线。当时算法团队对评测指标质疑很大，我通过组织 3 轮 Bad Case 盲测对齐，并引入 Kappa 一致性度量指标，最终说服算法采纳标准。',
+      transcript: `"最有挑战的是在资源极其有限的情况下，需要在一个月内完成首版评测系统上线。当时算法团队对评测指标质疑很大，双方标准不统一。我主导了 3 轮 Bad Case 盲测对齐，并引入 Kappa 一致性度量指标，将人机打分一致率提升到 94.1%，最终平息争议并按期上线。"`,
+      metricCards: {
+        clarityScore: 85,
+        clarityDesc: '情境-任务-行动-结果完整，重点突出',
+        impactScore: 82,
+        impactDesc: '给出了 94.1% 一致率等量化证据',
+        decisionScore: 80,
+        decisionDesc: '展现了冲突化解与技术说服能力',
+        fluencyScore: 80,
+        fluencyDesc: '叙述流畅，情感充沛'
+      },
+      interviewerIntent: {
+        mainPoints: ['逆境中的抗压与执行力', '跨团队冲突仲裁能力', '技术方案的可解释性与公信力'],
+        importanceStars: 4,
+        productAbilityStars: 4,
+        techDepthStars: 4,
+        intentItems: [
+          {
+            title: '抗压力与交付',
+            stars: 5,
+            desc: '在极端时间与资源限制下的交付确定性'
+          },
+          {
+            title: '协同仲裁',
+            stars: 4,
+            desc: '如何用客观数据说服强势技术团队'
+          }
+        ]
+      },
+      answerAnalysis: {
+        completeness: 81,
+        structure: 85,
+        persuasiveness: 82,
+        jobRelevance: 84,
+        clarity: 85,
+        impact: 82,
+        decision: 80,
+        fluency: 80
+      },
+      identifiedIssues: ['对克服困难后的团队沉淀与复用机制展开略简'],
+      suggestionAdvice: '可补充这套盲测对齐流程后来被固化为团队每周常规评测 SOP。',
+      relatedExperienceId: 'exp-1'
+    },
+    {
+      id: 'qa-5',
+      qIndex: 5,
+      question: '如何推动跨团队协作中的阻力？',
+      duration: '2:10',
+      score: 56,
+      candidateAnswer: '主要是多开会沟通，找双方领导拉齐目标，如果推进不下去就找上级仲裁。平时多了解对方的 KPI 诉求，尽量在需求中兼顾对方的利益。',
+      transcript: `"主要是多开会沟通，找双方领导拉齐目标，如果推进不下去就找上级仲裁。平时多了解对方的 KPI 诉求，尽量在需求中兼顾对方的利益。"`,
+      metricCards: {
+        clarityScore: 62,
+        clarityDesc: '思路较为被动，依赖升级机制',
+        impactScore: 50,
+        impactDesc: '缺少通过数据与技术共鸣主动破局的手段',
+        decisionScore: 52,
+        decisionDesc: '未体现高级 PM 的组织影响力',
+        fluencyScore: 65,
+        fluencyDesc: '篇幅过短，内容偏薄弱'
+      },
+      interviewerIntent: {
+        mainPoints: ['自驱影响力', '非职权领导力', '复杂跨部门博弈策略'],
+        importanceStars: 4,
+        productAbilityStars: 5,
+        techDepthStars: 2,
+        intentItems: [
+          {
+            title: '自驱影响力',
+            stars: 5,
+            desc: '是否具备不依赖上级施压的主动破局能力'
+          },
+          {
+            title: '利益对齐',
+            stars: 4,
+            desc: '能否把产品目标转化为合作团队的共同战果'
+          }
+        ]
+      },
+      answerAnalysis: {
+        completeness: 56,
+        structure: 62,
+        persuasiveness: 50,
+        jobRelevance: 60,
+        clarity: 62,
+        impact: 50,
+        decision: 52,
+        fluency: 65
+      },
+      identifiedIssues: ['过度依赖“找领导升级”，在字节扁平文化中容易被视为推进力偏弱'],
+      suggestionAdvice: '重塑回答：“首先将共同问题拆解为数据指标（如召回率瓶颈），主动为算法团队提供高质量 Benchmark 数据资产，用降低他们调试成本的方式变阻力为合力。”',
+      relatedExperienceId: 'exp-2'
+    },
+    {
+      id: 'qa-6',
+      qIndex: 6,
+      question: '你为什么选择 AI 产品方向？',
+      duration: '1:52',
+      score: 79,
+      candidateAnswer: '因为大模型带来了人机交互和生产力工具的底层重塑。传统软件时代我们只能定义确定性规则，而 AI 时代我们需要设计概率性系统的交互容错与反馈闭环，这对我来说极具挑战性和吸引力。',
+      transcript: `"因为大模型带来了人机交互和生产力工具的底层重塑。传统软件时代我们只能定义确定性规则，而 AI 时代我们需要设计概率性系统的交互容错与反馈闭环，这对我来说极具挑战性和吸引力。我在研究生期间就专攻 NLP，一直希望把技术转化为真实业务价值。"`,
+      metricCards: {
+        clarityScore: 82,
+        clarityDesc: '热爱与理性思考兼备，动机纯粹清晰',
+        impactScore: 75,
+        impactDesc: '点出了确定性向概率性转变的本质',
+        decisionScore: 78,
+        decisionDesc: '职业发展规划连贯性好',
+        fluencyScore: 82,
+        fluencyDesc: '自信真诚，逻辑自洽'
+      },
+      interviewerIntent: {
+        mainPoints: ['职业自驱力与稳定性', '对 AI 产品本质的认知', '长期发展潜力'],
+        importanceStars: 3,
+        productAbilityStars: 4,
+        techDepthStars: 3,
+        intentItems: [
+          {
+            title: '职业自驱力',
+            stars: 4,
+            desc: '对 AI 行业的真诚热爱与长期投入意愿'
+          },
+          {
+            title: '认知深度',
+            stars: 4,
+            desc: '是否理解 AI 产品的概率性与不确定性本质'
+          }
+        ]
+      },
+      answerAnalysis: {
+        completeness: 79,
+        structure: 82,
+        persuasiveness: 78,
+        jobRelevance: 80,
+        clarity: 82,
+        impact: 75,
+        decision: 78,
+        fluency: 82
+      },
+      identifiedIssues: ['可进一步结合字节的具体业务场景表达向往'],
+      suggestionAdvice: '可在结尾补充希望在字节亿级用户场景下，探索生成式交互如何真正走进大众日常生活。',
+      relatedExperienceId: 'exp-1'
+    },
+    {
+      id: 'qa-7',
+      qIndex: 7,
+      question: '如何衡量 AI 产品的成功？',
+      duration: '3:08',
+      score: 85,
+      candidateAnswer: '衡量 AI 产品不能只看模型层面的准确率，必须分三层体系：第一层是底层模型指标（Faithfulness、幻觉率、延迟）；第二层是交互层满意度（无编辑采纳率、单次会话完成率）；第三层是终极商业价值（ROI、留存率、单位任务成本节省）。',
+      transcript: `"衡量 AI 产品不能只看模型层面的准确率，必须分三层体系：第一层是底层模型指标（Faithfulness、幻觉率、延迟）；第二层是交互层满意度（无编辑采纳率、单次会话完成率）；第三层是终极商业价值（ROI、留存率、单位任务成本节省）。只有三层形成正向数据飞轮，产品才算真正成功。"`,
+      metricCards: {
+        clarityScore: 88,
+        clarityDesc: '分层指标体系非常完整，逻辑极强',
+        impactScore: 84,
+        impactDesc: '点出了无编辑采纳率等关键高阶指标',
+        decisionScore: 82,
+        decisionDesc: '兼顾技术效果与商业闭环',
+        fluencyScore: 86,
+        fluencyDesc: '结构层次分明，表达精练'
+      },
+      interviewerIntent: {
+        mainPoints: ['指标量化设计能力', '业务闭环与 ROI 意识', '全局产品视野'],
+        importanceStars: 5,
+        productAbilityStars: 5,
+        techDepthStars: 4,
+        intentItems: [
+          {
+            title: '指标体系设计',
+            stars: 5,
+            desc: '能否建立从模型到业务的端到端北极星指标体系'
+          },
+          {
+            title: '商业 ROI 闭环',
+            stars: 4,
+            desc: '是否注重算力成本与业务收益的经济学平衡'
+          }
+        ]
+      },
+      answerAnalysis: {
+        completeness: 85,
+        structure: 88,
+        persuasiveness: 84,
+        jobRelevance: 88,
+        clarity: 88,
+        impact: 84,
+        decision: 82,
+        fluency: 86
+      },
+      identifiedIssues: ['可补充一个反向案例：模型指标提升但业务指标下滑时如何归因'],
+      suggestionAdvice: '表现优异，可直接作为标准模版在二面继续保持。',
+      relatedExperienceId: 'exp-1'
+    },
+    {
+      id: 'qa-8',
+      qIndex: 8,
+      question: '大模型幻觉问题在搜索场景如何治理？',
+      duration: '3:20',
+      score: 83,
+      candidateAnswer: '搜索场景对幻觉零容忍。我的治理框架分为检索前、生成中、生成后三道防线。检索前做意图分类与高置信度召回；生成中做 Grounding 强约束 Prompt 与思维链校验；生成后做自洽性验证与基于 Fact-Checking 的事实验证模型过滤。',
+      transcript: `"搜索场景对幻觉零容忍。我的治理框架分为三道防线：检索前通过混合检索与语义重排确保上下文高质量；生成中采用基于引用锚点的 Constrained Generation；生成后引入轻量级 NLI 模型做蕴含校验，未通过的降级为结构化卡片展示。"`,
+      metricCards: {
+        clarityScore: 86,
+        clarityDesc: '三道防线体系清晰，工程化落地性强',
+        impactScore: 80,
+        impactDesc: '降级机制设计合理，兼顾体验安全',
+        decisionScore: 82,
+        decisionDesc: '对 NLI 校验与延迟权衡有深刻认知',
+        fluencyScore: 84,
+        fluencyDesc: '术语精准，表达流畅'
+      },
+      interviewerIntent: {
+        mainPoints: ['大模型技术原理掌握', '工程化落地与安全防护', '用户体验降级策略'],
+        importanceStars: 5,
+        productAbilityStars: 4,
+        techDepthStars: 5,
+        intentItems: [
+          {
+            title: '技术深度',
+            stars: 5,
+            desc: '对 RAG 与幻觉抑制算法原理的理解程度'
+          },
+          {
+            title: '风控与降级',
+            stars: 4,
+            desc: '在极端坏例下的容灾与安全保底策略'
+          }
+        ]
+      },
+      answerAnalysis: {
+        completeness: 83,
+        structure: 86,
+        persuasiveness: 80,
+        jobRelevance: 86,
+        clarity: 86,
+        impact: 80,
+        decision: 82,
+        fluency: 84
+      },
+      identifiedIssues: ['缺少对高并发下 NLI 验证延迟成本的量化数据'],
+      suggestionAdvice: '补充说明通过异步校验与冷热分流，将整体搜索首字 P99 延迟控制在 800ms 以内。',
+      relatedExperienceId: 'exp-3'
+    },
+    {
+      id: 'qa-9',
+      qIndex: 9,
+      question: '如果算法上线后核心指标下滑，你如何排查与决策？',
+      duration: '2:45',
+      score: 70,
+      candidateAnswer: '首先立即停止全量放量，回滚至上一稳定版本。随后抓取实验组与对照组的分流日志，按照 Query 频次与垂类做切片分析，定位是召回问题、重排问题还是大模型生成断流。',
+      transcript: `"首先立即停止全量放量并保护核心大盘。随后抓取两组分流日志，从三大维度排查：分流随机性与实验配置；Query 垂类切片（如长尾搜索 vs 头部词）；模型链路各个阶段的 Bad Case 归因。确认根因后再制定专项修复计划。"`,
+      metricCards: {
+        clarityScore: 76,
+        clarityDesc: '排查顺序合乎规范，具备基本的工程素养',
+        impactScore: 68,
+        impactDesc: '对业务指标与算法指标的联动分析略欠深入',
+        decisionScore: 68,
+        decisionDesc: '回滚决策果断，但缺少止损灰度分级机制',
+        fluencyScore: 72,
+        fluencyDesc: '表达正常，稍有平淡'
+      },
+      interviewerIntent: {
+        mainPoints: ['线上故障应急与抗压能力', 'AB 实验分析深度', '数据归因方法论'],
+        importanceStars: 4,
+        productAbilityStars: 4,
+        techDepthStars: 4,
+        intentItems: [
+          {
+            title: '应急处置',
+            stars: 4,
+            desc: '线上异常指标的止损与快速响应机制'
+          },
+          {
+            title: '归因深度',
+            stars: 4,
+            desc: '能否多维度多切片穿透数据异常表象'
+          }
+        ]
       },
       answerAnalysis: {
         completeness: 70,
-        structure: 68,
-        persuasiveness: 70,
-        jobRelevance: 82
+        structure: 76,
+        persuasiveness: 68,
+        jobRelevance: 72,
+        clarity: 76,
+        impact: 68,
+        decision: 68,
+        fluency: 72
       },
-      identifiedIssues: [
-        '⚠ 个人职责描述较模糊，听起来更像"协调者"而非"策略定义者"',
-        '缺少解决冲突的具体方法论与量化依据'
-      ],
-      suggestionAdvice: '强调作为 PM 独立定义了 Faithfulness/Recall 等三大核心数学指标体系，并通过 Bad Case 交叉校验与数据对齐，让算法心服口服。',
+      identifiedIssues: ['排查流程偏通用，缺少对 LLM 专属特征（如 Token 截断、Prompt 注入）的针对性排查'],
+      suggestionAdvice: '增加针对大模型生成特性（如 Temperature 漂移或第三方 API 抖动）的排查逻辑。',
+      relatedExperienceId: 'exp-1'
+    },
+    {
+      id: 'qa-10',
+      qIndex: 10,
+      question: '讲讲你在 Prompt 工程或 Agent 流程设计中的踩坑经验',
+      duration: '3:10',
+      score: 86,
+      candidateAnswer: '最典型的坑是"Prompt 越写越长导致指令遵循度下降和 Token 成本激增"。后来我们将庞杂的 System Prompt 拆解为 Router + Multi-Agent 架构，每个 Agent 专精一个单一职责，准确率提升了 28%，成本降低 40%。',
+      transcript: `"最典型的坑是早期把所有规则堆在一个几千 Token 的 System Prompt 里，导致模型出现'Attention 遗忘'和指令冲突。我们的解决方案是重构为 Multi-Agent 状态机，Router 负责意图分发，下游分别调用检索 Agent、推理 Agent 和格式化 Agent，整体稳定性大幅提升。"`,
+      metricCards: {
+        clarityScore: 90,
+        clarityDesc: '问题定义清晰，重构方案与对比数据翔实',
+        impactScore: 86,
+        impactDesc: '28% 准确率提升与 40% 成本优化很有说服力',
+        decisionScore: 84,
+        decisionDesc: '架构演进思路符合工业界最佳实践',
+        fluencyScore: 85,
+        fluencyDesc: '条理清晰，技术沉淀扎实'
+      },
+      interviewerIntent: {
+        mainPoints: ['真实的工程调优经验', '对 LLM 上下文注意力特性的理解', '架构重构魄力'],
+        importanceStars: 5,
+        productAbilityStars: 4,
+        techDepthStars: 5,
+        intentItems: [
+          {
+            title: '实战避坑',
+            stars: 5,
+            desc: '考察是否在复杂 Agent 系统中有过深度踩坑与优化实操'
+          },
+          {
+            title: '架构抽象',
+            stars: 4,
+            desc: '能否把复杂业务流抽象为高内聚低耦合的 Agent 链路'
+          }
+        ]
+      },
+      answerAnalysis: {
+        completeness: 86,
+        structure: 90,
+        persuasiveness: 86,
+        jobRelevance: 88,
+        clarity: 90,
+        impact: 86,
+        decision: 84,
+        fluency: 85
+      },
+      identifiedIssues: ['可进一步说明 Multi-Agent 链路之间的延迟开销是如何优化的'],
+      suggestionAdvice: '补充说明通过并行调用与异步流式输出，将端到端延迟维持在 1.5s 以内。',
+      relatedExperienceId: 'exp-2'
+    },
+    {
+      id: 'qa-11',
+      qIndex: 11,
+      question: '如何看待当前生成式搜索的商业化与变现路径？',
+      duration: '2:30',
+      score: 68,
+      candidateAnswer: '生成式搜索直接给出答案会挤压传统搜索广告的点击展示空间。未来的变现路径主要在三个方向：第一是答案中的智能商品推荐与服务履约卡片；第二是针对专业深度内容的付费订阅；第三是企业级垂直知识搜索的 API 计费。',
+      transcript: `"生成式搜索直接给出答案会挤压传统列表广告空间。我认为未来的变现核心是'从流量中介走向交易履约'：在生成答案中嵌入高相关性的原生商品卡与服务流，按成交 CPS 分成；同时结合意图识别为高净值用户提供专业研报与深度对比付费模式。"`,
+      metricCards: {
+        clarityScore: 74,
+        clarityDesc: '商业思考方向正确，结构清晰',
+        impactScore: 65,
+        impactDesc: '缺少对广告主投放意愿与 CPM 测算的深入探讨',
+        decisionScore: 66,
+        decisionDesc: '观点偏行业共识，缺少突破性解法',
+        fluencyScore: 70,
+        fluencyDesc: '表达正常'
+      },
+      interviewerIntent: {
+        mainPoints: ['商业嗅觉与变现模式设计', '颠覆性技术对现有商业帝国的冲击反思'],
+        importanceStars: 4,
+        productAbilityStars: 4,
+        techDepthStars: 3,
+        intentItems: [
+          {
+            title: '商业化构想',
+            stars: 4,
+            desc: '对 AI 搜索商业变现与经济模型的理解'
+          },
+          {
+            title: '生态推演',
+            stars: 4,
+            desc: '能否平衡搜索广告收入与用户直接获取答案的体验'
+          }
+        ]
+      },
+      answerAnalysis: {
+        completeness: 68,
+        structure: 74,
+        persuasiveness: 65,
+        jobRelevance: 70,
+        clarity: 74,
+        impact: 65,
+        decision: 66,
+        fluency: 70
+      },
+      identifiedIssues: ['缺少对传统搜索大厂变现困境与创新者窘境的深入剖析'],
+      suggestionAdvice: '可引入 Perplexity 的品牌赞助问题与电商佣金闭环作为具体参照物展开。',
+      relatedExperienceId: 'exp-2'
+    },
+    {
+      id: 'qa-12',
+      qIndex: 12,
+      question: '你有什么问题想向我提问的反问环节？',
+      duration: '2:05',
+      score: 82,
+      candidateAnswer: '我想请教面试官两个问题：第一，目前团队在多模态（图文/视频）生成式搜索方向，最核心的技术瓶颈是召回准确率还是推理延迟？第二，这个业务在字节当前战略序列里的优先级以及期望新加入的同学在入职前三个月达成的关键里程碑是什么？',
+      transcript: `"我想请教两个问题：第一，目前团队在生成式搜索落地中，核心攻坚点是多模态特征召回还是端到端推理成本优化？第二，您期望新加入的同学在入职前三个月独立主导并交付的关键业务里程碑是什么？"`,
+      metricCards: {
+        clarityScore: 86,
+        clarityDesc: '问题专业且极具针对性，展现了极强的务实态度',
+        impactScore: 80,
+        impactDesc: '直击团队核心痛点与岗位期望',
+        decisionScore: 82,
+        decisionDesc: '提问显露出对业务落地的主动思考',
+        fluencyScore: 82,
+        fluencyDesc: '提问得体，态度谦逊专业'
+      },
+      interviewerIntent: {
+        mainPoints: ['候选人的真实求职意向与成熟度', '对团队业务痛点的敏感度'],
+        importanceStars: 4,
+        productAbilityStars: 4,
+        techDepthStars: 4,
+        intentItems: [
+          {
+            title: '求职动机与务实度',
+            stars: 5,
+            desc: '通过反问体现候选人的专业段位与落地决心'
+          }
+        ]
+      },
+      answerAnalysis: {
+        completeness: 82,
+        structure: 86,
+        persuasiveness: 80,
+        jobRelevance: 85,
+        clarity: 86,
+        impact: 80,
+        decision: 82,
+        fluency: 82
+      },
+      identifiedIssues: ['提问质量很高，展现了成熟的产品思维'],
+      suggestionAdvice: '保持该提问策略，在二面及 HR 面均可复用。',
       relatedExperienceId: 'exp-1'
     }
   ],

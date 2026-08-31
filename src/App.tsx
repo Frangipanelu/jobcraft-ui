@@ -16,6 +16,7 @@ import { InterviewPrepCenterView } from './components/interview/InterviewPrepCen
 import { InterviewPrepWorkspaceView } from './components/interview/InterviewPrepWorkspaceView';
 import { InterviewReviewCenterView } from './components/review/InterviewReviewCenterView';
 import { InterviewReviewDetailView } from './components/review/InterviewReviewDetailView';
+import { UserProfileView } from './components/user/UserProfileView';
 
 // Modals
 import { NewJobModal } from './components/jobs/NewJobModal';
@@ -110,6 +111,9 @@ const MainLayout: React.FC = () => {
             interviewId={selectedInterviewId}
           />
         );
+
+      case 'user_profile':
+        return <UserProfileView />;
 
       default:
         return (

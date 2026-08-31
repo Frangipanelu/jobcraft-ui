@@ -1,21 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useJobCraft } from '../../context/JobCraftContext';
 import {
-  RotateCcw,
-  Sparkles,
-  ArrowRight,
-  TrendingUp,
-  AlertTriangle,
-  CheckCircle2,
-  Database,
   ArrowLeft,
-  ChevronRight,
-  Award,
-  Layers,
-  HelpCircle,
-  Clock,
-  BookOpen
+  Star,
+  Sparkles,
+  CheckCircle2,
+  AlertTriangle,
+  ArrowRight,
+  Database,
+  Quote,
+  Lightbulb,
+  TrendingUp,
+  FileText
 } from 'lucide-react';
+import { InterviewQA } from '../../types/jobcraft';
 
 interface InterviewReviewDetailViewProps {
   interviewId?: string;
@@ -29,13 +27,15 @@ export const InterviewReviewDetailView: React.FC<InterviewReviewDetailViewProps>
   const currentInterview = interviews.find((i) => i.id === interviewId) || interviews[0];
   const review = currentInterview?.review;
 
+  const [selectedQAIndex, setSelectedQAIndex] = useState<number>(0);
+
   if (!currentInterview || !review) {
     return (
       <div className="max-w-4xl mx-auto p-12 text-center space-y-4">
         <div className="text-base text-[#6B726F]">暂无本场面试的复盘报告</div>
         <button
           onClick={() => navigateTo('interview_review_center')}
-          className="px-4 py-2 rounded-lg bg-[#3E6256] text-white text-xs font-semibold"
+          className="px-4 py-2 rounded-lg bg-[#3E6256] text-white text-xs font-semibold cursor-pointer"
         >
           返回复盘中心
         </button>
@@ -43,249 +43,408 @@ export const InterviewReviewDetailView: React.FC<InterviewReviewDetailViewProps>
     );
   }
 
-  const handleApplyFeedback = (feedbackIndex: number, experienceId: string) => {
+  const qaList: InterviewQA[] = review.qaList && review.qaList.length > 0 ? review.qaList : [];
+  const selectedQA: InterviewQA | undefined = qaList[selectedQAIndex] || qaList[0];
+
+  const handleApplyFeedback = (feedbackIndex: number) => {
     applyReviewFeedback(currentInterview.id, feedbackIndex);
     showToast({
       type: 'success',
       title: '经历资产已升级',
-      message: '已将本次面试复盘建议沉淀至经历资产库最新版本！'
+      message: '已将本次面试复盘的建议沉淀至经历资产库最新版本！'
     });
   };
 
-  const qaList = review.qaList || [];
-  const coreProblems = review.coreProblems || review.drawbacks || [];
-  const experienceFeedbacks = review.experienceFeedbacks || [];
+  // Helper for score badge color
+  const getScoreBadgeClass = (score: number) => {
+    if (score >= 80) return 'text-[#2D4B41] bg-[#E8F1EC] border-[#D3E2DB]';
+    if (score >= 70) return 'text-[#4B5563] bg-[#F3F4F6] border-[#E5E7EB]';
+    return 'text-[#991B1B] bg-[#FEE2E2] border-[#FECACA]';
+  };
+
+  // Metric cards fallback computation
+  const metricCards = selectedQA?.metricCards || {
+    clarityScore: selectedQA?.answerAnalysis?.structure || 85,
+    clarityDesc: 'STAR 结构完整，逻辑层次清晰',
+    impactScore: selectedQA?.answerAnalysis?.persuasiveness || 80,
+    impactDesc: '引用了具体指标，但可以更精确',
+    decisionScore: selectedQA?.answerAnalysis?.completeness || 75,
+    decisionDesc: '提及了 trade-off，但深度略浅',
+    fluencyScore: selectedQA?.answerAnalysis?.jobRelevance || 82,
+    fluencyDesc: '表达清晰，偶有停顿'
+  };
+
+  // Intent items fallback
+  const intentItems = selectedQA?.interviewerIntent?.intentItems || [
+    {
+      title: '产品完整性',
+      stars: selectedQA?.interviewerIntent?.importanceStars || 5,
+      desc: selectedQA?.interviewerIntent?.mainPoints?.[0] || '考察候选人是否有从 0 到 1 的完整产品经验'
+    },
+    {
+      title: '数据意识',
+      stars: selectedQA?.interviewerIntent?.productAbilityStars || 4,
+      desc: selectedQA?.interviewerIntent?.mainPoints?.[1] || '是否能用数据量化 Impact 并做取舍'
+    },
+    {
+      title: '推动力',
+      stars: selectedQA?.interviewerIntent?.techDepthStars || 3,
+      desc: selectedQA?.interviewerIntent?.mainPoints?.[2] || '是否能在不确定中持续推进产品落地'
+    }
+  ];
+
+  // Analysis progress bars
+  const analysisBars = [
+    { label: '结构清晰度', score: selectedQA?.answerAnalysis?.clarity || metricCards.clarityScore || 92 },
+    { label: '量化 Impact', score: selectedQA?.answerAnalysis?.impact || metricCards.impactScore || 85 },
+    { label: '关键决策', score: selectedQA?.answerAnalysis?.decision || metricCards.decisionScore || 80 },
+    { label: '语言流畅度', score: selectedQA?.answerAnalysis?.fluency || metricCards.fluencyScore || 88 }
+  ];
+
+  // Find if current QA has related feedback
+  const relatedFeedback = review.experienceFeedbacks?.find(
+    (fb) => fb.experienceId === selectedQA?.relatedExperienceId
+  );
+  const feedbackIndex = review.experienceFeedbacks?.findIndex(
+    (fb) => fb.experienceId === selectedQA?.relatedExperienceId
+  );
 
   return (
-    <div className="max-w-5xl mx-auto p-6 md:p-8 space-y-6 animate-in fade-in duration-300">
-      {/* 1. Header Navigation & Score Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E6E6E1] pb-4">
-        <div className="flex items-center gap-3">
+    <div className="min-h-full bg-[#F5F5F3] p-4 md:p-6 lg:p-7 space-y-4 max-w-[1440px] mx-auto animate-in fade-in duration-300 text-[#1D201F]">
+      {/* 1. Header Section */}
+      <div className="bg-white rounded-2xl border border-[#E6E6E1] p-5 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        {/* Left Info */}
+        <div className="space-y-2">
           <button
             onClick={() => navigateTo('interview_review_center')}
-            className="p-1.5 rounded-lg border border-[#E6E6E1] bg-white hover:bg-[#F5F5F2] text-[#6B726F] hover:text-[#1D201F] transition shrink-0 cursor-pointer"
-            title="返回复盘中心"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#6B726F] hover:text-[#1D201F] transition cursor-pointer group"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
+            <span>面试复盘</span>
           </button>
-          <div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-xl font-bold text-[#1D201F] tracking-tight">
-                {currentInterview.company} · {currentInterview.roundName} · 深度复盘审计
-              </h1>
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#E8F1EC] text-[#2D4B41] border border-[#D3E2DB]">
-                得分 {review.overallScore} 分
-              </span>
-            </div>
-            <p className="text-xs text-[#6B726F] mt-0.5">
-              复盘时间：{review.reviewDate} · 岗位：{currentInterview.role}
-            </p>
+
+          <div className="flex items-center gap-3 flex-wrap">
+            <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[#1D201F]">
+              {review.company} · {review.role}
+            </h1>
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#EFEFED] text-[#6B726F]">
+              {review.roundName}
+            </span>
+          </div>
+
+          <div className="text-xs text-[#8A908C]">
+            {review.reviewDate} · {review.duration || '共 54 分钟'} · 识别 {qaList.length || 12} 组 QA
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5 shrink-0">
-          <button
-            onClick={() => navigateTo('interview_prep_workspace', { interviewId: currentInterview.id })}
-            className="px-3.5 py-2 rounded-lg bg-white border border-[#E6E6E1] hover:bg-[#F5F5F2] text-[#1D201F] text-xs font-semibold transition cursor-pointer"
-          >
-            查看原备战方案
-          </button>
-        </div>
-      </div>
-
-      {/* 2. SECTION 1: 全局综合评判与胜率研判 (Executive Summary) */}
-      <div className="bg-white rounded-xl border border-[#E6E6E1] overflow-hidden shadow-2xs">
-        <div className="bg-[#F5F5F2] px-6 py-4 border-b border-[#E6E6E1] flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-[#E8F1EC] text-[#2D4B41] flex items-center justify-center font-bold">
-              <Sparkles className="w-4 h-4 text-[#3E6256]" />
+        {/* Right Top Score Banner */}
+        <div className="flex items-center gap-6 bg-[#FAFAF8] rounded-xl border border-[#ECECE8] px-5 py-3 shrink-0">
+          {/* Big Number */}
+          <div className="text-center pr-6 border-r border-[#E6E6E1]">
+            <div className="text-4xl font-extrabold text-[#1D201F] tracking-tight leading-none">
+              {review.overallScore}
             </div>
-            <div>
-              <h2 className="text-sm font-bold text-[#1D201F]">一、本场综合得失诊断</h2>
-              <p className="text-[11px] text-[#6B726F]">AI 综合考官意图与应答表现生成的阶段性诊断建议</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-6 space-y-4 text-xs">
-          <div className="p-4 rounded-lg bg-[#E8F1EC]/30 border border-[#D3E2DB] text-[#2D4B41] leading-relaxed font-medium">
-            💡 {review.aiDiagnosis || '本次面试展现了扎实的项目落地能力，但在方案选型对比与量化业务指标的表达上仍有提升空间。'}
+            <div className="text-[11px] text-[#8A908C] font-medium mt-1">综合评分</div>
           </div>
 
-          {(review.competencies || []).length > 0 && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2">
-              {(review.competencies || []).map((comp, cIdx) => (
-                <div key={cIdx} className="p-3 bg-[#FAFAFA] rounded-lg border border-[#E6E6E1] space-y-1">
-                  <div className="text-[11px] text-[#6B726F] font-semibold">{comp.name}</div>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-lg font-bold text-[#1D201F]">{comp.score}分</span>
-                    <span className="text-[10px] text-[#8A908C]">行业基准 {comp.benchmark}</span>
-                  </div>
+          {/* 4 Dimension Progress Bars */}
+          <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs min-w-[240px]">
+            {(review.competencies || [
+              { name: '岗位匹配', score: 86 },
+              { name: '专业深度', score: 78 },
+              { name: '回答结构', score: 72 },
+              { name: '表达清晰', score: 74 }
+            ]).map((comp, idx) => (
+              <div key={idx} className="flex items-center gap-2">
+                <span className="text-[11px] text-[#6B726F] font-medium w-14 shrink-0">{comp.name}</span>
+                <div className="flex-1 h-1.5 bg-[#E6E6E1] rounded-full overflow-hidden w-16">
+                  <div
+                    className="h-full bg-[#2D3748] rounded-full transition-all duration-500"
+                    style={{ width: `${comp.score}%` }}
+                  />
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* 3. SECTION 2: 逐题攻防得失审计表 (Question-by-Question Ledger) */}
-      <div className="bg-white rounded-xl border border-[#E6E6E1] overflow-hidden shadow-2xs">
-        <div className="bg-[#F5F5F2] px-6 py-4 border-b border-[#E6E6E1] flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-[#E8F1EC] text-[#2D4B41] flex items-center justify-center font-bold">
-              <BookOpen className="w-4 h-4 text-[#3E6256]" />
-            </div>
-            <div>
-              <h2 className="text-sm font-bold text-[#1D201F]">二、逐题应答深度审计与优化建议</h2>
-              <p className="text-[11px] text-[#6B726F]">对照考官考核点剖析个人应答亮点与失分根因</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="divide-y divide-[#E6E6E1]">
-          {qaList.map((item, idx) => (
-            <div key={item.id || idx} className="p-6 space-y-3 text-xs">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex items-start gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-[#E8F1EC] text-[#2D4B41] font-bold text-[11px] flex items-center justify-center shrink-0 mt-0.5">
-                    {idx + 1}
-                  </span>
-                  <div className="space-y-1">
-                    <h3 className="font-bold text-sm text-[#1D201F]">{item.question}</h3>
-                    <div className="text-[11px] text-[#6B726F] flex items-center gap-2 flex-wrap">
-                      <span className="text-[#3E6256] font-medium">
-                        考官真实意图：{(item.interviewerIntent?.mainPoints || []).join(' / ') || '考察专业深度与落地推力'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-[#FAF2EB] text-[#8F5128] border border-[#F0DFD1] shrink-0">
-                  综合 {item.answerAnalysis?.completeness || 75} 分
-                </span>
-              </div>
-
-              {/* Candidate answer snippet */}
-              {item.candidateAnswer && (
-                <div className="p-3 bg-[#FAFAFA] rounded-lg border border-[#E6E6E1] text-[#6B726F] leading-relaxed italic">
-                  “{item.candidateAnswer}”
-                </div>
-              )}
-
-              {/* Issues & Suggestions */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
-                <div className="p-3 rounded-lg bg-[#FAF2EB]/40 border border-[#F0DFD1] space-y-1">
-                  <div className="font-bold text-[#8F5128]">主要暴露问题</div>
-                  <ul className="space-y-1 text-[#6B726F] list-disc list-inside">
-                    {(item.identifiedIssues || []).map((issue, iIdx) => (
-                      <li key={iIdx}>{issue}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="p-3 rounded-lg bg-[#E8F1EC]/40 border border-[#D3E2DB] space-y-1">
-                  <div className="font-bold text-[#2D4B41]">下一轮优化话术建议</div>
-                  <p className="text-[#6B726F] leading-relaxed">
-                    {item.suggestionAdvice || '建议在回答末尾强化量化结果，并主动对比替代技术路线。'}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* 4. SECTION 3: 核心改进清单 (Core Action Items) */}
-      {coreProblems.length > 0 && (
-        <div className="bg-white rounded-xl border border-[#E6E6E1] overflow-hidden shadow-2xs">
-          <div className="bg-[#F5F5F2] px-6 py-4 border-b border-[#E6E6E1] flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-[#E8F1EC] text-[#2D4B41] flex items-center justify-center font-bold">
-                <AlertTriangle className="w-4 h-4 text-[#8F5128]" />
-              </div>
-              <div>
-                <h2 className="text-sm font-bold text-[#1D201F]">三、下一轮面试必改行动清单</h2>
-                <p className="text-[11px] text-[#6B726F]">针对本轮暴露的共性短板制定的强化动作</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="p-6 divide-y divide-[#E6E6E1] text-xs">
-            {coreProblems.map((prob, idx) => (
-              <div key={idx} className="py-3 first:pt-0 last:pb-0 flex items-start gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-[#FAF2EB] text-[#8F5128] text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
-                  {idx + 1}
-                </span>
-                <span className="text-[#1D201F] font-medium leading-relaxed">{prob}</span>
+                <span className="text-[11px] font-bold text-[#1D201F] w-5 text-right">{comp.score}</span>
               </div>
             ))}
           </div>
         </div>
-      )}
+      </div>
 
-      {/* 5. SECTION 4: 经历资产反哺与升级流转 (Experience Asset Feedback Loop) */}
-      <div className="bg-white rounded-xl border border-[#E6E6E1] overflow-hidden shadow-2xs">
-        <div className="bg-[#F5F5F2] px-6 py-4 border-b border-[#E6E6E1] flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-[#E8F1EC] text-[#2D4B41] flex items-center justify-center font-bold">
-              <Database className="w-4 h-4 text-[#3E6256]" />
-            </div>
-            <div>
-              <h2 className="text-sm font-bold text-[#1D201F]">四、反哺经历资产库（版本迭代沉淀）</h2>
-              <p className="text-[11px] text-[#6B726F]">
-                将本场面试得到的实战检验与考官反馈一键沉淀升级至经历资产库
-              </p>
-            </div>
+      {/* 2. Core Problems Alert Banner (本场核心问题) */}
+      <div className="bg-[#FAF5EF] border border-[#F2E7DC] rounded-xl px-4 py-3 flex flex-col md:flex-row md:items-center gap-3 text-xs shadow-2xs">
+        <div className="flex items-center gap-1.5 shrink-0">
+          <span className="font-bold text-[#8F5128] bg-[#F4E6D8] px-2.5 py-0.5 rounded-md text-[11px]">
+            本场核心问题
+          </span>
+        </div>
+        <div className="text-[#6B726F] leading-relaxed flex-1 flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-4">
+          {(review.coreProblems || [
+            '① 产品决策依据表达不足，面试官追问时缺少方案选择背景',
+            '② 技术理解回答不够深入，停留在现象描述而非原理层',
+            '③ 项目结果缺少量化数据，导致说服力偏弱'
+          ]).map((prob, idx) => (
+            <span key={idx} className="inline-block">
+              {prob}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* 3. Three-Column Workspace Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+        {/* Left Column: QA Question List (3 Cols) */}
+        <div className="lg:col-span-3 bg-white rounded-2xl border border-[#E6E6E1] p-3 shadow-xs space-y-2">
+          <div className="px-2 py-1 flex items-center justify-between text-xs font-bold text-[#6B726F] border-b border-[#F0F0EB] pb-2">
+            <span>QA 题目清单 ({qaList.length})</span>
+            <span className="text-[10px] font-normal text-[#8A908C]">点击切换查看详情</span>
+          </div>
+
+          <div className="space-y-1.5 max-h-[700px] overflow-y-auto custom-scrollbar pr-1">
+            {qaList.map((qa, index) => {
+              const isSelected = index === selectedQAIndex;
+              const qScore = qa.score || qa.answerAnalysis?.completeness || 75;
+
+              return (
+                <button
+                  key={qa.id || index}
+                  onClick={() => setSelectedQAIndex(index)}
+                  className={`w-full text-left p-3 rounded-xl transition-all cursor-pointer border ${
+                    isSelected
+                      ? 'bg-[#F9FAF9] border-[#3E6256] shadow-xs'
+                      : 'bg-white hover:bg-[#FAFAF8] border-[#EBEBE6]'
+                  }`}
+                >
+                  <div className="flex items-start gap-2">
+                    <span
+                      className={`text-xs font-bold shrink-0 mt-0.5 ${
+                        isSelected ? 'text-[#3E6256]' : 'text-[#8A908C]'
+                      }`}
+                    >
+                      Q{qa.qIndex || index + 1}
+                    </span>
+                    <p
+                      className={`text-xs font-medium leading-snug line-clamp-2 ${
+                        isSelected ? 'text-[#1D201F] font-semibold' : 'text-[#4B5563]'
+                      }`}
+                    >
+                      {qa.question}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between mt-2.5 pt-1.5 border-t border-[#F0F0EB]/60 text-[11px]">
+                    <span className="text-[#8A908C] font-mono">{qa.duration || '3:15'}</span>
+                    <span
+                      className={`px-2 py-0.2 rounded-md font-bold text-[10px] border ${getScoreBadgeClass(
+                        qScore
+                      )}`}
+                    >
+                      {qScore}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        <div className="divide-y divide-[#E6E6E1]">
-          {experienceFeedbacks.map((ref, idx) => (
-            <div key={idx} className="p-6 space-y-4 text-xs">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-bold text-sm text-[#1D201F]">{ref.experienceTitle}</h3>
-                  <p className="text-[11px] text-[#6B726F] mt-0.5">
-                    版本演进：{ref.currentVersion} → <strong className="text-[#3E6256]">{ref.proposedVersion}</strong>
-                  </p>
+        {/* Middle Column: Main Question & Answer Detail (6 Cols) */}
+        <div className="lg:col-span-6 space-y-4">
+          <div className="bg-white rounded-2xl border border-[#E6E6E1] p-5 shadow-xs space-y-5">
+            {/* Header: Question & Time */}
+            <div className="flex items-start justify-between gap-4 border-b border-[#F0F0EB] pb-3.5">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded-md bg-[#3E6256] text-white font-bold text-xs">
+                    Q{selectedQA?.qIndex || selectedQAIndex + 1}
+                  </span>
+                  <h2 className="text-base md:text-lg font-bold text-[#1D201F] leading-snug">
+                    {selectedQA?.question}
+                  </h2>
+                </div>
+              </div>
+              <span className="text-xs font-mono text-[#8A908C] shrink-0 mt-1 bg-[#F5F5F3] px-2 py-1 rounded-md">
+                时长 {selectedQA?.duration || '4:32'}
+              </span>
+            </div>
+
+            {/* Transcript / Answer Record (回答记录) */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-[#6B726F]">
+                <Quote className="w-3.5 h-3.5 text-[#3E6256]" />
+                <span>回答记录</span>
+              </div>
+              <div className="p-4 rounded-xl bg-[#FAFAF8] border border-[#EEEEEC] text-xs text-[#374151] leading-relaxed whitespace-pre-line font-normal">
+                {selectedQA?.transcript || selectedQA?.candidateAnswer}
+              </div>
+            </div>
+
+            {/* 4 Dimension Cards (2x2 Grid) */}
+            <div className="space-y-2">
+              <div className="text-xs font-bold text-[#6B726F]">回答质量维度诊断</div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* 1. 结构清晰度 */}
+                <div className="p-3.5 rounded-xl bg-[#FAFAF8] border border-[#EEEEEC] space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-[#6B726F]">结构清晰度</span>
+                    <span className="text-lg font-extrabold text-[#1D201F]">
+                      {metricCards.clarityScore}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-[#4B5563] leading-relaxed">{metricCards.clarityDesc}</p>
                 </div>
 
-                {ref.applied ? (
-                  <span className="flex items-center gap-1 text-[#3E6256] font-bold text-xs bg-[#E8F1EC] px-3 py-1.5 rounded-lg border border-[#D3E2DB]">
-                    <CheckCircle2 className="w-4 h-4" />
-                    <span>已同步至资产库</span>
-                  </span>
-                ) : (
-                  <button
-                    onClick={() => handleApplyFeedback(idx, ref.experienceId)}
-                    className="flex items-center gap-1 px-4 py-2 bg-[#3E6256] hover:bg-[#325046] text-white text-xs font-bold rounded-lg transition shadow-xs cursor-pointer"
-                  >
-                    <span>一键升级并沉淀为新版本</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                )}
+                {/* 2. 量化 Impact */}
+                <div className="p-3.5 rounded-xl bg-[#FAFAF8] border border-[#EEEEEC] space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-[#6B726F]">量化 Impact</span>
+                    <span className="text-lg font-extrabold text-[#1D201F]">
+                      {metricCards.impactScore}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-[#4B5563] leading-relaxed">{metricCards.impactDesc}</p>
+                </div>
+
+                {/* 3. 关键决策 */}
+                <div className="p-3.5 rounded-xl bg-[#FAFAF8] border border-[#EEEEEC] space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-[#6B726F]">关键决策</span>
+                    <span className="text-lg font-extrabold text-[#1D201F]">
+                      {metricCards.decisionScore}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-[#4B5563] leading-relaxed">{metricCards.decisionDesc}</p>
+                </div>
+
+                {/* 4. 语言流畅度 */}
+                <div className="p-3.5 rounded-xl bg-[#FAFAF8] border border-[#EEEEEC] space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-[#6B726F]">语言流畅度</span>
+                    <span className="text-lg font-extrabold text-[#1D201F]">
+                      {metricCards.fluencyScore}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-[#4B5563] leading-relaxed">{metricCards.fluencyDesc}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* AI Advice & Next Step */}
+            <div className="p-4 rounded-xl bg-[#E8F1EC]/30 border border-[#D3E2DB] space-y-2">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-[#2D4B41]">
+                <Lightbulb className="w-4 h-4 text-[#3E6256]" />
+                <span>下一轮优化建议与话术示范</span>
+              </div>
+              <p className="text-xs text-[#2D4B41] leading-relaxed">
+                {selectedQA?.suggestionAdvice ||
+                  '建议在 1 分钟内补充双模型交叉判别机制，说明如何用 5% 金标抽检确保评测一致性达到 94.1%。'}
+              </p>
+            </div>
+          </div>
+
+          {/* Experience Sync / Feedback Box if available */}
+          {relatedFeedback && (
+            <div className="bg-white rounded-2xl border border-[#E6E6E1] p-4 shadow-xs flex items-center justify-between gap-4">
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-[#1D201F]">
+                  <Database className="w-3.5 h-3.5 text-[#3E6256]" />
+                  <span>已关联经历资产：{relatedFeedback.experienceTitle}</span>
+                </div>
+                <div className="text-[11px] text-[#6B726F]">
+                  建议版本升级：{relatedFeedback.currentVersion} →{' '}
+                  <strong className="text-[#3E6256]">{relatedFeedback.proposedVersion}</strong>（沉淀本题反思与量化数据）
+                </div>
               </div>
 
-              {/* Proposed changes diff */}
-              {(ref.proposedChanges || []).length > 0 && (
-                <div className="space-y-2 pt-1">
-                  {(ref.proposedChanges || []).map((ch, cIdx) => (
-                    <div key={cIdx} className="p-3 bg-[#FAFAFA] rounded-lg border border-[#E6E6E1] space-y-1">
-                      <div className="font-bold text-[#1D201F] text-[11px]">{ch.field}</div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[11px]">
-                        <div className="p-2 rounded bg-[#FAF2EB]/40 border border-[#F0DFD1] text-[#8F5128]">
-                          <strong>原描述：</strong>{ch.from}
-                        </div>
-                        <div className="p-2 rounded bg-[#E8F1EC]/40 border border-[#D3E2DB] text-[#2D4B41]">
-                          <strong>升级后：</strong>{ch.to}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+              {relatedFeedback.applied ? (
+                <span className="flex items-center gap-1 text-[#3E6256] font-bold text-xs bg-[#E8F1EC] px-3 py-1.5 rounded-lg border border-[#D3E2DB] shrink-0">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>已同步</span>
+                </span>
+              ) : (
+                <button
+                  onClick={() => feedbackIndex !== undefined && feedbackIndex >= 0 && handleApplyFeedback(feedbackIndex)}
+                  className="flex items-center gap-1 px-3.5 py-1.5 bg-[#3E6256] hover:bg-[#325046] text-white text-xs font-bold rounded-lg transition shadow-xs cursor-pointer shrink-0"
+                >
+                  <span>沉淀至经历库</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
               )}
             </div>
-          ))}
+          )}
+        </div>
+
+        {/* Right Column: Analysis Panel (3 Cols) */}
+        <div className="lg:col-span-3 space-y-4">
+          {/* Card 1: 面试官意图 (Interviewer Intent) */}
+          <div className="bg-white rounded-2xl border border-[#E6E6E1] p-4 shadow-xs space-y-3.5">
+            <div className="flex items-center justify-between border-b border-[#F0F0EB] pb-2.5">
+              <h3 className="text-xs font-bold text-[#1D201F]">面试官意图</h3>
+              <span className="text-[10px] text-[#8A908C]">深层考量分析</span>
+            </div>
+
+            <div className="space-y-3">
+              {intentItems.map((item, idx) => (
+                <div key={idx} className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-[#1D201F]">{item.title}</span>
+                    <div className="flex items-center gap-0.5">
+                      {[1, 2, 3, 4, 5].map((starVal) => (
+                        <Star
+                          key={starVal}
+                          className={`w-3 h-3 ${
+                            starVal <= item.stars
+                              ? 'fill-[#D97706] text-[#D97706]'
+                              : 'fill-transparent text-[#D1D5DB]'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-[#6B726F] leading-snug">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Card 2: 回答分析 (Answer Analysis) */}
+          <div className="bg-white rounded-2xl border border-[#E6E6E1] p-4 shadow-xs space-y-3.5">
+            <div className="flex items-center justify-between border-b border-[#F0F0EB] pb-2.5">
+              <h3 className="text-xs font-bold text-[#1D201F]">回答分析</h3>
+              <span className="text-[10px] text-[#8A908C]">四维量化得分</span>
+            </div>
+
+            <div className="space-y-2.5">
+              {analysisBars.map((bar, idx) => (
+                <div key={idx} className="space-y-1">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-[#6B726F] font-medium">{bar.label}</span>
+                    <span className="font-bold text-[#1D201F]">{bar.score}</span>
+                  </div>
+                  <div className="h-1.5 bg-[#EAEAE6] rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-[#374151] rounded-full transition-all duration-500"
+                      style={{ width: `${bar.score}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Card 3: 诊断与行动总结 (Action summary) */}
+          <div className="bg-[#FAF5EF] rounded-2xl border border-[#F2E7DC] p-4 shadow-2xs space-y-2 text-xs">
+            <div className="flex items-center gap-1.5 font-bold text-[#8F5128]">
+              <AlertTriangle className="w-3.5 h-3.5 text-[#8F5128]" />
+              <span>本题失分防范</span>
+            </div>
+            <ul className="space-y-1 text-[#6B726F] text-[11px] list-disc list-inside">
+              {(selectedQA?.identifiedIssues || ['方案选型对比展开略浅', '可进一步补充如何解决大模型自身评测偏差']).map(
+                (issue, iIdx) => (
+                  <li key={iIdx}>{issue}</li>
+                )
+              )}
+            </ul>
+          </div>
         </div>
       </div>
     </div>

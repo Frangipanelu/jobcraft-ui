@@ -163,7 +163,7 @@ export const InterviewReviewCenterView: React.FC<InterviewReviewCenterViewProps>
                     <td className="p-3.5 align-top text-right">
                       <button
                         onClick={() =>
-                          navigateTo('interview_review', {
+                          navigateTo('interview_review_detail', {
                             interviewId: interview.id
                           })
                         }

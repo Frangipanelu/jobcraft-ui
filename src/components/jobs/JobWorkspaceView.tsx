@@ -186,6 +186,7 @@ export const JobWorkspaceView: React.FC<JobWorkspaceViewProps> = ({
               analysisId={currentJob.jdAnalysisId || 'jd-byte-1'}
               onNavigateToResume={() => setActiveTab('resume')}
               onNavigateToInterview={() => setActiveTab('interview')}
+              embedded={true}
             />
           </div>
         )}
@@ -195,6 +196,7 @@ export const JobWorkspaceView: React.FC<JobWorkspaceViewProps> = ({
             <ResumeEditorView
               resumeId={currentJob.resumeId || 'res-byte-1'}
               jobId={currentJob.id}
+              embedded={true}
             />
           </div>
         )}
