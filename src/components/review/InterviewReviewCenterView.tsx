@@ -9,7 +9,9 @@ import {
   Sparkles,
   Calendar,
   CheckCircle2,
-  Search
+  Search,
+  ArrowLeft,
+  FileCheck2
 } from 'lucide-react';
 
 interface InterviewReviewCenterViewProps {
@@ -28,130 +30,161 @@ export const InterviewReviewCenterView: React.FC<InterviewReviewCenterViewProps>
   const filteredReviewed = interviewsWithReviews.filter(
     (i) =>
       i.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      i.role.toLowerCase().includes(searchQuery.toLowerCase())
+      i.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      i.roundName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-8 animate-in fade-in duration-300">
+    <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-6 animate-in fade-in duration-300">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/80 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E6E6E1] pb-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">智能面试复盘中心</h1>
-          <p className="text-sm text-slate-500 mt-0.5">
-            把每一场真实面试转化为你的能力沉淀与经历资产，形成求职闭环
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl font-bold text-[#1D201F] tracking-tight">面试复盘中心</h1>
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#E8F1EC] text-[#2D4B41] border border-[#D3E2DB]">
+              已沉淀 {interviewsWithReviews.length} 场复盘
+            </span>
+          </div>
+          <p className="text-xs md:text-sm text-[#6B726F] mt-1">
+            把每一次真实面试经历转化为能力沉淀，逐题诊断得失并将亮点反哺回经历资产库
           </p>
         </div>
+
         <button
           onClick={onOpenNewReview}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold shadow-xs transition shrink-0"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#3E6256] hover:bg-[#325046] text-white text-xs font-bold shadow-xs transition shrink-0 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
-          <span>+ 新建面试复盘</span>
+          <span>+ 录入新面试复盘</span>
         </button>
       </div>
 
-      {/* Stats Summary Bar */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-1">
-          <div className="text-xs text-slate-400 font-medium">累计完成复盘</div>
-          <div className="text-2xl font-bold text-slate-900">{interviewsWithReviews.length} 场</div>
-          <div className="text-[11px] text-emerald-700 font-semibold">100% 完成逐题诊断与要点反哺</div>
-        </div>
-
-        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-1">
-          <div className="text-xs text-slate-400 font-medium">面试平均得分</div>
-          <div className="text-2xl font-bold text-emerald-700">85.0 分</div>
-          <div className="text-[11px] text-slate-500">最高分 88 分 (字节跳动 · 业务面)</div>
-        </div>
-
-        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-1">
-          <div className="text-xs text-slate-400 font-medium">待复盘面试</div>
-          <div className="text-2xl font-bold text-amber-600">
-            {interviewsWithoutReviews.length} 场
+      {/* Metrics Summary Strip */}
+      <div className="bg-white rounded-xl border border-[#E6E6E1] p-4 shadow-2xs grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-[#E6E6E1]">
+        <div className="p-2 sm:px-4 space-y-1">
+          <div className="text-[11px] font-semibold text-[#6B726F] uppercase">已完成逐题复盘</div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-xl font-bold text-[#1D201F]">{interviewsWithReviews.length} 场</span>
+            <span className="text-xs text-[#2D4B41] font-semibold">100% 反哺率</span>
           </div>
-          <div className="text-[11px] text-slate-500">及时复盘，遗忘率降低 80%</div>
+        </div>
+
+        <div className="p-2 sm:px-4 space-y-1">
+          <div className="text-[11px] font-semibold text-[#6B726F] uppercase">平均得分</div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-xl font-bold text-[#3E6256]">85.0 分</span>
+            <span className="text-xs text-[#6B726F]">最高 88 分 (字节业务面)</span>
+          </div>
+        </div>
+
+        <div className="p-2 sm:px-4 space-y-1">
+          <div className="text-[11px] font-semibold text-[#6B726F] uppercase">待复盘场次</div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-xl font-bold text-[#8F5128]">{interviewsWithoutReviews.length} 场</span>
+            <span className="text-xs text-[#8F5128]">建议 24h 内完成</span>
+          </div>
         </div>
       </div>
 
-      {/* Review List */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-base font-bold text-slate-900">已完成复盘列表</h2>
-          <div className="relative w-56">
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+      {/* Structured Review Ledger Table */}
+      <div className="bg-white rounded-xl border border-[#E6E6E1] overflow-hidden shadow-2xs">
+        <div className="p-3.5 bg-[#F5F5F2] border-b border-[#E6E6E1] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <h2 className="text-xs font-bold text-[#1D201F]">已复盘面试台账</h2>
+
+          <div className="relative w-full sm:w-64">
+            <Search className="w-3.5 h-3.5 text-[#8A908C] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="搜索公司或岗位..."
+              placeholder="搜索公司、岗位或面试轮次..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-7 pr-2.5 py-1 text-xs rounded-lg border border-slate-200 focus:outline-none"
+              className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border border-[#E6E6E1] bg-white text-[#1D201F] placeholder:text-[#8A908C] focus:border-[#3E6256] focus:outline-none"
             />
           </div>
         </div>
 
-        <div className="space-y-3">
-          {filteredReviewed.map((interview) => {
-            const review = interview.review!;
-            return (
-              <div
-                key={interview.id}
-                className="bg-white rounded-xl border border-slate-200 p-5 shadow-2xs hover:border-emerald-300 transition space-y-3"
-              >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2.5 flex-wrap">
-                      <span className="font-bold text-slate-900 text-sm">{interview.company}</span>
-                      <span className="text-slate-300">·</span>
-                      <span className="font-semibold text-slate-800 text-sm">{interview.role}</span>
-                      <span className="text-xs px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr className="border-b border-[#E6E6E1] text-[#6B726F] font-semibold bg-[#FAFAFA]">
+                <th className="p-3.5 w-52">公司与面试轮次</th>
+                <th className="p-3.5 w-32">面试时间</th>
+                <th className="p-3.5 w-28">综合得分</th>
+                <th className="p-3.5 w-40">通过概率与评级</th>
+                <th className="p-3.5">核心诊断与反哺亮点</th>
+                <th className="p-3.5 w-32 text-right">操作</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#E6E6E1]">
+              {filteredReviewed.map((interview) => {
+                const currentReview = interview.review!;
+                return (
+                  <tr key={interview.id} className="hover:bg-[#F5F5F2]/40 transition">
+                    <td className="p-3.5 align-top font-bold text-[#1D201F]">
+                      <div className="text-sm font-bold text-[#1D201F]">{interview.company}</div>
+                      <div className="text-xs text-[#6B726F] font-medium mt-0.5">{interview.role}</div>
+                      <div className="text-[11px] text-[#3E6256] font-semibold mt-1">
                         {interview.roundName}
-                      </span>
-                    </div>
-                    <div className="text-xs text-slate-400 flex items-center gap-2">
-                      <Calendar className="w-3.5 h-3.5" />
-                      <span>面试时间：{interview.time}</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <div className="text-right">
-                      <div className="text-[10px] text-slate-400 font-medium">综合表现评估</div>
-                      <div className="text-lg font-bold text-emerald-700">
-                        {review.overallScore} 分
                       </div>
-                    </div>
+                    </td>
 
-                    <button
-                      onClick={() =>
-                        navigateTo('interview_review_detail', {
-                          jobId: interview.jobId,
-                          interviewId: interview.id
-                        })
-                      }
-                      className="px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold shadow-xs transition flex items-center gap-1"
-                    >
-                      <span>查看复盘报告</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
+                    <td className="p-3.5 align-top text-[#6B726F]">
+                      <div className="flex items-center gap-1 font-medium text-[#2C302E]">
+                        <Calendar className="w-3.5 h-3.5 text-[#8A908C]" />
+                        <span>{interview.time}</span>
+                      </div>
+                      <div className="text-[11px] text-[#8A908C] mt-0.5">
+                        {interview.format === 'video' ? '视频面试' : '现场面试'}
+                      </div>
+                    </td>
 
-                {/* Highlights snippet */}
-                <div className="p-3 bg-slate-50 rounded-lg border border-slate-100 text-xs space-y-1">
-                  <div className="font-bold text-emerald-900 flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>核心亮点摘要：</span>
-                  </div>
-                  <p className="text-slate-600 line-clamp-1 leading-relaxed">
-                    {review.highlights?.[0] ||
-                      review.coreProblems?.[0] ||
-                      review.aiDiagnosis ||
-                      '已生成多维度深度复盘诊断'}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
+                    <td className="p-3.5 align-top">
+                      <div className="text-base font-bold text-[#3E6256]">
+                        {currentReview.overallScore} <span className="text-xs text-[#8A908C] font-normal">/ 100</span>
+                      </div>
+                    </td>
+
+                    <td className="p-3.5 align-top">
+                      <span className="px-2 py-0.5 rounded text-xs font-bold bg-[#E8F1EC] text-[#2D4B41] border border-[#D3E2DB] inline-block">
+                        {currentReview.passProbability || '高概率通过'}
+                      </span>
+                    </td>
+
+                    <td className="p-3.5 align-top text-[#6B726F] leading-relaxed">
+                      <div className="font-medium text-[#1D201F]">
+                        诊断：{currentReview.aiDiagnosis?.slice(0, 48) || '对轻量化评测体系阐述清晰，指标具备说服力'}...
+                      </div>
+                      <div className="text-[11px] text-[#2D4B41] mt-1 flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3 text-[#3E6256]" />
+                        <span>已完成经历资产库反哺沉淀</span>
+                      </div>
+                    </td>
+
+                    <td className="p-3.5 align-top text-right">
+                      <button
+                        onClick={() =>
+                          navigateTo('interview_review', {
+                            interviewId: interview.id
+                          })
+                        }
+                        className="px-3 py-1.5 rounded bg-[#3E6256] hover:bg-[#325046] text-white text-xs font-semibold transition cursor-pointer"
+                      >
+                        查看详细报告
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+
+              {filteredReviewed.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="p-8 text-center text-xs text-[#8A908C]">
+                    未找到复盘记录
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

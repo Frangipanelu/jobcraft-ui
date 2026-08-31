@@ -355,7 +355,7 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
                   <div>
                     <div className="text-[11px] text-[#8A908C] font-medium mb-1">量化证据支撑：</div>
                     <div className="flex flex-wrap gap-1">
-                      {linkedExp.metrics.map((m, idx) => (
+                      {(linkedExp.metrics || []).map((m, idx) => (
                         <span
                           key={idx}
                           className="px-2 py-0.5 rounded bg-white text-[#2C302E] text-[10px] font-semibold border border-[#E6E6E1]"

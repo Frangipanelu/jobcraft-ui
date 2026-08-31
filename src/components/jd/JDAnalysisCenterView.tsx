@@ -10,27 +10,35 @@ import {
   Calendar,
   Layers,
   Search,
-  ExternalLink
+  ExternalLink,
+  BookOpen,
+  CheckCircle2,
+  AlertCircle,
+  FileText,
+  Clock
 } from 'lucide-react';
 
 export const JDAnalysisCenterView: React.FC = () => {
   const { jdAnalyses, createJDAnalysis, deleteJDAnalysis, navigateTo } = useJobCraft();
 
+  const [activeTab, setActiveTab] = useState<'create' | 'history'>('create');
   const [company, setCompany] = useState('');
   const [role, setRole] = useState('');
+  const [salaryRange, setSalaryRange] = useState('');
   const [rawText, setRawText] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
-  const sampleJD = `【职位描述】
-1. 负责端侧大模型与个人生产力工具的 AI 交互形态设计与策略落地；
-2. 搭建面向端侧轻量化模型的评测基准，优化上下文感知与本地意图召回；
-3. 与算法及客户端架构团队紧密协作，推进量化压缩与内存占用优化。
+  const sampleJD = `【岗位职责】
+1. 主导端侧大模型（On-Device LLM）与个人生产力场景的 AI 交互形态设计与业务落地；
+2. 搭建面向轻量化大模型的质量评测基准与自动化 Eval 管线，持续优化上下文感知与意图识别准确率；
+3. 与算法及工程团队紧密协同，制定模型微调数据标注标准，推动内存占用与端侧延迟优化；
+4. 负责核心业务指标的定义、监控与 AB 实验迭代。
 
 【任职要求】
-1. 3年以上 AI 产品经验，深入理解端侧计算与云端协作机制；
-2. 具备严谨的数据分析思维与评测指标方法论（NDCG/准确率）；
-3. 优秀的沟通与跨团队攻坚能力。`;
+1. 3 年以上 AI/搜索/推荐产品经验，深入理解 Transformer、端侧计算与 RAG 机制；
+2. 具备从 0 到 1 搭建质量评估基准体系的成熟方法论，熟练掌握常用评估指标（NDCG/Faithfulness/Recall 等）；
+3. 出色的跨团队推进力与严谨的数据敏感度，有技术背景或能直接与算法架构师对话者优先。`;
 
   const handleStartAnalysis = (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,14 +54,16 @@ export const JDAnalysisCenterView: React.FC = () => {
       setIsAnalyzing(false);
       setCompany('');
       setRole('');
+      setSalaryRange('');
       setRawText('');
       navigateTo('jd_report', { jdId: newAnalysisId });
     }, 800);
   };
 
   const handleUsePreset = () => {
-    setCompany('某科技独角兽公司');
-    setRole('AI 产品经理（端侧大模型方向）');
+    setCompany('某头部科技公司');
+    setRole('AI 产品经理（端侧与 Agent 方向）');
+    setSalaryRange('40K-60K · 16薪');
     setRawText(sampleJD);
   };
 
@@ -64,181 +74,259 @@ export const JDAnalysisCenterView: React.FC = () => {
   );
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-8 animate-in fade-in duration-300">
+    <div className="p-6 md:p-8 max-w-6xl mx-auto space-y-6 animate-in fade-in duration-300">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E6E6E1] pb-4">
         <div>
-          <h1 className="text-2xl font-bold text-[#1D201F] tracking-tight">全局 JD 分析中心</h1>
-          <p className="text-sm text-[#6B726F] mt-1">
-            只依赖用户提供的 JD 原文进行全景深度研判，提取 ATS 关键词、隐藏招聘意图与能力缺口
+          <h1 className="text-2xl font-bold text-[#1D201F] tracking-tight">全局 JD 深度分析中心</h1>
+          <p className="text-xs md:text-sm text-[#6B726F] mt-1">
+            仅依赖真实 JD 原文进行全景结构化研判，穿透 ATS 关键词、隐藏招聘意图与能力缺口，指导后续简历定制与面试应答
           </p>
+        </div>
+
+        {/* Top Tab Switcher */}
+        <div className="flex items-center gap-1.5 p-1 bg-[#F5F5F2] rounded-lg border border-[#E6E6E1] shrink-0 self-start sm:self-auto">
+          <button
+            onClick={() => setActiveTab('create')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition ${
+              activeTab === 'create'
+                ? 'bg-white text-[#1D201F] shadow-2xs'
+                : 'text-[#6B726F] hover:text-[#1D201F]'
+            }`}
+          >
+            <Plus className="w-3.5 h-3.5 text-[#3E6256]" />
+            <span>发起新 JD 研判</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('history')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition ${
+              activeTab === 'history'
+                ? 'bg-white text-[#1D201F] shadow-2xs'
+                : 'text-[#6B726F] hover:text-[#1D201F]'
+            }`}
+          >
+            <Clock className="w-3.5 h-3.5 text-[#8A908C]" />
+            <span>历史研判报告 ({jdAnalyses.length})</span>
+          </button>
         </div>
       </div>
 
-      {/* Main Grid: Left New Analysis Form + Right History List */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Column (6 cols): Input Form */}
-        <div className="lg:col-span-6 bg-white rounded-2xl border border-[#E6E6E1] p-6 shadow-2xs space-y-5">
-          <div className="flex items-center justify-between">
+      {/* TAB 1: New Analysis Structured Form */}
+      {activeTab === 'create' && (
+        <div className="bg-white rounded-xl border border-[#E6E6E1] overflow-hidden shadow-2xs">
+          <div className="bg-[#F5F5F2] px-6 py-4 border-b border-[#E6E6E1] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-[#EBF2EE] text-[#2D4B41] flex items-center justify-center font-bold">
-                <FileSearch className="w-4 h-4" />
+              <div className="w-7 h-7 rounded-lg bg-[#E8F1EC] text-[#2D4B41] flex items-center justify-center font-bold">
+                <FileSearch className="w-4 h-4 text-[#3E6256]" />
               </div>
-              <h2 className="text-base font-bold text-[#1D201F]">分析新的 JD</h2>
+              <div>
+                <h2 className="text-sm font-bold text-[#1D201F]">新建 JD 全景研判表单</h2>
+                <p className="text-[11px] text-[#6B726F]">填写岗位基本信息并粘贴 JD 原文，系统将自动拆解分析维度</p>
+              </div>
             </div>
+
             <button
               type="button"
               onClick={handleUsePreset}
-              className="text-xs text-[#3E6256] hover:text-[#325046] font-semibold flex items-center gap-1"
+              className="text-xs text-[#3E6256] hover:text-[#325046] font-semibold flex items-center gap-1 transition self-start sm:self-auto"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>填入范例文档</span>
+              <span>填入高潜 AI 岗位范例</span>
             </button>
           </div>
 
-          <form onSubmit={handleStartAnalysis} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+          <form onSubmit={handleStartAnalysis} className="p-6 md:p-8 space-y-6">
+            {/* Meta Fields Table */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               <div>
-                <label className="block text-xs font-semibold text-[#1D201F] mb-1">
-                  目标公司 <span className="text-rose-500">*</span>
+                <label className="block text-xs font-bold text-[#1D201F] mb-1.5">
+                  目标公司名称 <span className="text-rose-500">*</span>
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="例如：字节跳动、腾讯"
+                  placeholder="例如：字节跳动、腾讯、某独角兽"
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-[#D5D5CE] focus:ring-2 focus:ring-[#3E6256] focus:border-[#3E6256] text-xs text-[#1D201F] bg-white outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#E6E6E1] focus:border-[#3E6256] focus:ring-1 focus:ring-[#3E6256] text-xs text-[#1D201F] bg-white outline-none placeholder:text-[#8A908C]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#1D201F] mb-1">
-                  岗位名称 <span className="text-rose-500">*</span>
+                <label className="block text-xs font-bold text-[#1D201F] mb-1.5">
+                  应聘岗位名称 <span className="text-rose-500">*</span>
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="例如：AI 产品经理"
+                  placeholder="例如：AI 产品经理、算法专家"
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-[#D5D5CE] focus:ring-2 focus:ring-[#3E6256] focus:border-[#3E6256] text-xs text-[#1D201F] bg-white outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#E6E6E1] focus:border-[#3E6256] focus:ring-1 focus:ring-[#3E6256] text-xs text-[#1D201F] bg-white outline-none placeholder:text-[#8A908C]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#1D201F] mb-1.5">
+                  预期薪酬范围 (选填)
+                </label>
+                <input
+                  type="text"
+                  placeholder="例如：35K-50K · 16薪"
+                  value={salaryRange}
+                  onChange={(e) => setSalaryRange(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#E6E6E1] focus:border-[#3E6256] focus:ring-1 focus:ring-[#3E6256] text-xs text-[#1D201F] bg-white outline-none placeholder:text-[#8A908C]"
                 />
               </div>
             </div>
 
+            {/* Raw JD Text Field */}
             <div>
-              <div className="flex items-center justify-between mb-1">
-                <label className="block text-xs font-semibold text-[#1D201F]">
-                  JD 原文内容 <span className="text-rose-500">*</span>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-bold text-[#1D201F]">
+                  岗位招聘要求原文 (JD Text) <span className="text-rose-500">*</span>
                 </label>
-                <span className="text-[11px] text-[#8A908C]">支持直接复制粘贴招聘信息</span>
+                <span className="text-[11px] text-[#8A908C]">
+                  已输入 {rawText.length} 字 · 包含职责与要求即可
+                </span>
               </div>
               <textarea
                 required
-                rows={8}
-                placeholder="粘贴岗位的职责描述、任职要求、加分项等..."
+                rows={10}
+                placeholder="直接从招聘网站或猎头渠道复制粘贴岗位的职位描述、任职要求与加分项..."
                 value={rawText}
                 onChange={(e) => setRawText(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-lg border border-[#D5D5CE] focus:ring-2 focus:ring-[#3E6256] focus:border-[#3E6256] text-xs leading-relaxed font-mono resize-none bg-[#F5F5F2] text-[#1D201F] outline-none"
+                className="w-full p-4 rounded-lg border border-[#E6E6E1] focus:border-[#3E6256] focus:ring-1 focus:ring-[#3E6256] text-xs text-[#1D201F] bg-[#FAFAFA] font-mono leading-relaxed outline-none placeholder:text-[#8A908C]"
               />
             </div>
 
-            <button
-              type="submit"
-              disabled={isAnalyzing}
-              className="w-full py-2.5 rounded-xl bg-[#3E6256] hover:bg-[#325046] disabled:bg-slate-300 text-white text-xs font-bold shadow-xs transition flex items-center justify-center gap-2"
-            >
-              {isAnalyzing ? (
-                <>
-                  <Sparkles className="w-4 h-4 animate-spin" />
-                  <span>AI 正在全景分析与提炼关键词...</span>
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-4 h-4" />
-                  <span>开始生成 JD 深度分析报告 →</span>
-                </>
-              )}
-            </button>
+            {/* Submit Action Bar */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-[#E6E6E1]">
+              <div className="flex items-center gap-2 text-xs text-[#6B726F]">
+                <CheckCircle2 className="w-4 h-4 text-[#3E6256]" />
+                <span>分析将自动生成：ATS 关键词库、招聘暗话潜台词、能力缺口审计与经历匹配清单</span>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isAnalyzing || !company.trim() || !role.trim() || !rawText.trim()}
+                className="px-6 py-2.5 rounded-lg bg-[#3E6256] hover:bg-[#325046] disabled:opacity-50 text-white text-xs font-bold transition flex items-center justify-center gap-2 shadow-xs shrink-0 cursor-pointer"
+              >
+                {isAnalyzing ? (
+                  <>
+                    <Sparkles className="w-4 h-4 animate-spin text-[#8EBAAB]" />
+                    <span>正在进行全景深度研判...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4 text-[#8EBAAB]" />
+                    <span>开始全景深度研判 →</span>
+                  </>
+                )}
+              </button>
+            </div>
           </form>
         </div>
+      )}
 
-        {/* Right Column (6 cols): History List */}
-        <div className="lg:col-span-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <h2 className="text-base font-bold text-[#1D201F]">历史分析记录</h2>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-[#EBF2EE] text-[#2D4B41] font-medium">
-                {jdAnalyses.length}
-              </span>
+      {/* TAB 2: Historical Analysis Registry Table */}
+      {activeTab === 'history' && (
+        <div className="bg-white rounded-xl border border-[#E6E6E1] overflow-hidden shadow-2xs space-y-4">
+          <div className="bg-[#F5F5F2] px-6 py-4 border-b border-[#E6E6E1] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 className="text-sm font-bold text-[#1D201F]">历史 JD 研判档案库</h2>
+              <p className="text-[11px] text-[#6B726F]">已归档的岗位研判报告，可随时回溯查看或一键调取经历定制简历</p>
             </div>
 
-            <div className="relative w-48">
-              <Search className="w-3.5 h-3.5 text-[#8A908C] absolute left-2.5 top-1/2 -translate-y-1/2" />
+            {/* Search Filter */}
+            <div className="relative w-full sm:w-64">
+              <Search className="w-3.5 h-3.5 text-[#8A908C] absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="搜索历史报告..."
+                placeholder="搜索公司或岗位名称..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-7 pr-2.5 py-1 text-xs rounded-lg border border-[#E6E6E1] bg-white text-[#1D201F] focus:outline-none focus:border-[#3E6256]"
+                className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg bg-white border border-[#E6E6E1] focus:border-[#3E6256] focus:outline-none text-[#1D201F] placeholder:text-[#8A908C]"
               />
             </div>
           </div>
 
-          <div className="space-y-3">
-            {filteredAnalyses.map((analysis) => (
-              <div
-                key={analysis.id}
-                className="bg-white rounded-xl border border-[#E6E6E1] p-5 shadow-2xs hover:border-[#3E6256]/50 transition space-y-3"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-bold text-[#1D201F] text-sm">{analysis.company}</span>
-                      <span className="text-[#D5D5CE]">·</span>
-                      <span className="font-semibold text-[#2C302E] text-sm">{analysis.role}</span>
-                      <span className="px-2 py-0.5 rounded-md bg-[#E8F1EC] text-[#2D4B41] text-xs font-bold border border-[#D3E2DB]">
-                        {analysis.matchScore}% 匹配
-                      </span>
-                    </div>
-                    <div className="text-xs text-[#8A908C] mt-1 flex items-center gap-2">
-                      <Calendar className="w-3.5 h-3.5" />
-                      <span>分析时间: {analysis.createdAt}</span>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() => deleteJDAnalysis(analysis.id)}
-                    className="text-[#A6ACA8] hover:text-rose-600 p-1 transition"
-                    title="删除记录"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-
-                <p className="text-xs text-[#6B726F] line-clamp-2 leading-relaxed bg-[#F5F5F2] p-2.5 rounded-lg border border-[#E6E6E1]">
-                  {analysis.verdictSummary}
-                </p>
-
-                <div className="flex items-center justify-between pt-2 border-t border-[#F5F5F2]">
-                  <div className="text-xs text-[#B7794B] font-semibold">
-                    推荐指数 {'★'.repeat(analysis.recommendationStars)}
-                  </div>
-
-                  <button
-                    onClick={() => navigateTo('jd_report', { jdId: analysis.id })}
-                    className="flex items-center gap-1 text-xs font-semibold text-[#3E6256] hover:text-[#325046] transition"
-                  >
-                    <span>查看完整研判报告</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            ))}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="border-b border-[#E6E6E1] text-[#6B726F] font-semibold bg-[#FAFAFA]">
+                  <th className="p-3.5 w-60">目标公司与岗位</th>
+                  <th className="p-3.5 w-28">匹配得分</th>
+                  <th className="p-3.5 w-28">推荐指数</th>
+                  <th className="p-3.5">核心研判结论摘要</th>
+                  <th className="p-3.5 w-28">分析日期</th>
+                  <th className="p-3.5 w-44 text-right">操作</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#E6E6E1]">
+                {filteredAnalyses.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="p-8 text-center text-[#8A908C]">
+                      未找到符合条件的研判记录
+                    </td>
+                  </tr>
+                ) : (
+                  filteredAnalyses.map((analysis) => (
+                    <tr key={analysis.id} className="hover:bg-[#F5F5F2]/40 transition">
+                      <td className="p-3.5 align-top font-bold text-[#1D201F]">
+                        <div className="text-sm font-bold text-[#1D201F]">{analysis.company}</div>
+                        <div className="text-xs text-[#6B726F] font-normal mt-0.5">{analysis.role}</div>
+                        {analysis.salaryRange && (
+                          <div className="text-[10px] text-[#8F5128] font-medium mt-1">
+                            {analysis.salaryRange}
+                          </div>
+                        )}
+                      </td>
+                      <td className="p-3.5 align-top">
+                        <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#E8F1EC] text-[#2D4B41] border border-[#D3E2DB] inline-block">
+                          {analysis.matchScore}%
+                        </span>
+                      </td>
+                      <td className="p-3.5 align-top">
+                        <span className="text-[#B7794B] tracking-wider font-bold">
+                          {'★'.repeat(analysis.recommendationStars || 5)}
+                        </span>
+                      </td>
+                      <td className="p-3.5 align-top text-[#2C302E] leading-relaxed max-w-md">
+                        <div className="line-clamp-2">{analysis.verdictSummary}</div>
+                      </td>
+                      <td className="p-3.5 align-top text-[#8A908C]">
+                        {analysis.createdAt}
+                      </td>
+                      <td className="p-3.5 align-top text-right space-x-1.5">
+                        <button
+                          onClick={() => navigateTo('jd_report', { jdId: analysis.id })}
+                          className="px-2.5 py-1 rounded bg-white hover:bg-[#F5F5F2] text-[#1D201F] border border-[#E6E6E1] text-xs font-medium transition"
+                        >
+                          查看报告
+                        </button>
+                        <button
+                          onClick={() => navigateTo('resume_editor', { jobId: analysis.jobId })}
+                          className="px-2.5 py-1 rounded bg-[#3E6256] hover:bg-[#325046] text-white text-xs font-semibold transition"
+                        >
+                          定制简历
+                        </button>
+                        <button
+                          onClick={() => deleteJDAnalysis(analysis.id)}
+                          className="p-1 rounded text-[#8A908C] hover:text-rose-600 transition"
+                          title="删除记录"
+                        >
+                          <Trash2 className="w-3.5 h-3.5 inline" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

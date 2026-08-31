@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useJobCraft } from '../../context/JobCraftContext';
 import { NavigationTab } from '../../types/jobcraft';
 import {
@@ -9,15 +9,16 @@ import {
   RotateCcw,
   Sparkles,
   Award,
-  Layers,
+  ChevronLeft,
   ChevronRight,
-  Plus
+  PanelLeftClose,
+  PanelLeftOpen
 } from 'lucide-react';
 
 interface SidebarProps {
   onOpenNewJob: () => void;
   onOpenNewInterview: () => void;
-  onOpenNewReview: () => void;
+  onOpenNewReview?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -26,6 +27,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenNewReview
 }) => {
   const { currentTab, navigateTo, jobs, interviews } = useJobCraft();
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const interviewingJobsCount = jobs.filter((j) => j.status === 'interviewing').length;
   const pendingReviewCount = interviews.filter((i) => i.status === 'completed' && !i.review).length || 1;
@@ -66,7 +68,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           id: 'jobs',
           label: '我的岗位',
           icon: <Briefcase className="w-4 h-4" />,
-          badge: interviewingJobsCount > 0 ? `${interviewingJobsCount}推进中` : undefined,
+          badge: interviewingJobsCount > 0 ? `${interviewingJobsCount}` : undefined,
           badgeColor: 'bg-[#E8F1EC] text-[#2D4B41]'
         },
         {
@@ -88,7 +90,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           id: 'interview_review_center',
           label: '面试复盘',
           icon: <RotateCcw className="w-4 h-4" />,
-          badge: pendingReviewCount > 0 ? '待复盘' : undefined,
+          badge: pendingReviewCount > 0 ? `${pendingReviewCount}` : undefined,
           badgeColor: 'bg-[#F8EFE9] text-[#935427]'
         }
       ]
@@ -96,37 +98,63 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   return (
-    <aside className="w-64 h-screen bg-[#1D201F] text-[#A6ACA8] flex flex-col justify-between shrink-0 select-none border-r border-[#2C302E]">
+    <aside
+      className={`h-screen bg-[#1D201F] text-[#A6ACA8] flex flex-col justify-between shrink-0 select-none border-r border-[#2C302E] transition-all duration-300 ${
+        isCollapsed ? 'w-16' : 'w-60'
+      }`}
+    >
       {/* Brand Header */}
-      <div>
-        <div className="p-5 border-b border-[#2C302E]">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#3E6256] flex items-center justify-center text-white shadow-sm shadow-[#3E6256]/30">
+      <div className="flex-1 flex flex-col min-h-0">
+        <div className="p-4 border-b border-[#2C302E] flex items-center justify-between">
+          <div className="flex items-center gap-2.5 min-w-0 overflow-hidden">
+            <div
+              onClick={() => isCollapsed && setIsCollapsed(false)}
+              className={`w-8 h-8 rounded-lg bg-[#3E6256] flex items-center justify-center text-white shadow-sm shadow-[#3E6256]/30 shrink-0 ${
+                isCollapsed ? 'cursor-pointer hover:bg-[#325046]' : ''
+              }`}
+              title="JobCraft"
+            >
               <Sparkles className="w-4 h-4" />
             </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-bold text-white tracking-tight text-base">JobCraft</span>
-                <span className="text-[10px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-[#3E6256]/30 text-[#8EBAAB] border border-[#3E6256]/50">
-                  V2
-                </span>
+
+            {!isCollapsed && (
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-bold text-white tracking-tight text-sm">JobCraft</span>
+                  <span className="text-[10px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-[#3E6256]/30 text-[#8EBAAB] border border-[#3E6256]/50 shrink-0">
+                    V2
+                  </span>
+                </div>
+                <p className="text-[11px] text-[#8A908C] font-medium truncate">求职与经历闭环</p>
               </div>
-              <p className="text-xs text-[#8A908C] font-medium">求职与经历闭环系统</p>
-            </div>
+            )}
           </div>
+
+          {/* Collapse/Expand toggle button */}
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="p-1 rounded-md text-[#8A908C] hover:text-white hover:bg-white/10 transition shrink-0 ml-1"
+            title={isCollapsed ? '展开侧边栏' : '收起侧边栏'}
+          >
+            {isCollapsed ? (
+              <PanelLeftOpen className="w-4 h-4 text-[#8EBAAB]" />
+            ) : (
+              <PanelLeftClose className="w-4 h-4" />
+            )}
+          </button>
         </div>
 
         {/* Navigation list */}
-        <div className="p-3 space-y-4 overflow-y-auto max-h-[calc(100vh-270px)] custom-scrollbar">
+        <div className="p-2 space-y-4 overflow-y-auto flex-1 custom-scrollbar">
           {navItems.map((group, gIdx) => (
             <div key={gIdx} className="space-y-1">
-              {group.section && (
+              {!isCollapsed && group.section && (
                 <div className="px-3 py-1 text-[11px] font-semibold text-[#6C726E] uppercase tracking-wider">
                   {group.section}
                 </div>
               )}
               {group.items.map((item) => {
-                const isActive =
+                const isActivewk =
                   currentTab === item.id ||
                   (item.id === 'jobs' && currentTab === 'job_workspace') ||
                   (item.id === 'jd_analysis' && (currentTab === 'jd_report' || currentTab === 'jd_analysis_center')) ||
@@ -137,19 +165,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <button
                     key={item.id}
                     onClick={() => navigateTo(item.id)}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                      isActive
+                    title={isCollapsed ? item.label : undefined}
+                    className={`w-full flex items-center ${
+                      isCollapsed ? 'justify-center px-2 py-2.5' : 'justify-between px-3 py-2'
+                    } rounded-lg text-xs font-medium transition-all ${
+                      isActivewk
                         ? 'bg-[#3E6256] text-white font-semibold shadow-xs'
                         : 'text-[#A6ACA8] hover:text-white hover:bg-white/5'
                     }`}
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <span className={isActive ? 'text-white' : 'text-[#8A908C]'}>
+                      <span className={isActivewk ? 'text-white' : 'text-[#8A908C]'}>
                         {item.icon}
                       </span>
-                      <span className="truncate">{item.label}</span>
+                      {!isCollapsed && <span className="truncate">{item.label}</span>}
                     </div>
-                    {item.badge && (
+
+                    {!isCollapsed && item.badge && (
                       <span
                         className={`text-[10px] px-1.5 py-0.5 rounded-md font-semibold shrink-0 ${
                           item.badgeColor || 'bg-[#2C302E] text-[#D0D5D2]'
@@ -158,76 +190,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         {item.badge}
                       </span>
                     )}
+
+                    {isCollapsed && item.badge && (
+                      <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#B7794B]" />
+                    )}
                   </button>
                 );
               })}
             </div>
           ))}
-
-          {/* Quick Shortcuts Section */}
-          <div className="pt-2 border-t border-[#2C302E]">
-            <div className="px-3 py-1 text-[11px] font-semibold text-[#6C726E] uppercase tracking-wider flex items-center justify-between">
-              <span>快速发起</span>
-              <Layers className="w-3.5 h-3.5 text-[#6C726E]" />
-            </div>
-            <div className="space-y-1 mt-1">
-              <button
-                onClick={onOpenNewJob}
-                className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-[#A6ACA8] hover:text-white hover:bg-white/5 rounded-lg transition"
-              >
-                <Plus className="w-3.5 h-3.5 text-[#B7794B]" />
-                <span>新建岗位申请</span>
-              </button>
-              <button
-                onClick={onOpenNewInterview}
-                className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-[#A6ACA8] hover:text-white hover:bg-white/5 rounded-lg transition"
-              >
-                <Plus className="w-3.5 h-3.5 text-[#B7794B]" />
-                <span>独立创建面试准备</span>
-              </button>
-              <button
-                onClick={onOpenNewReview}
-                className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-[#A6ACA8] hover:text-white hover:bg-white/5 rounded-lg transition"
-              >
-                <Plus className="w-3.5 h-3.5 text-[#B7794B]" />
-                <span>上传真实面试复盘</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Asset quota widget & User Profile */}
-      <div className="p-3 space-y-2 border-t border-[#2C302E]">
-        {/* Asset Meter widget */}
-        <div className="p-3 bg-white/5 rounded-xl border border-white/5">
-          <div className="flex items-center justify-between text-xs text-[#C8CEC9] font-medium">
-            <span>经历资产库沉淀率</span>
-            <span className="text-[#8EBAAB] font-semibold">82%</span>
-          </div>
-          <div className="h-1.5 bg-white/10 rounded-full my-2 overflow-hidden">
-            <div className="w-[82%] h-full bg-[#3E6256] rounded-full"></div>
-          </div>
-          <div className="text-[10px] text-[#8A908C] flex items-center justify-between">
-            <span>已结构化 18 个证据卡</span>
-            <span className="text-[#B7794B] font-medium">SOTA 就绪</span>
-          </div>
-        </div>
-
-        {/* User Card */}
-        <div className="flex items-center justify-between p-2 rounded-xl bg-white/5 border border-white/5">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <img
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
-              alt="菁菁"
-              className="w-7 h-7 rounded-full object-cover ring-1 ring-[#3E6256] shrink-0"
-            />
-            <div className="min-w-0">
-              <div className="text-xs font-semibold text-white truncate">菁菁</div>
-              <div className="text-[10px] text-[#8A908C] truncate">AI 产品专家</div>
-            </div>
-          </div>
-          <div className="w-2 h-2 rounded-full bg-[#3E6256] ring-2 ring-[#3E6256]/30 shrink-0" title="系统正常运行" />
         </div>
       </div>
     </aside>

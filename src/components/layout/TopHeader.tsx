@@ -152,43 +152,23 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
         )}
       </div>
 
-      {/* Center/Right controls: Search Bar & Status */}
-      <div className="flex items-center gap-4 shrink-0">
-        {/* Search bar */}
-        <div className="hidden lg:flex items-center relative">
-          <Search className="w-3.5 h-3.5 text-[#8A908C] absolute left-3.5 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            placeholder="搜索岗位、经历资产或面试考点..."
-            className="w-64 pl-9 pr-4 py-1.5 text-xs rounded-full bg-[#F5F5F2] border border-[#E6E6E1] focus:border-[#3E6256] focus:bg-white focus:outline-none transition text-[#1D201F] placeholder:text-[#8A908C]"
-          />
+      {/* Right controls: User Profile */}
+      <div className="flex items-center gap-3 shrink-0">
+        {/* User Account Display */}
+        <div className="flex items-center gap-3 pl-2 py-1 pr-3 rounded-full bg-[#F5F5F2] border border-[#E6E6E1] hover:border-[#D5D5CE] transition cursor-pointer select-none">
+          <div className="relative">
+            <img
+              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
+              alt="菁菁"
+              className="w-7 h-7 rounded-full object-cover ring-1 ring-[#3E6256]/40 shrink-0"
+            />
+            <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-[#3E6256] ring-1.5 ring-white" />
+          </div>
+          <div className="flex flex-col text-left">
+            <span className="text-xs font-bold text-[#1D201F] leading-tight">菁菁 (Jinelle)</span>
+            <span className="text-[10px] text-[#6B726F] leading-tight">AI 产品专家</span>
+          </div>
         </div>
-
-        {/* Operational Status Dot */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#EBF2EE] border border-[#D3E2DB] text-xs">
-          <div className="w-2 h-2 rounded-full bg-[#3E6256]" />
-          <span className="text-[#2D4B41] font-medium text-[11px]">闭环引擎: 正常运行</span>
-        </div>
-
-        {currentTab === 'workbench' && (
-          <button
-            onClick={onOpenNewJob}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#3E6256] hover:bg-[#325046] text-white text-xs font-semibold shadow-xs transition"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>添加岗位</span>
-          </button>
-        )}
-
-        {currentTab === 'interview_prep_center' && (
-          <button
-            onClick={onOpenNewInterview}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#3E6256] hover:bg-[#325046] text-white text-xs font-semibold shadow-xs transition"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>新建面试准备</span>
-          </button>
-        )}
       </div>
     </header>
   );
