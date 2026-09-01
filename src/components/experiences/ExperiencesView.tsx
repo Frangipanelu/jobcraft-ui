@@ -99,7 +99,7 @@ export const ExperiencesView: React.FC<ExperiencesViewProps> = () => {
       case 'interview_review':
         return { label: '面试实战反哺', color: 'bg-sage-soft text-sage border-sage-soft' };
       case 'jd_alignment':
-        return { label: 'JD 深度对齐', color: 'bg-terra-soft text-terra border-terra-soft' };
+        return { label: 'JD 深度对齐', color: 'bg-warning-bg text-warning border-warning-bg' };
       default:
         return { label: '经历维护更新', color: 'bg-page text-muted border-edge' };
     }
@@ -175,7 +175,7 @@ export const ExperiencesView: React.FC<ExperiencesViewProps> = () => {
           className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-sage hover:bg-sage-dim text-white text-xs font-bold shadow-xs transition shrink-0 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
-          <span>+ 沉淀新经历资产</span>
+          <span>沉淀新经历资产</span>
         </button>
       </div>
 
@@ -359,7 +359,7 @@ export const ExperiencesView: React.FC<ExperiencesViewProps> = () => {
                         deleteExperience(exp.id);
                       }
                     }}
-                    className="p-1.5 text-faint hover:text-rose-600 hover:bg-white rounded-lg border border-transparent hover:border-edge transition cursor-pointer"
+                    className="p-1.5 text-faint hover:text-error hover:bg-error-bg rounded-lg border border-transparent hover:border-error/20 transition cursor-pointer"
                     title="删除此经历"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -369,11 +369,11 @@ export const ExperiencesView: React.FC<ExperiencesViewProps> = () => {
 
               {/* Version History Drawer (if expanded) */}
               {isVersionExpanded && (
-                <div className="p-5 bg-terra-soft/40 border-b border-terra-soft space-y-3 animate-in fade-in">
+                <div className="p-5 bg-warning-bg/40 border-b border-warning-bg space-y-3 animate-in fade-in">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <History className="w-4 h-4 text-terra" />
-                      <span className="text-xs font-bold text-terra">
+                      <History className="w-4 h-4 text-warning" />
+                      <span className="text-xs font-bold text-warning">
                         版本演进时间轴（累计迭代 {historyList.length || 1} 个版本）
                       </span>
                     </div>
@@ -576,7 +576,7 @@ export const ExperiencesView: React.FC<ExperiencesViewProps> = () => {
                     {(exp.targetJobs || []).map((jobTitle, jIdx) => (
                       <span
                         key={jIdx}
-                        className="px-2 py-0.5 rounded bg-terra-soft text-terra border border-terra-soft text-[11px] font-semibold"
+                        className="px-2 py-0.5 rounded bg-warning-bg text-warning border border-warning/20 text-[11px] font-semibold"
                       >
                         {jobTitle}
                       </span>
@@ -740,7 +740,7 @@ const EditExperienceModal: React.FC<EditExperienceModalProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-ink mb-1">
-                经历名称 <span className="text-rose-500">*</span>
+                经历名称 <span className="text-error">*</span>
               </label>
               <input
                 type="text"

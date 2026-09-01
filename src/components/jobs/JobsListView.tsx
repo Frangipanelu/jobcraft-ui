@@ -34,13 +34,13 @@ export const JobsListView: React.FC<JobsListViewProps> = ({ onOpenNewJob }) => {
   const getStatusBadge = (status: JobStatus) => {
     switch (status) {
       case 'interviewing':
-        return <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sage-soft text-sage border border-sage-soft">面试中</span>;
+        return <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sage-soft text-sage border border-sage/20">面试中</span>;
       case 'delivered':
-        return <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-terra-soft text-terra border border-terra-soft">已投递</span>;
+        return <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-info-bg text-info border border-info/20">已投递</span>;
       case 'pending':
-        return <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-page text-muted border border-edge">待处理</span>;
+        return <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-warning-bg text-warning border border-warning/20">待处理</span>;
       case 'finished':
-        return <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-page text-faint border border-edge">已结束</span>;
+        return <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-error-bg text-error border border-error/20">已结束</span>;
     }
   };
 
@@ -59,7 +59,7 @@ export const JobsListView: React.FC<JobsListViewProps> = ({ onOpenNewJob }) => {
           className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-sage hover:bg-sage-dim text-white text-xs font-semibold shadow-xs transition shrink-0"
         >
           <Plus className="w-4 h-4" />
-          <span>+ 添加岗位</span>
+          <span>添加岗位</span>
         </button>
       </div>
 

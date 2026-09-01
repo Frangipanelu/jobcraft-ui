@@ -275,9 +275,9 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
             <div className="border-t border-edge pt-1 mt-1">
               <button
                 onClick={handleSignOut}
-                className="w-full px-4 py-2 text-xs text-hazard hover:bg-hazard-soft flex items-center gap-2.5 transition text-left"
+                className="w-full px-4 py-2 text-xs text-error hover:bg-error-bg flex items-center gap-2.5 transition text-left cursor-pointer"
               >
-                <LogOut className="w-4 h-4 text-hazard" />
+                <LogOut className="w-4 h-4 text-error" />
                 <span>退出登录</span>
               </button>
             </div>

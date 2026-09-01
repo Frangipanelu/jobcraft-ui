@@ -51,7 +51,7 @@ export const InterviewReviewCenterView: React.FC<InterviewReviewCenterViewProps>
           className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-sage hover:bg-sage-dim text-white text-xs font-bold shadow-xs transition shrink-0 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
-          <span>+ 新建复盘</span>
+          <span>新建复盘</span>
         </button>
       </div>
 

@@ -65,7 +65,7 @@ export const InterviewPrepCenterView: React.FC<InterviewPrepCenterViewProps> = (
           className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-sage hover:bg-sage-dim text-white text-xs font-bold shadow-xs transition shrink-0 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
-          <span>+ 新建面试</span>
+          <span>新建面试</span>
         </button>
       </div>
 
@@ -226,7 +226,7 @@ export const InterviewPrepCenterView: React.FC<InterviewPrepCenterViewProps> = (
                                 interviewId: interview.id
                               })
                             }
-                            className="text-[11px] text-terra hover:underline font-semibold"
+                            className="text-[11px] text-warning hover:underline font-semibold"
                           >
                             查看复盘报告 →
                           </button>

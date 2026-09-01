@@ -14,10 +14,29 @@
   --color-faint: #A8ADA8;
   --color-edge: #E4E5E0;
   --color-edge-deep: #D0D2CB;
-  --color-terra: #B7794B;
-  --color-terra-soft: #F4E8DE;
-  --color-hazard: #B75B55;
-  --color-hazard-soft: #FAEAE9;
+
+  /* Semantic Color System */
+  --color-warning: #A86A35;
+  --color-warning-bg: #F7EEE5;
+  --color-error: #A45D55;
+  --color-error-bg: #F8ECEA;
+  --color-info: #58718A;
+  --color-info-bg: #EDF2F5;
+
+  /* Legacy compatibility aliases */
+  --color-terra: #A86A35;
+  --color-terra-soft: #F7EEE5;
+  --color-hazard: #A45D55;
+  --color-hazard-soft: #F8ECEA;
+}
+
+:root {
+  --color-warning: #A86A35;
+  --color-warning-bg: #F7EEE5;
+  --color-error: #A45D55;
+  --color-error-bg: #F8ECEA;
+  --color-info: #58718A;
+  --color-info-bg: #EDF2F5;
 }
 
 @layer base {

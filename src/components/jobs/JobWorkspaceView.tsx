@@ -44,10 +44,10 @@ export const JobWorkspaceView: React.FC<JobWorkspaceViewProps> = ({
   if (!currentJob) {
     return (
       <div className="p-8 text-center">
-        <p className="text-sm text-slate-500">未找到岗位信息</p>
+        <p className="text-sm text-muted">未找到岗位信息</p>
         <button
           onClick={() => navigateTo('jobs')}
-          className="mt-2 px-4 py-1.5 bg-emerald-700 text-white rounded-lg text-xs"
+          className="mt-2 px-4 py-1.5 bg-sage hover:bg-sage-dim text-white rounded-lg text-xs font-semibold transition cursor-pointer"
         >
           返回岗位列表
         </button>
@@ -64,26 +64,32 @@ export const JobWorkspaceView: React.FC<JobWorkspaceViewProps> = ({
           <div className="flex items-center justify-between">
             <button
               onClick={() => navigateTo('jobs')}
-              className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-emerald-700 font-medium transition"
+              className="inline-flex items-center gap-1.5 text-xs text-muted hover:text-sage font-medium transition cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>返回我的岗位列表</span>
             </button>
 
             <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400">投递时间: {currentJob.applyDate}</span>
-              <span className="text-slate-300">·</span>
+              <span className="text-xs text-faint">投递时间: {currentJob.applyDate}</span>
+              <span className="text-edge-deep">·</span>
               <span
                 className={`text-xs px-2.5 py-0.5 rounded-full font-semibold ${
                   currentJob.status === 'interviewing'
-                    ? 'bg-emerald-100 text-emerald-800'
-                    : 'bg-slate-100 text-slate-700'
+                    ? 'bg-sage-soft text-sage border border-sage/20'
+                    : currentJob.status === 'delivered'
+                    ? 'bg-info-bg text-info border border-info/20'
+                    : currentJob.status === 'finished'
+                    ? 'bg-error-bg text-error border border-error/20'
+                    : 'bg-warning-bg text-warning border border-warning/20'
                 }`}
               >
                 {currentJob.status === 'interviewing'
                   ? '面试推进中'
                   : currentJob.status === 'delivered'
                   ? '已投递'
+                  : currentJob.status === 'finished'
+                  ? '已结束'
                   : '待处理'}
               </span>
             </div>
@@ -124,7 +130,7 @@ export const JobWorkspaceView: React.FC<JobWorkspaceViewProps> = ({
                 className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-sage hover:bg-sage-dim text-white text-xs font-semibold shadow-xs transition"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>+ 新建面试</span>
+                <span>新建面试</span>
               </button>
             </div>
           </div>
@@ -206,16 +212,16 @@ export const JobWorkspaceView: React.FC<JobWorkspaceViewProps> = ({
             {/* Interview Center Header */}
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-bold text-slate-900">
+                <h2 className="text-lg font-bold text-ink">
                   {currentJob.company} · 多轮面试推进
                 </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-muted mt-0.5">
                   每轮面试拥有专属的考点预判、高频题库、公司研判以及赛后复盘沉淀
                 </p>
               </div>
               <button
                 onClick={() => onOpenNewInterview(currentJob?.id)}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-700 text-white text-xs font-semibold hover:bg-emerald-800 transition"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-sage text-white text-xs font-semibold hover:bg-sage-dim transition cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>+ 新建面试轮次</span>
@@ -233,34 +239,34 @@ export const JobWorkspaceView: React.FC<JobWorkspaceViewProps> = ({
                     key={interview.id}
                     className={`bg-white rounded-xl border p-6 shadow-2xs transition ${
                       isUpcoming
-                        ? 'border-emerald-300 ring-1 ring-emerald-100'
-                        : 'border-slate-200'
+                        ? 'border-warning/40 ring-1 ring-warning/20'
+                        : 'border-edge'
                     }`}
                   >
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                       {/* Left: Info */}
                       <div className="space-y-1.5">
                         <div className="flex items-center gap-3">
-                          <span className="text-base font-bold text-slate-900">
+                          <span className="text-base font-bold text-ink">
                             {interview.roundName}
                           </span>
                           <span
-                            className={`text-xs px-2.5 py-0.5 rounded-md font-semibold ${
+                            className={`text-xs px-2.5 py-0.5 rounded-md font-semibold border ${
                               isUpcoming
-                                ? 'bg-emerald-100 text-emerald-800'
+                                ? 'bg-warning-bg text-warning border-warning/20'
                                 : isCompleted
-                                ? 'bg-slate-100 text-slate-700'
-                                : 'bg-amber-100 text-amber-800'
+                                ? 'bg-page text-muted border-edge'
+                                : 'bg-info-bg text-info border-info/20'
                             }`}
                           >
                             {isUpcoming ? '即将进行' : isCompleted ? '已完成' : '准备中'}
                           </span>
-                          <span className="text-xs text-slate-500 font-medium">
+                          <span className="text-xs text-faint font-medium">
                             时间：{interview.time}
                           </span>
                         </div>
 
-                        <div className="text-xs text-slate-600 flex items-center gap-3 flex-wrap">
+                        <div className="text-xs text-muted flex items-center gap-3 flex-wrap">
                           <span>形式：{interview.format === 'video' ? '视频面试' : interview.format === 'phone' ? '电话面试' : '现场面试'}</span>
                           {interview.interviewer && (
                             <>
@@ -269,14 +275,14 @@ export const JobWorkspaceView: React.FC<JobWorkspaceViewProps> = ({
                             </>
                           )}
                           <span>·</span>
-                          <span className="font-semibold text-emerald-800">
+                          <span className="font-semibold text-sage">
                             准备度 {interview.readinessPercent}%
                           </span>
                         </div>
 
                         {interview.supplementNotes && (
-                          <p className="text-xs text-slate-500 bg-slate-50 p-2 rounded-lg border border-slate-100 mt-2">
-                            <strong className="text-slate-700 font-semibold">HR/背景提醒：</strong> {interview.supplementNotes}
+                          <p className="text-xs text-muted bg-page p-2 rounded-lg border border-edge mt-2">
+                            <strong className="text-ink font-semibold">HR/背景提醒：</strong> {interview.supplementNotes}
                           </p>
                         )}
                       </div>
@@ -291,9 +297,9 @@ export const JobWorkspaceView: React.FC<JobWorkspaceViewProps> = ({
                                 interviewId: interview.id
                               })
                             }
-                            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-200 transition"
+                            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white hover:bg-page text-ink text-xs font-semibold border border-edge transition cursor-pointer"
                           >
-                            <RotateCcw className="w-3.5 h-3.5 text-emerald-700" />
+                            <RotateCcw className="w-3.5 h-3.5 text-sage" />
                             <span>查看复盘报告 ({interview.review.overallScore}分)</span>
                           </button>
                         )}
@@ -305,7 +311,7 @@ export const JobWorkspaceView: React.FC<JobWorkspaceViewProps> = ({
                               interviewId: interview.id
                             })
                           }
-                          className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold shadow-xs transition"
+                          className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-sage hover:bg-sage-dim text-white text-xs font-semibold shadow-xs transition cursor-pointer"
                         >
                           <BookOpenCheck className="w-3.5 h-3.5" />
                           <span>{isCompleted ? '查看准备方案' : '进入准备空间'}</span>
@@ -317,11 +323,11 @@ export const JobWorkspaceView: React.FC<JobWorkspaceViewProps> = ({
               })}
 
               {jobInterviews.length === 0 && (
-                <div className="p-8 text-center bg-white rounded-xl border border-dashed border-slate-200">
-                  <p className="text-sm text-slate-500">本岗位暂未安排面试轮次</p>
+                <div className="p-8 text-center bg-white rounded-xl border border-dashed border-edge">
+                  <p className="text-sm text-muted">本岗位暂未安排面试轮次</p>
                   <button
                     onClick={() => onOpenNewInterview(currentJob?.id)}
-                    className="mt-3 px-4 py-2 bg-emerald-700 text-white text-xs font-semibold rounded-lg"
+                    className="mt-3 px-4 py-2 bg-sage hover:bg-sage-dim text-white text-xs font-semibold rounded-lg cursor-pointer"
                   >
                     + 新建第1面准备
                   </button>

@@ -57,9 +57,9 @@ export const InterviewReviewDetailView: React.FC<InterviewReviewDetailViewProps>
 
   // Helper for score badge color
   const getScoreBadgeClass = (score: number) => {
-    if (score >= 80) return 'text-sage bg-sage-soft border-sage-soft';
+    if (score >= 80) return 'text-sage bg-sage-soft border-sage/20';
     if (score >= 70) return 'text-ink bg-page border-edge';
-    return 'text-hazard bg-hazard-soft border-hazard-soft';
+    return 'text-warning bg-warning-bg border-warning/20';
   };
 
   // Metric cards fallback computation
@@ -115,14 +115,6 @@ export const InterviewReviewDetailView: React.FC<InterviewReviewDetailViewProps>
       <div className="bg-white rounded-2xl border border-edge p-5 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         {/* Left Info */}
         <div className="space-y-2">
-          <button
-            onClick={() => navigateTo('interview_review_center')}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted hover:text-ink transition cursor-pointer group"
-          >
-            <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
-            <span>面试复盘</span>
-          </button>
-
           <div className="flex items-center gap-3 flex-wrap">
             <h1 className="text-xl md:text-2xl font-bold tracking-tight text-ink">
               {review.company} · {review.role}
@@ -171,9 +163,9 @@ export const InterviewReviewDetailView: React.FC<InterviewReviewDetailViewProps>
       </div>
 
       {/* 2. Core Problems Alert Banner (本场核心问题) */}
-      <div className="bg-terra-soft border border-terra-soft rounded-xl px-4 py-3 flex flex-col md:flex-row md:items-center gap-3 text-xs shadow-2xs">
+      <div className="bg-warning-bg border border-warning/20 rounded-xl px-4 py-3 flex flex-col md:flex-row md:items-center gap-3 text-xs shadow-2xs">
         <div className="flex items-center gap-1.5 shrink-0">
-          <span className="font-bold text-terra bg-terra-soft px-2.5 py-0.5 rounded-md text-[11px]">
+          <span className="font-bold text-warning bg-warning-bg px-2.5 py-0.5 rounded-md text-[11px] border border-warning/20">
             本场核心问题
           </span>
         </div>
@@ -432,9 +424,9 @@ export const InterviewReviewDetailView: React.FC<InterviewReviewDetailViewProps>
           </div>
 
           {/* Card 3: 诊断与行动总结 (Action summary) */}
-          <div className="bg-terra-soft rounded-2xl border border-terra-soft p-4 shadow-2xs space-y-2 text-xs">
-            <div className="flex items-center gap-1.5 font-bold text-terra">
-              <AlertTriangle className="w-3.5 h-3.5 text-terra" />
+          <div className="bg-warning-bg rounded-2xl border border-warning/20 p-4 shadow-2xs space-y-2 text-xs">
+            <div className="flex items-center gap-1.5 font-bold text-warning">
+              <AlertTriangle className="w-3.5 h-3.5 text-warning" />
               <span>本题失分防范</span>
             </div>
             <ul className="space-y-1 text-muted text-[11px] list-disc list-inside">

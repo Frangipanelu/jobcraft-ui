@@ -10,37 +10,37 @@ export const ToastContainer: React.FC = () => {
   return (
     <div className="fixed bottom-5 right-5 z-50 flex flex-col gap-2.5 max-w-md w-full pointer-events-none">
       {toasts.map((toast) => {
-        let icon = <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />;
-        let borderColor = 'border-emerald-200 bg-emerald-50/95 text-emerald-950';
+        let icon = <CheckCircle2 className="w-4 h-4 text-sage shrink-0 mt-0.5" />;
+        let borderColor = 'border-sage/30 bg-white text-ink';
 
         if (toast.type === 'error') {
-          icon = <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />;
-          borderColor = 'border-rose-200 bg-rose-50/95 text-rose-950';
+          icon = <AlertCircle className="w-4 h-4 text-error shrink-0 mt-0.5" />;
+          borderColor = 'border-error/30 bg-white text-ink';
         } else if (toast.type === 'warning') {
-          icon = <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />;
-          borderColor = 'border-amber-200 bg-amber-50/95 text-amber-950';
+          icon = <AlertTriangle className="w-4 h-4 text-warning shrink-0 mt-0.5" />;
+          borderColor = 'border-warning/30 bg-white text-ink';
         } else if (toast.type === 'info') {
-          icon = <Info className="w-5 h-5 text-blue-600 shrink-0" />;
-          borderColor = 'border-blue-200 bg-blue-50/95 text-blue-950';
+          icon = <Info className="w-4 h-4 text-info shrink-0 mt-0.5" />;
+          borderColor = 'border-info/30 bg-white text-ink';
         }
 
         return (
           <div
             key={toast.id}
-            className={`pointer-events-auto flex items-start gap-3 p-4 rounded-xl border shadow-lg shadow-slate-900/5 backdrop-blur-sm transition-all duration-300 animate-in fade-in slide-in-from-bottom-3 ${borderColor}`}
+            className={`pointer-events-auto flex items-start gap-3 p-4 rounded-xl border shadow-lg shadow-black/5 transition-all duration-300 animate-in fade-in slide-in-from-bottom-3 ${borderColor}`}
           >
             {icon}
             <div className="flex-1 min-w-0">
-              <h4 className="text-sm font-semibold leading-tight">{toast.title}</h4>
+              <h4 className="text-xs sm:text-[13px] font-bold leading-tight text-ink">{toast.title}</h4>
               {toast.message && (
-                <p className="text-xs opacity-90 mt-1 leading-relaxed">{toast.message}</p>
+                <p className="text-xs text-muted mt-1 leading-relaxed">{toast.message}</p>
               )}
             </div>
             <button
               onClick={() => dismissToast(toast.id)}
-              className="text-slate-400 hover:text-slate-600 p-0.5 rounded transition"
+              className="text-faint hover:text-ink p-0.5 rounded transition cursor-pointer"
             >
-              <X className="w-4 h-4" />
+              <X className="w-3.5 h-3.5" />
             </button>
           </div>
         );
@@ -48,3 +48,4 @@ export const ToastContainer: React.FC = () => {
     </div>
   );
 };
+

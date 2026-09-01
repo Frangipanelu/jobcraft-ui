@@ -325,7 +325,7 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
                                   <span className="text-sage font-bold mr-1.5">•</span>
                                   <span>{bullet.text}</span>
                                   {bullet.jdMatchTag && (
-                                    <span className="ml-2 inline-block text-[10px] px-1.5 py-0.2 rounded bg-terra-soft text-terra font-semibold border border-terra-soft">
+                                    <span className="ml-2 inline-block text-[10px] px-1.5 py-0.2 rounded bg-warning-bg text-warning font-semibold border border-warning/20">
                                       {bullet.jdMatchTag}
                                     </span>
                                   )}
@@ -347,7 +347,7 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
                                       e.stopPropagation();
                                       deleteResumeBullet(section.id, item.id, bullet.id);
                                     }}
-                                    className="p-1 text-faint hover:text-rose-600 rounded transition cursor-pointer"
+                                    className="p-1 text-faint hover:text-error rounded transition cursor-pointer"
                                     title="删除要点"
                                   >
                                     <Trash2 className="w-3.5 h-3.5" />
@@ -420,7 +420,7 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
                     {(linkedExp.metrics || []).map((met, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-0.5 rounded bg-terra-soft text-terra font-mono text-[11px] font-bold border border-terra-soft"
+                        className="px-2 py-0.5 rounded bg-sage-soft text-sage font-mono text-[11px] font-bold border border-sage/20"
                       >
                         {met}
                       </span>

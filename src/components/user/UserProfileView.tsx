@@ -337,7 +337,7 @@ export const UserProfileView: React.FC = () => {
                   {historicalResumes.length > 1 && (
                     <button
                       onClick={() => deleteHistoricalResume(resume.id)}
-                      className="p-1.5 rounded-lg border border-edge hover:bg-hazard-soft text-hazard hover:border-hazard/40 transition"
+                      className="p-1.5 rounded-lg border border-edge hover:bg-error-bg text-error hover:border-error/40 transition cursor-pointer"
                       title="删除此简历"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -486,13 +486,13 @@ export const UserProfileView: React.FC = () => {
               {targetCompanies.map((comp, idx) => (
                 <span
                   key={idx}
-                  className="px-3 py-1 rounded-lg text-xs bg-terra-soft text-terra font-medium flex items-center gap-2"
+                  className="px-3 py-1 rounded-lg text-xs bg-info-bg text-info font-medium flex items-center gap-2 border border-info/20"
                 >
                   {comp}
                   <button
                     type="button"
                     onClick={() => handleRemoveCompany(comp)}
-                    className="hover:text-red-600 font-bold"
+                    className="hover:text-error font-bold cursor-pointer"
                   >
                     ×
                   </button>

@@ -129,7 +129,7 @@ export const NewExperienceModal: React.FC<NewExperienceModalProps> = ({ isOpen, 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-ink mb-1">
-                经历名称 <span className="text-rose-500">*</span>
+                经历名称 <span className="text-error">*</span>
               </label>
               <input
                 type="text"

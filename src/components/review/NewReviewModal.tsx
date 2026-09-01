@@ -99,24 +99,24 @@ export const NewReviewModal: React.FC<NewReviewModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xl max-w-xl w-full overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 bg-ink/60 backdrop-blur-xs flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl border border-edge shadow-xl max-w-xl w-full overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+        <div className="p-6 border-b border-edge flex items-center justify-between bg-canvas">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-sage-soft text-sage flex items-center justify-center">
               <RotateCcw className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900">上传面试记录 · 生成智能复盘</h3>
-              <p className="text-xs text-slate-500">
+              <h3 className="text-base font-bold text-ink">上传面试记录 · 生成智能复盘</h3>
+              <p className="text-xs text-muted">
                 支持粘贴文字问答、录音转写稿或会议记录，AI 自动完成逐题诊断与得失提炼
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+            className="p-1 rounded-lg text-faint hover:text-ink hover:bg-page transition cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -125,13 +125,13 @@ export const NewReviewModal: React.FC<NewReviewModalProps> = ({
         <form onSubmit={handleStartReview} className="p-6 space-y-4">
           {/* Target Interview selector */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-semibold text-ink mb-1">
               关联面试轮次
             </label>
             <select
               value={selectedInterviewId}
               onChange={(e) => setSelectedInterviewId(e.target.value)}
-              className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 bg-white"
+              className="w-full px-3 py-2 text-xs rounded-lg border border-edge bg-white text-ink focus:border-sage outline-none"
             >
               {interviews.map((i) => (
                 <option key={i.id} value={i.id}>
@@ -146,10 +146,10 @@ export const NewReviewModal: React.FC<NewReviewModalProps> = ({
             <button
               type="button"
               onClick={() => setUploadType('transcript')}
-              className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center justify-center gap-1.5 transition ${
+              className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer ${
                 uploadType === 'transcript'
-                  ? 'bg-emerald-50 text-emerald-900 border-emerald-600'
-                  : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                  ? 'bg-sage-soft text-sage border-sage/40'
+                  : 'border-edge text-muted hover:bg-page'
               }`}
             >
               <FileText className="w-3.5 h-3.5" />
@@ -159,10 +159,10 @@ export const NewReviewModal: React.FC<NewReviewModalProps> = ({
             <button
               type="button"
               onClick={() => setUploadType('text')}
-              className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center justify-center gap-1.5 transition ${
+              className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer ${
                 uploadType === 'text'
-                  ? 'bg-emerald-50 text-emerald-900 border-emerald-600'
-                  : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                  ? 'bg-sage-soft text-sage border-sage/40'
+                  : 'border-edge text-muted hover:bg-page'
               }`}
             >
               <FileText className="w-3.5 h-3.5" />
@@ -178,10 +178,10 @@ export const NewReviewModal: React.FC<NewReviewModalProps> = ({
                   title: '支持音频文件或手机录音快速转写'
                 });
               }}
-              className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center justify-center gap-1.5 transition ${
+              className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer ${
                 uploadType === 'audio'
-                  ? 'bg-emerald-50 text-emerald-900 border-emerald-600'
-                  : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                  ? 'bg-sage-soft text-sage border-sage/40'
+                  : 'border-edge text-muted hover:bg-page'
               }`}
             >
               <Mic className="w-3.5 h-3.5" />
@@ -192,13 +192,13 @@ export const NewReviewModal: React.FC<NewReviewModalProps> = ({
           {/* Text Area */}
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="block text-xs font-semibold text-slate-700">
+              <label className="block text-xs font-semibold text-ink">
                 面试对话与作答记录
               </label>
               <button
                 type="button"
                 onClick={() => setTranscriptContent(sampleTranscript)}
-                className="text-[11px] text-emerald-700 hover:text-emerald-800 font-semibold"
+                className="text-[11px] text-sage hover:underline font-semibold cursor-pointer"
               >
                 填入范例文稿
               </button>
@@ -209,7 +209,7 @@ export const NewReviewModal: React.FC<NewReviewModalProps> = ({
               placeholder="粘贴面试过程中的核心提问与作答记录..."
               value={transcriptContent}
               onChange={(e) => setTranscriptContent(e.target.value)}
-              className="w-full p-3 text-xs rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 font-sans leading-relaxed resize-none bg-slate-50/50"
+              className="w-full p-3 text-xs rounded-xl border border-edge focus:border-sage focus:outline-none font-sans leading-relaxed resize-none bg-page text-ink"
             />
           </div>
 
@@ -217,7 +217,7 @@ export const NewReviewModal: React.FC<NewReviewModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs text-slate-600 hover:bg-slate-100 rounded-lg"
+              className="px-4 py-2 text-xs text-muted hover:bg-page rounded-lg transition cursor-pointer"
             >
               取消
             </button>
@@ -225,7 +225,7 @@ export const NewReviewModal: React.FC<NewReviewModalProps> = ({
             <button
               type="submit"
               disabled={isProcessing}
-              className="px-5 py-2 text-xs bg-emerald-700 hover:bg-emerald-800 disabled:bg-slate-300 text-white font-bold rounded-lg flex items-center gap-1.5 shadow-xs transition"
+              className="px-5 py-2 text-xs bg-sage hover:bg-sage-dim disabled:bg-edge-deep text-white font-bold rounded-lg flex items-center gap-1.5 shadow-xs transition cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>{isProcessing ? 'AI 正在深度复盘分析中...' : '生成智能复盘报告 →'}</span>

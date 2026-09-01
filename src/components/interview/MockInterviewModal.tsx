@@ -107,25 +107,25 @@ export const MockInterviewModal: React.FC<MockInterviewModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xl max-w-2xl w-full overflow-hidden animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
+      <div className="bg-white rounded-2xl border border-edge shadow-xl max-w-2xl w-full overflow-hidden animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+        <div className="p-5 border-b border-edge flex items-center justify-between bg-canvas">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-sage-soft text-sage flex items-center justify-center">
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-900">
+              <h3 className="text-sm font-bold text-ink">
                 AI 模拟面试实战 · 第 {currentQIndex + 1} / {mockQuestions.length} 题
               </h3>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[11px] text-muted">
                 {currentInterview.company} · {currentInterview.roundName}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+            className="p-1 rounded-lg text-faint hover:text-ink hover:bg-page transition cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -135,12 +135,12 @@ export const MockInterviewModal: React.FC<MockInterviewModalProps> = ({
         <div className="p-6 space-y-6 overflow-y-auto flex-1 custom-scrollbar">
           {/* AI Interviewer Bubble */}
           <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center shrink-0 text-xs font-bold font-mono">
+            <div className="w-8 h-8 rounded-full bg-ink text-white flex items-center justify-center shrink-0 text-xs font-bold font-mono">
               AI
             </div>
             <div className="space-y-1.5 flex-1">
-              <div className="text-xs font-semibold text-slate-600">面试官：</div>
-              <div className="p-4 rounded-2xl rounded-tl-none bg-slate-100 text-slate-900 text-sm font-medium leading-relaxed shadow-2xs">
+              <div className="text-xs font-semibold text-muted">面试官：</div>
+              <div className="p-4 rounded-2xl rounded-tl-none bg-page text-ink text-sm font-medium leading-relaxed shadow-2xs border border-edge">
                 {currentQ.q}
               </div>
             </div>
@@ -149,11 +149,11 @@ export const MockInterviewModal: React.FC<MockInterviewModalProps> = ({
           {/* User Input / Response Area */}
           <div className="space-y-3 pl-11">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-700">你的回答：</span>
+              <span className="text-xs font-semibold text-ink">你的回答：</span>
               <button
                 type="button"
                 onClick={handleUsePresetAnswer}
-                className="text-[11px] text-emerald-700 hover:text-emerald-800 font-semibold"
+                className="text-[11px] text-sage hover:underline font-semibold cursor-pointer"
               >
                 快速填入参考回答
               </button>
@@ -164,20 +164,20 @@ export const MockInterviewModal: React.FC<MockInterviewModalProps> = ({
               placeholder="输入你的现场回答，或点击下方麦克风模拟语音录音..."
               value={candidateInput}
               onChange={(e) => setCandidateInput(e.target.value)}
-              className="w-full p-3.5 text-xs rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 font-sans leading-relaxed resize-none"
+              className="w-full p-3.5 text-xs rounded-xl border border-edge focus:border-sage focus:outline-none font-sans leading-relaxed resize-none bg-white text-ink"
             />
 
             <div className="flex items-center justify-between gap-3">
               <button
                 type="button"
                 onClick={handleToggleRecording}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition cursor-pointer ${
                   isRecording
-                    ? 'bg-rose-50 text-rose-700 border-rose-300 animate-pulse'
-                    : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                    ? 'bg-error-bg text-error border-error/40 animate-pulse'
+                    : 'bg-white text-ink border-edge hover:bg-page'
                 }`}
               >
-                {isRecording ? <MicOff className="w-3.5 h-3.5 text-rose-600" /> : <Mic className="w-3.5 h-3.5 text-slate-500" />}
+                {isRecording ? <MicOff className="w-3.5 h-3.5 text-error" /> : <Mic className="w-3.5 h-3.5 text-muted" />}
                 <span>{isRecording ? '正在语音识别录入...' : '语音录入回答'}</span>
               </button>
 
@@ -185,7 +185,7 @@ export const MockInterviewModal: React.FC<MockInterviewModalProps> = ({
                 type="button"
                 onClick={handleSendAnswer}
                 disabled={!candidateInput.trim() || isEvaluating}
-                className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 disabled:bg-slate-200 text-white text-xs font-semibold shadow-xs transition"
+                className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-sage hover:bg-sage-dim disabled:bg-edge-deep text-white text-xs font-semibold shadow-xs transition cursor-pointer"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>{isEvaluating ? 'AI 正在多维评估...' : '提交评估回答'}</span>
@@ -196,39 +196,39 @@ export const MockInterviewModal: React.FC<MockInterviewModalProps> = ({
           {/* AI Instant Feedback Evaluation Card (Section 15.9) */}
           {feedback && (
             <div className="pl-11 space-y-3 animate-in fade-in">
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
-                <div className="flex items-center justify-between border-b border-slate-200/60 pb-2">
+              <div className="p-4 rounded-xl bg-page border border-edge space-y-3">
+                <div className="flex items-center justify-between border-b border-edge pb-2">
                   <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-emerald-600" />
-                    <h4 className="text-xs font-bold text-slate-900">AI 实时作答评分</h4>
+                    <Sparkles className="w-4 h-4 text-sage" />
+                    <h4 className="text-xs font-bold text-ink">AI 实时作答评分</h4>
                   </div>
-                  <span className="text-xs font-bold text-emerald-800">
+                  <span className="text-xs font-bold text-sage">
                     综合得分 {Math.round((feedback.structure + feedback.relevance + feedback.expression + feedback.completeness) / 4)} / 100
                   </span>
                 </div>
 
                 {/* 4 Score Metrics */}
                 <div className="grid grid-cols-4 gap-2 text-center text-xs">
-                  <div className="p-2 bg-white rounded-lg border border-slate-100">
-                    <div className="text-[10px] text-slate-400">结构逻辑</div>
-                    <div className="font-bold text-slate-900 mt-0.5">{feedback.structure}</div>
+                  <div className="p-2 bg-white rounded-lg border border-edge">
+                    <div className="text-[10px] text-faint">结构逻辑</div>
+                    <div className="font-bold text-ink mt-0.5">{feedback.structure}</div>
                   </div>
-                  <div className="p-2 bg-white rounded-lg border border-slate-100">
-                    <div className="text-[10px] text-slate-400">岗位相关性</div>
-                    <div className="font-bold text-emerald-700 mt-0.5">{feedback.relevance}</div>
+                  <div className="p-2 bg-white rounded-lg border border-edge">
+                    <div className="text-[10px] text-faint">岗位相关性</div>
+                    <div className="font-bold text-sage mt-0.5">{feedback.relevance}</div>
                   </div>
-                  <div className="p-2 bg-white rounded-lg border border-slate-100">
-                    <div className="text-[10px] text-slate-400">表达清晰</div>
-                    <div className="font-bold text-slate-900 mt-0.5">{feedback.expression}</div>
+                  <div className="p-2 bg-white rounded-lg border border-edge">
+                    <div className="text-[10px] text-faint">表达清晰</div>
+                    <div className="font-bold text-ink mt-0.5">{feedback.expression}</div>
                   </div>
-                  <div className="p-2 bg-white rounded-lg border border-slate-100">
-                    <div className="text-[10px] text-slate-400">证据完整度</div>
-                    <div className="font-bold text-amber-700 mt-0.5">{feedback.completeness}</div>
+                  <div className="p-2 bg-white rounded-lg border border-edge">
+                    <div className="text-[10px] text-faint">证据完整度</div>
+                    <div className="font-bold text-warning mt-0.5">{feedback.completeness}</div>
                   </div>
                 </div>
 
-                <div className="text-xs text-slate-700 bg-white p-3 rounded-lg border border-slate-100 leading-relaxed font-medium">
-                  <strong className="text-emerald-900 font-bold">改进建议：</strong> {feedback.advice}
+                <div className="text-xs text-ink bg-white p-3 rounded-lg border border-edge leading-relaxed font-medium">
+                  <strong className="text-sage font-bold">改进建议：</strong> {feedback.advice}
                 </div>
               </div>
             </div>
@@ -236,7 +236,7 @@ export const MockInterviewModal: React.FC<MockInterviewModalProps> = ({
         </div>
 
         {/* Footer Next Button */}
-        <div className="p-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
+        <div className="p-4 border-t border-edge flex items-center justify-between bg-canvas">
           <button
             onClick={onClose}
             className="px-4 py-1.5 text-xs text-slate-500 hover:bg-slate-200 rounded-lg transition"

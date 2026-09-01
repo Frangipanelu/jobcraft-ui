@@ -87,7 +87,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           label: '面试复盘',
           icon: <RotateCcw className="w-4 h-4" />,
           badge: pendingReviewCount > 0 ? `${pendingReviewCount}` : undefined,
-          badgeColor: 'bg-terra-soft text-terra'
+          badgeColor: 'bg-warning-bg text-warning'
         }
       ]
     }
@@ -96,48 +96,55 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <aside
       className={`h-screen bg-ink text-faint flex flex-col justify-between shrink-0 select-none border-r border-ink transition-all duration-300 ${
-        isCollapsed ? 'w-16' : 'w-60'
+        isCollapsed ? 'w-[68px]' : 'w-60'
       }`}
     >
       {/* Brand Header */}
       <div className="flex-1 flex flex-col min-h-0">
-        <div className="p-4 border-b border-ink flex items-center justify-between">
-          <div className="flex items-center gap-2.5 min-w-0 overflow-hidden">
-            <div
-              onClick={() => isCollapsed && setIsCollapsed(false)}
-              className={`w-8 h-8 rounded-lg bg-sage flex items-center justify-center text-white shadow-sm shadow-sage/30 shrink-0 ${
-                isCollapsed ? 'cursor-pointer hover:bg-sage-dim' : ''
-              }`}
-              title="JobCraft"
+        <div
+          className={`border-b border-white/10 flex items-center transition-all ${
+            isCollapsed ? 'justify-center py-3.5 px-2' : 'justify-between p-4'
+          }`}
+        >
+          {isCollapsed ? (
+            <button
+              onClick={() => setIsCollapsed(false)}
+              className="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 text-faint hover:text-white flex items-center justify-center transition cursor-pointer"
+              title="展开侧边栏"
             >
-              <Sparkles className="w-4 h-4" />
-            </div>
-
-            {!isCollapsed && (
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-bold text-white tracking-tight text-sm">JobCraft</span>
-                  <span className="text-[10px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-sage/30 text-sage-dim border border-sage/50 shrink-0">
-                    V2
-                  </span>
+              <PanelLeftOpen className="w-5 h-5 text-sage-dim" />
+            </button>
+          ) : (
+            <>
+              <div className="flex items-center gap-2.5 min-w-0 overflow-hidden">
+                <div
+                  className="w-8 h-8 rounded-lg bg-sage flex items-center justify-center text-white shadow-sm shadow-sage/30 shrink-0"
+                  title="JobCraft"
+                >
+                  <Sparkles className="w-4 h-4" />
                 </div>
-                <p className="text-[11px] text-faint font-medium truncate">求职与经历闭环</p>
-              </div>
-            )}
-          </div>
 
-          {/* Collapse/Expand toggle button */}
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-1 rounded-md text-faint hover:text-white hover:bg-white/10 transition shrink-0 ml-1"
-            title={isCollapsed ? '展开侧边栏' : '收起侧边栏'}
-          >
-            {isCollapsed ? (
-              <PanelLeftOpen className="w-4 h-4 text-sage-dim" />
-            ) : (
-              <PanelLeftClose className="w-4 h-4" />
-            )}
-          </button>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-bold text-white tracking-tight text-sm">JobCraft</span>
+                    <span className="text-[10px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-sage/30 text-sage-dim border border-sage/50 shrink-0">
+                      V2
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-faint font-medium truncate">求职与经历闭环</p>
+                </div>
+              </div>
+
+              {/* Collapse button */}
+              <button
+                onClick={() => setIsCollapsed(true)}
+                className="p-1.5 rounded-lg text-faint hover:text-white hover:bg-white/10 transition shrink-0 cursor-pointer"
+                title="收起侧边栏"
+              >
+                <PanelLeftClose className="w-4 h-4" />
+              </button>
+            </>
+          )}
         </div>
 
         {/* Navigation list */}
@@ -162,15 +169,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     key={item.id}
                     onClick={() => navigateTo(item.id)}
                     title={isCollapsed ? item.label : undefined}
-                    className={`w-full flex items-center ${
-                      isCollapsed ? 'justify-center px-2 py-2.5' : 'justify-between px-3 py-2'
-                    } rounded-lg text-xs font-medium transition-all ${
+                    className={`flex items-center ${
+                      isCollapsed
+                        ? 'justify-center w-10 h-10 mx-auto rounded-xl'
+                        : 'w-full justify-between px-3 py-2 rounded-lg'
+                    } text-xs font-medium transition-all relative cursor-pointer ${
                       isActivewk
                         ? 'bg-sage text-white font-semibold shadow-xs'
                         : 'text-faint hover:text-white hover:bg-white/5'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5 min-w-0">
+                    <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-2.5'} min-w-0`}>
                       <span className={isActivewk ? 'text-white' : 'text-faint'}>
                         {item.icon}
                       </span>
@@ -188,7 +197,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     )}
 
                     {isCollapsed && item.badge && (
-                      <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-terra" />
+                      <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-warning ring-2 ring-ink" />
                     )}
                   </button>
                 );

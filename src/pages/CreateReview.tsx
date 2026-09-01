@@ -387,7 +387,7 @@ export const CreateReview: React.FC = () => {
                         {selectedJob.currentStage || '第1面已完成'}
                       </span>
                     </div>
-                    <div className="w-5 h-5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-300 flex items-center justify-center">
+                    <div className="w-5 h-5 rounded-full bg-sage-soft text-sage border border-sage/40 flex items-center justify-center">
                       <Check className="w-3 h-3 stroke-[3]" />
                     </div>
                   </div>

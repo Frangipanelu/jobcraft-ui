@@ -42,22 +42,22 @@ export const NewJobModal: React.FC<NewJobModalProps> = ({ isOpen, onClose }) => 
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xl max-w-lg w-full overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 bg-ink/60 backdrop-blur-xs flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl border border-edge shadow-xl max-w-lg w-full overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+        <div className="p-6 border-b border-edge flex items-center justify-between bg-canvas">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-sage-soft text-sage flex items-center justify-center">
               <Briefcase className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900">添加新的目标岗位</h3>
-              <p className="text-xs text-slate-500">创建岗位工作空间，开启 JD 分析与专属简历定制</p>
+              <h3 className="text-base font-bold text-ink">添加新的目标岗位</h3>
+              <p className="text-xs text-muted">创建岗位工作空间，开启 JD 分析与专属简历定制</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+            className="p-1 rounded-lg text-faint hover:text-ink hover:bg-page transition cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -65,26 +65,26 @@ export const NewJobModal: React.FC<NewJobModalProps> = ({ isOpen, onClose }) => 
 
         {/* Quick Presets */}
         <div className="px-6 pt-4">
-          <span className="text-xs text-slate-400 font-medium">快速填充范例：</span>
+          <span className="text-xs text-faint font-medium">快速填充范例：</span>
           <div className="flex flex-wrap gap-2 mt-1.5">
             <button
               type="button"
               onClick={() => handleQuickPreset('阿里巴巴', 'AI 搜推产品专家', '通义实验室 / 淘天搜索', '45K–65K · 16薪')}
-              className="px-2.5 py-1 text-xs rounded-md bg-slate-100 text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition"
+              className="px-2.5 py-1 text-xs rounded-md bg-page text-muted hover:bg-sage-soft hover:text-sage transition cursor-pointer"
             >
               阿里 · AI 搜推专家
             </button>
             <button
               type="button"
               onClick={() => handleQuickPreset('小红书', '大模型内容理解 PM', '推荐与社区技术部', '38K–55K · 15薪')}
-              className="px-2.5 py-1 text-xs rounded-md bg-slate-100 text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition"
+              className="px-2.5 py-1 text-xs rounded-md bg-page text-muted hover:bg-sage-soft hover:text-sage transition cursor-pointer"
             >
               小红书 · 大模型 PM
             </button>
             <button
               type="button"
               onClick={() => handleQuickPreset('美团', '商业化 AI 策略 PM', '美团平台 / 智能中台', '40K–60K · 15.5薪')}
-              className="px-2.5 py-1 text-xs rounded-md bg-slate-100 text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition"
+              className="px-2.5 py-1 text-xs rounded-md bg-page text-muted hover:bg-sage-soft hover:text-sage transition cursor-pointer"
             >
               美团 · AI 策略 PM
             </button>
@@ -94,8 +94,8 @@ export const NewJobModal: React.FC<NewJobModalProps> = ({ isOpen, onClose }) => 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
-              公司名称 <span className="text-rose-500">*</span>
+            <label className="block text-xs font-semibold text-ink mb-1">
+              公司名称 <span className="text-error">*</span>
             </label>
             <input
               type="text"
@@ -103,13 +103,13 @@ export const NewJobModal: React.FC<NewJobModalProps> = ({ isOpen, onClose }) => 
               placeholder="例如：字节跳动、腾讯、微软"
               value={company}
               onChange={(e) => setCompany(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-edge focus:outline-none focus:border-sage text-xs text-ink"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
-              岗位名称 <span className="text-rose-500">*</span>
+            <label className="block text-xs font-semibold text-ink mb-1">
+              岗位名称 <span className="text-error">*</span>
             </label>
             <input
               type="text"
@@ -117,13 +117,13 @@ export const NewJobModal: React.FC<NewJobModalProps> = ({ isOpen, onClose }) => 
               placeholder="例如：AI 产品经理、搜索策略专家"
               value={role}
               onChange={(e) => setRole(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-edge focus:outline-none focus:border-sage text-xs text-ink"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-ink mb-1">
                 业务线 / 部门
               </label>
               <input
@@ -131,11 +131,11 @@ export const NewJobModal: React.FC<NewJobModalProps> = ({ isOpen, onClose }) => 
                 placeholder="例如：搜索业务中台"
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm"
+                className="w-full px-3 py-2 rounded-lg border border-edge focus:outline-none focus:border-sage text-xs text-ink"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-ink mb-1">
                 薪资范围
               </label>
               <input
@@ -143,23 +143,23 @@ export const NewJobModal: React.FC<NewJobModalProps> = ({ isOpen, onClose }) => 
                 placeholder="例如：40K–60K"
                 value={salaryRange}
                 onChange={(e) => setSalaryRange(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm"
+                className="w-full px-3 py-2 rounded-lg border border-edge focus:outline-none focus:border-sage text-xs text-ink"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-semibold text-ink mb-1">
               初始推进状态
             </label>
             <div className="grid grid-cols-3 gap-2">
               <button
                 type="button"
                 onClick={() => setStatus('pending')}
-                className={`py-2 text-xs rounded-lg font-medium border text-center transition ${
+                className={`py-2 text-xs rounded-lg font-medium border text-center transition cursor-pointer ${
                   status === 'pending'
-                    ? 'border-emerald-600 bg-emerald-50 text-emerald-900 font-semibold'
-                    : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                    ? 'border-warning/40 bg-warning-bg text-warning font-semibold'
+                    : 'border-edge text-muted hover:bg-page'
                 }`}
               >
                 待处理
@@ -167,10 +167,10 @@ export const NewJobModal: React.FC<NewJobModalProps> = ({ isOpen, onClose }) => 
               <button
                 type="button"
                 onClick={() => setStatus('delivered')}
-                className={`py-2 text-xs rounded-lg font-medium border text-center transition ${
+                className={`py-2 text-xs rounded-lg font-medium border text-center transition cursor-pointer ${
                   status === 'delivered'
-                    ? 'border-emerald-600 bg-emerald-50 text-emerald-900 font-semibold'
-                    : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                    ? 'border-info/40 bg-info-bg text-info font-semibold'
+                    : 'border-edge text-muted hover:bg-page'
                 }`}
               >
                 已投递
@@ -178,10 +178,10 @@ export const NewJobModal: React.FC<NewJobModalProps> = ({ isOpen, onClose }) => 
               <button
                 type="button"
                 onClick={() => setStatus('interviewing')}
-                className={`py-2 text-xs rounded-lg font-medium border text-center transition ${
+                className={`py-2 text-xs rounded-lg font-medium border text-center transition cursor-pointer ${
                   status === 'interviewing'
-                    ? 'border-emerald-600 bg-emerald-50 text-emerald-900 font-semibold'
-                    : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                    ? 'border-sage/40 bg-sage-soft text-sage font-semibold'
+                    : 'border-edge text-muted hover:bg-page'
                 }`}
               >
                 面试中
@@ -189,17 +189,17 @@ export const NewJobModal: React.FC<NewJobModalProps> = ({ isOpen, onClose }) => 
             </div>
           </div>
 
-          <div className="pt-4 flex items-center justify-end gap-3 border-t border-slate-100">
+          <div className="pt-4 flex items-center justify-end gap-3 border-t border-edge">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-medium transition"
+              className="px-4 py-2 rounded-lg border border-edge text-muted hover:bg-page text-xs font-medium transition cursor-pointer"
             >
               取消
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold shadow-xs transition"
+              className="px-5 py-2 rounded-lg bg-sage hover:bg-sage-dim text-white text-xs font-semibold shadow-xs transition cursor-pointer"
             >
               创建并进入岗位空间 →
             </button>

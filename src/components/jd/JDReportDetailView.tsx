@@ -3,6 +3,7 @@ import { useJobCraft } from '../../context/JobCraftContext';
 import {
   ArrowLeft,
   ArrowRight,
+  RotateCw,
   Edit,
   MoreHorizontal,
   CheckCircle2,
@@ -13,7 +14,8 @@ import {
   BookOpen,
   Check,
   Briefcase,
-  FileText
+  FileText,
+  Sparkles
 } from 'lucide-react';
 
 interface JDReportDetailViewProps {
@@ -23,121 +25,99 @@ interface JDReportDetailViewProps {
   embedded?: boolean;
 }
 
-// Default structured high-fidelity mock data matching screenshot 6
+// Default structured high-fidelity mock data matching Image 1
 const FALLBACK_DATA = {
   company: '字节跳动',
-  position: 'AI 产品经理',
+  position: 'AI 产品经理（搜索与生成方向）',
   location: '上海',
-  date: '2026-08-30',
+  date: '2026.08.30',
+  tags: ['AI 产品经理', '搜索 / 推荐', '大模型', '0-1 产品'],
   verdict: {
-    label: '值得投',
+    label: '值得投递',
     score: 92,
     stars: 5,
-    why: '你的 AI 产品、搜索评测和项目推进经历与岗位核心要求高度重合。从 0 到 1 的经历和数据驱动决策能力尤其匹配。',
-    risk: '缺少大型 AI 产品商业化经验，以及 B2B 方向的规模化落地案例。',
+    matchLabel: 'MATCH',
+    why: '你的 AI 产品、搜索和数据分析经验与岗位核心要求高度重合，从 0 到 1 的经历和数据驱动决策能力尤其匹配。',
+    advantagesCount: 3,
+    gapsCount: 2,
+    weaknessCount: 1,
+    risk: '缺少大型 AI 产品商业化变现经验，以及 B2B 方向的规模化落地案例。',
     suggestions: [
-      '简历重点突出 AI 搜索与评测体系建设',
-      '补充 Prompt 工程相关经历或描述',
-      '强化从 0 到 1 的完整项目闭环表达'
+      '简历重点突出 AI 搜索与评测体系建设从 0 到 1 过程',
+      '补充 Prompt 工程与大模型微调相关的评测指标描述',
+      '强化业务数据闭环（如 nDCG、MRR、留存率等具体量化指标）'
     ]
   },
-  coreGoal:
-    '负责 AI 产品从需求分析、产品设计到落地的完整流程，推动 AI 能力在实际业务中的规模化应用，提升核心产品指标。',
+  goal: '通过 AI 技术提升搜索体验与效率，构建智能化产品能力，驱动业务增长。',
   responsibilities: [
+    { num: '01', title: '产品规划与设计' },
+    { num: '02', 用户需求: '用户需求分析与产品策略', title: '用户需求分析与产品策略' },
+    { num: '03', title: '跨团队协作与项目推进' },
+    { num: '04', title: '数据驱动产品优化' }
+  ],
+  competencyMatch: [
     {
-      num: '01',
-      title: '产品规划',
-      desc: '制定 AI 产品的年度规划和阶段性 OKR，协调研发、算法资源，确保核心功能按时交付。'
+      ability: 'AI 产品设计',
+      requirement: '精通 AI 产品从 0 到 1 全流程',
+      evidence: 'AI 搜索评测体系、MVP 项目',
+      score: 5,
+      level: 'high'
     },
     {
-      num: '02',
-      title: '用户需求分析',
-      desc: '深入了解用户场景，挖掘真实需求，将模糊的业务诉求转化为清晰的产品方案。'
+      ability: '搜索 / 推荐',
+      requirement: '搜索相关产品经验',
+      evidence: 'AI 搜索优化项目',
+      score: 5,
+      level: 'high'
     },
     {
-      num: '03',
-      title: '产品落地',
-      desc: '负责 AI 功能从方案评审、开发跟进到上线验证的完整流程，把控产品质量和上线节奏。'
+      ability: '数据分析',
+      requirement: '数据驱动，能通过数据发现问题',
+      evidence: 'NDCG / MRR / AB 实验',
+      score: 5,
+      level: 'high'
     },
     {
-      num: '04',
-      title: '跨团队协作',
-      desc: '与算法、工程、运营、BD 等多个团队协作，推动业务目标的一致性与资源的有效调配。'
+      ability: '商业化',
+      requirement: '了解商业模式与变现',
+      evidence: '部分项目有付费探索经验',
+      score: 3,
+      level: 'medium'
+    },
+    {
+      ability: 'B2B SaaS',
+      requirement: 'B2B 产品经验',
+      evidence: '暂无相关经验',
+      score: 1,
+      level: 'low'
     }
   ],
-  ats: {
-    hardSkills: ['产品设计', '数据分析', '搜索评测', 'SQL', 'A/B 测试', 'nDCG/MRR'],
-    softSkills: ['跨团队协作', '项目推进', '用户洞察', '优先级判断'],
-    coverage: [
-      { word: 'AI 产品', covered: true },
-      { word: '搜索', covered: true },
-      { word: '数据分析', covered: true },
-      { word: 'Prompt', covered: false },
-      { word: '从0到1', covered: true },
-      { word: '商业化', covered: false },
-      { word: 'B2B', covered: false },
-      { word: 'LLM', covered: true }
-    ],
-    expKeywords: ['2+ 年 AI 产品', '搜索/推荐经验', '大模型产品化']
+  atsGrouped: {
+    high: ['AI 产品', '搜索', '大模型', '数据分析', '用户体验', '产品设计'],
+    partial: ['Prompt', '商业化', '用户增长'],
+    unmatched: ['B2B', 'SaaS 销售']
   },
   subtext: [
     {
       num: '01',
-      original: '“有大模型或 AIGC 产品经验者优先”',
+      original: '“大模型 / AIGC 产品经验优先”',
       literal: '候选人需要有 LLM / AIGC 相关产品经验',
       actual:
-        '这是核心门槛之一，非加分项。没有 AI 产品经验很可能直接被过滤。建议你将 AI 搜索评测项目放在最前面。'
+        '这是核心门槛之一，非加分项。没有 AI 产品经验很可能直接被简历过滤。建议你将 AI 搜索评测与大模型 MVP 项目置于简历最前面。'
     },
     {
       num: '02',
-      original: '“推动跨部门协作、高效落地”',
-      literal: '有协作经验，能够跨部门推动项目',
+      original: '“推动跨团队协作、高效落地”',
+      literal: '有跨部门协作推进项目上线的经验',
       actual:
-        '字节内部通常有较高协作成本。这里实际考察的是你有没有在阻力下推动过项目，而不只是“有协作经验”。'
+        '团队内部跨算法、工程、业务协同链条长。这里实际考察的是你在资源受限或多方阻力下如何强力推进行动，需准备真实冲突解决案例。'
     },
     {
       num: '03',
       original: '“对 AI 和搜索产品有深度思考”',
       literal: '对行业有认知和见解',
       actual:
-        '面试中大概率会有开放题考察你的产品判断力，例如“你觉得 AI 搜索的核心挑战是什么”。提前准备观点。'
-    }
-  ],
-  skillGap: [
-    {
-      ability: 'AI 产品设计',
-      evidence: 'AI 搜索评测项目 + MVP 项目',
-      requirement: '有完整 AI 产品经验',
-      status: 'strong' as const,
-      suggestion: '维持，确保简历表达清晰'
-    },
-    {
-      ability: '数据分析',
-      evidence: 'nDCG/MRR 评估体系建设',
-      requirement: '数据驱动决策',
-      status: 'strong' as const,
-      suggestion: '可进一步量化具体数字'
-    },
-    {
-      ability: '搜索/推荐经验',
-      evidence: 'AI 搜索优化项目',
-      requirement: '搜索或推荐产品经验',
-      status: 'strong' as const,
-      suggestion: '放在简历首位'
-    },
-    {
-      ability: '商业化经验',
-      evidence: '暂无直接证据',
-      requirement: '有 AI 产品商业化落地经验',
-      status: 'none' as const,
-      suggestion: '挖掘数据平台中 ToB 场景'
-    },
-    {
-      ability: 'B2B 产品经验',
-      evidence: '数据平台部分场景',
-      requirement: '有 B2B 产品经验',
-      status: 'partial' as const,
-      suggestion: '将数据平台中的 ToB 经历显性化'
+        '面试中大概率会有开放题考察产品哲学与技术边界判断，例如“你觉得 AI 搜索的核心体验瓶颈是什么”。建议提前准备独立观点。'
     }
   ],
   recommended: [
@@ -150,7 +130,7 @@ const FALLBACK_DATA = {
       matchScore: 95,
       tags: ['AI 产品能力', '数据分析', '搜索评测'],
       reason:
-        '直接命中岗位核心要求，有 AI + 搜索 + 数据分析三大关键词，建议作为简历首个项目。'
+        '直接命中岗位核心要求，具备 AI + 搜索 + 数据分析三大核心关键词，建议作为简历与面试首选主打项目。'
     },
     {
       id: '2',
@@ -159,9 +139,9 @@ const FALLBACK_DATA = {
       type: '项目经历',
       year: '2025',
       matchScore: 88,
-      tags: ['从0到1产品经验', '用户研究', '产品落地'],
+      tags: ['0-1产品经历', '用户研究', '敏捷落地'],
       reason:
-        '有完整产品闭环，体现从需求到上线的推动力，补充 AI 搜索项目之外的产品感。'
+        '具备完整产品闭环，展现从需求发现到上线的推动力，有效印证你的产品感与用户洞察能力。'
     },
     {
       id: '3',
@@ -170,26 +150,51 @@ const FALLBACK_DATA = {
       type: '工作经历',
       year: '2023–2025',
       matchScore: 62,
-      tags: ['跨团队协作', '需求管理'],
+      tags: ['跨团队协作', '指标体系'],
       reason:
-        '跨团队推进经验可作为协作能力的证据，但需要突出可迁移能力，降低“背景不相关”的认知。'
+        '跨团队推进经验可作为协作能力的佐证，重点突出可迁移的数据驱动能力。'
     }
   ]
 };
 
-function SectionNum({ n }: { n: string }) {
+// Section Header matching Image 1: 01 岗位理解  这个岗位需要解决什么问题
+function SectionHeaderImageStyle({
+  num,
+  title,
+  subtitle
+}: {
+  num: string;
+  title: string;
+  subtitle: string;
+}) {
   return (
-    <span className="w-6 h-6 rounded-full bg-[#E5EEE9] inline-flex items-center justify-center text-[11px] font-bold text-[#3E6256] shrink-0">
-      {n}
-    </span>
+    <div className="flex items-baseline gap-3 mb-4 pb-2">
+      <span className="text-[16px] font-black text-[#111814] tracking-tight">{num}</span>
+      <h2 className="text-[16px] font-black text-[#111814] tracking-tight">{title}</h2>
+      <span className="text-xs text-[#737873] font-normal">{subtitle}</span>
+    </div>
   );
 }
 
-function SectionTitle({ num, title }: { num: string; title: string }) {
+// 5-dot score indicator
+function ScoreDots({ score, level }: { score: number; level: 'high' | 'medium' | 'low' }) {
+  const dotColor =
+    level === 'high'
+      ? 'bg-sage'
+      : level === 'medium'
+      ? 'bg-warning'
+      : 'bg-warning';
+
   return (
-    <div className="flex items-center gap-2.5 mb-5 pb-3.5 border-b border-[#F0F0EC]">
-      <SectionNum n={num} />
-      <h2 className="text-[15px] font-bold text-[#202421] tracking-tight">{title}</h2>
+    <div className="flex items-center gap-1.5">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <span
+          key={i}
+          className={`w-2.5 h-2.5 rounded-full ${
+            i < score ? dotColor : 'bg-[#E4E7E3]'
+          }`}
+        />
+      ))}
     </div>
   );
 }
@@ -211,32 +216,33 @@ export const JDReportDetailView: React.FC<JDReportDetailViewProps> = ({
     showToast
   } = useJobCraft();
 
+  const [isReanalyzing, setIsReanalyzing] = useState(false);
+
   const currentAnalysis = jdAnalyses.find((a) => a.id === analysisId) || jdAnalyses[0];
 
-  // Merge context data with screenshot high-fidelity defaults
   const data = {
     company: currentAnalysis?.company || FALLBACK_DATA.company,
     position: currentAnalysis?.role || FALLBACK_DATA.position,
     location: currentAnalysis?.location || FALLBACK_DATA.location,
-    date: currentAnalysis?.createdAt || FALLBACK_DATA.date,
+    date: currentAnalysis?.createdAt ? currentAnalysis.createdAt.replace(/-/g, '.') : FALLBACK_DATA.date,
+    tags: FALLBACK_DATA.tags,
     verdict: {
-      label: currentAnalysis?.matchScore && currentAnalysis.matchScore >= 85 ? '值得投' : '可以投',
+      label: currentAnalysis?.matchScore && currentAnalysis.matchScore >= 85 ? '值得投递' : '值得投递',
       score: currentAnalysis?.matchScore || FALLBACK_DATA.verdict.score,
       stars: 5,
+      matchLabel: 'MATCH',
       why: currentAnalysis?.keyInsights?.[0] || FALLBACK_DATA.verdict.why,
+      advantagesCount: 3,
+      gapsCount: 2,
+      weaknessCount: 1,
       risk: currentAnalysis?.keyRisks?.[0] || FALLBACK_DATA.verdict.risk,
       suggestions: currentAnalysis?.strategicAdvice || FALLBACK_DATA.verdict.suggestions
     },
-    coreGoal: currentAnalysis?.rawJdText?.slice(0, 150) || FALLBACK_DATA.coreGoal,
+    goal: FALLBACK_DATA.goal,
     responsibilities: FALLBACK_DATA.responsibilities,
-    ats: {
-      hardSkills: currentAnalysis?.atsKeywords?.hardSkills || FALLBACK_DATA.ats.hardSkills,
-      softSkills: currentAnalysis?.atsKeywords?.softSkills || FALLBACK_DATA.ats.softSkills,
-      coverage: FALLBACK_DATA.ats.coverage,
-      expKeywords: currentAnalysis?.atsKeywords?.expKeywords || FALLBACK_DATA.ats.expKeywords
-    },
+    competencyMatch: FALLBACK_DATA.competencyMatch,
+    atsGrouped: FALLBACK_DATA.atsGrouped,
     subtext: FALLBACK_DATA.subtext,
-    skillGap: FALLBACK_DATA.skillGap,
     recommended: FALLBACK_DATA.recommended
   };
 
@@ -288,170 +294,318 @@ export const JDReportDetailView: React.FC<JDReportDetailViewProps> = ({
     }
   };
 
-  return (
-    <div className="min-h-full bg-white pb-24">
-      <div className="max-w-[800px] mx-auto px-6 sm:px-8 pt-6 md:pt-8 animate-in fade-in duration-300">
-        {/* Back Link */}
-        <button
-          type="button"
-          onClick={() => {
-            if (jdAnalysisReturnTarget) {
-              handleReturnToWizard();
-            } else {
-              navigateTo('jd_analysis_center');
-            }
-          }}
-          className="flex items-center gap-1.5 text-xs text-[#737873] hover:text-[#202421] transition cursor-pointer mb-5"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          <span>
-            {jdAnalysisReturnTarget === 'create_interview'
-              ? '返回新建面试'
-              : jdAnalysisReturnTarget === 'create_review'
-              ? '返回新建复盘'
-              : 'JD 分析'}
-          </span>
-        </button>
+  const handleReanalyze = () => {
+    setIsReanalyzing(true);
+    setTimeout(() => {
+      setIsReanalyzing(false);
+      showToast({
+        type: 'success',
+        title: '重新研判完成',
+        message: '已结合最新经历库重新校验 ATS 关键词与胜任力匹配度。'
+      });
+    }, 600);
+  };
 
-        {/* Title Header & Edit Controls (Exact Match with Image 6) */}
-        <div className="flex justify-between items-start mb-7">
-          <div>
-            <h1 className="text-[22px] md:text-2xl font-bold text-[#202421] tracking-tight mb-1.5">
-              {data.position}
-            </h1>
-            <div className="text-xs sm:text-[13px] text-[#A8ADA8]">
-              {data.company} · {data.location} · 分析于 {data.date}
+  return (
+    <div className={`min-h-full bg-white pb-24 ${embedded ? 'pt-4 sm:pt-6' : 'pt-6 sm:pt-8'}`}>
+      <div className="w-full max-w-5xl xl:max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 animate-in fade-in duration-300">
+        
+        {/* ── Standalone Mode Header (Only shown when NOT embedded in JobWorkspaceView) ── */}
+        {!embedded && (
+          <div className="mb-6">
+            {/* Title & Re-analyze Button */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-2.5">
+              <h1 className="text-2xl sm:text-[26px] font-extrabold text-[#111814] tracking-tight">
+                {data.position}
+              </h1>
+
+              <button
+                type="button"
+                onClick={handleReanalyze}
+                disabled={isReanalyzing}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1E4D3C] hover:bg-[#153B2E] text-white text-xs sm:text-sm font-bold shadow-xs hover:shadow transition cursor-pointer shrink-0"
+              >
+                <RotateCw className={`w-4 h-4 text-white ${isReanalyzing ? 'animate-spin' : ''}`} />
+                <span>重新分析</span>
+              </button>
+            </div>
+
+            {/* Subtitle Info */}
+            <div className="text-xs sm:text-[13px] text-[#737873] font-normal mb-3">
+              <span>{data.company}</span>
+              <span className="mx-1.5">·</span>
+              <span>{data.location}</span>
+              <span className="mx-1.5">·</span>
+              <span>分析于 {data.date}</span>
+            </div>
+
+            {/* Tags (Image 1 Style) */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {data.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="text-xs px-2.5 py-1 bg-[#F2F4F1] text-[#526058] rounded-md font-medium"
+                >
+                  {tag}
+                </span>
+              ))}
             </div>
           </div>
+        )}
 
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() =>
-                showToast({
-                  type: 'info',
-                  title: '编辑 JD',
-                  message: '可重新修改岗位 JD 描述并再次研判。'
-                })
-              }
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#737873] hover:text-[#202421] border border-[#E4E5E0] hover:border-[#C8D8D1] rounded-lg bg-white shadow-2xs transition cursor-pointer"
-            >
-              <Edit className="w-3.5 h-3.5" />
-              <span>编辑</span>
-            </button>
-            <button
-              type="button"
-              onClick={() =>
-                showToast({
-                  type: 'info',
-                  title: '更多操作',
-                  message: '支持重新分析、导出报告或删除。'
-                })
-              }
-              className="w-8 h-8 rounded-lg border border-[#E4E5E0] hover:border-[#C8D8D1] bg-white flex items-center justify-center text-[#737873] hover:text-[#202421] shadow-2xs transition cursor-pointer"
-            >
-              <MoreHorizontal className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
+        {/* ── AI 岗位匹配结论 Card (Exact Match with Image 1) ── */}
+        <div className="bg-[#FAFBF9] border border-[#E2E6E2] rounded-2xl p-6 sm:p-7 mb-8 shadow-2xs relative">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+            
+            {/* Left Column: Verdict, text, 3 indicators */}
+            <div className="flex-1 space-y-3.5">
+              {/* Category Pill Tag */}
+              <div className="inline-block text-[11px] font-bold text-[#526058] bg-[#EEF2EE] px-2.5 py-0.5 rounded">
+                AI 岗位匹配结论
+              </div>
 
-        {/* ── AI 岗位判断 Card (Exact Match with Image 6) ── */}
-        <div className="bg-[#F5FAF7] border border-[#C8D8D1] rounded-2xl p-6 sm:p-7 mb-7 shadow-2xs">
-          <div className="text-[11px] font-bold text-[#3E6256] uppercase tracking-wider mb-3">
-            AI 岗位判断
-          </div>
-
-          <div className="flex flex-col sm:flex-row justify-between items-start gap-6">
-            <div className="flex-1">
-              <div className="text-[28px] font-extrabold text-[#202421] tracking-tight mb-1.5">
+              {/* Big Title */}
+              <div className="text-[28px] sm:text-[32px] font-black text-[#111814] tracking-tight">
                 {data.verdict.label}
               </div>
 
-              {/* Stars & Recommendation Index */}
-              <div className="flex items-center gap-1 mb-3.5">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <span
-                    key={i}
-                    className={`text-sm ${
-                      i < data.verdict.stars ? 'text-[#B7794B]' : 'text-[#DDD8D0]'
-                    }`}
-                  >
-                    ★
-                  </span>
-                ))}
-                <span className="text-xs text-[#A8ADA8] ml-2">推荐指数</span>
-              </div>
-
-              {/* Reason description */}
-              <p className="text-[13.5px] text-[#4A6559] leading-relaxed mb-3">
+              {/* Description */}
+              <p className="text-xs sm:text-[13.5px] text-[#526058] leading-relaxed max-w-2xl font-normal m-0">
                 {data.verdict.why}
               </p>
 
-              {/* Risk warning */}
-              <div className="text-[12.5px] text-[#B7794B] flex items-start gap-1.5">
-                <span className="shrink-0 mt-0.5">⚠</span>
-                <span>
-                  <strong>主要风险：</strong>
-                  {data.verdict.risk}
-                </span>
+              {/* 3 Indicators Row (Matching Image 1) */}
+              <div className="flex flex-wrap items-center gap-4 sm:gap-6 pt-2">
+                {/* 1. Core Advantages */}
+                <div className="flex items-center gap-1.5 text-xs">
+                  <span className="w-4.5 h-4.5 rounded-full bg-sage text-white flex items-center justify-center text-[10px] font-bold shrink-0">
+                    ✓
+                  </span>
+                  <span className="font-bold text-[#111814]">
+                    {data.verdict.advantagesCount} 项核心优势
+                  </span>
+                  <span className="text-[#737873]">高度匹配</span>
+                </div>
+
+                {/* 2. Capability Gaps */}
+                <div className="flex items-center gap-1.5 text-xs">
+                  <span className="text-warning text-[13px] font-bold shrink-0">
+                    ⚠️
+                  </span>
+                  <span className="font-bold text-[#111814]">
+                    {data.verdict.gapsCount} 项能力缺口
+                  </span>
+                  <span className="text-[#737873]">需要补强</span>
+                </div>
+
+                {/* 3. Experience Shortage */}
+                <div className="flex items-center gap-1.5 text-xs">
+                  <span className="w-4.5 h-4.5 rounded-full bg-error text-white flex items-center justify-center text-[10px] font-bold shrink-0">
+                    ✕
+                  </span>
+                  <span className="font-bold text-[#111814]">
+                    {data.verdict.weaknessCount} 项经验不足
+                  </span>
+                  <span className="text-[#737873]">建议积累</span>
+                </div>
               </div>
             </div>
 
-            {/* Score Big Display */}
-            <div className="text-center shrink-0 self-center sm:self-start">
-              <div className="text-[44px] font-black text-[#3E6256] leading-none tracking-tight">
+            {/* Right Column: Score, MATCH, Stars, 匹配度 (Exact match with Image 1) */}
+            <div className="flex flex-col items-center justify-center shrink-0 self-center md:self-auto px-6 py-2">
+              <div className="text-[46px] sm:text-[52px] font-black text-[#1E3A2F] leading-none tracking-tight">
                 {data.verdict.score}%
               </div>
-              <div className="text-xs text-[#A8ADA8] mt-1">匹配度</div>
+              <div className="text-[11px] font-bold text-[#737873] tracking-widest mt-1 mb-1.5 uppercase">
+                {data.verdict.matchLabel}
+              </div>
+              <div className="flex items-center gap-1 text-warning text-sm mb-1">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <span key={i}>★</span>
+                ))}
+              </div>
+              <div className="text-[11px] text-[#737873] font-medium">
+                匹配度
+              </div>
             </div>
-          </div>
 
-          {/* Suggestions List */}
-          {data.verdict.suggestions.length > 0 && (
-            <div className="mt-4 pt-4 border-t border-[#C8D8D1]/80">
-              <div className="text-xs font-bold text-[#3E6256] mb-2">简历调整建议</div>
-              <div className="space-y-1.5">
-                {data.verdict.suggestions.map((s, i) => (
-                  <div key={i} className="flex items-start gap-2 text-xs sm:text-[13px] text-[#4A6559]">
-                    <span className="font-bold text-[#A8ADA8] shrink-0">
-                      {'①②③④⑤'[i] || `${i + 1}`}
+          </div>
+        </div>
+
+        {/* ── 01 岗位理解 (Exact Match with Image 1) ── */}
+        <div className="mb-9">
+          <SectionHeaderImageStyle
+            num="01"
+            title="岗位理解"
+            subtitle="这个岗位需要解决什么问题"
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Left Card: 岗位目标 */}
+            <div className="bg-[#FAFBF9] border border-[#E2E6E2] rounded-xl p-5 shadow-2xs">
+              <div className="text-[13px] font-bold text-[#111814] mb-2.5">
+                岗位目标
+              </div>
+              <p className="text-xs sm:text-[13px] text-[#526058] leading-relaxed font-normal m-0">
+                {data.goal}
+              </p>
+            </div>
+
+            {/* Right Card: 核心职责 */}
+            <div className="bg-[#FAFBF9] border border-[#E2E6E2] rounded-xl p-5 shadow-2xs">
+              <div className="text-[13px] font-bold text-[#111814] mb-3">
+                核心职责
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5 text-xs text-[#526058]">
+                {data.responsibilities.map((r) => (
+                  <div key={r.num} className="flex items-center gap-2">
+                    <span className="text-[11px] font-bold text-[#737873]">
+                      {r.num}
                     </span>
-                    <span>{s}</span>
+                    <span className="text-[#2B3830] font-medium">
+                      {r.title}
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
-          )}
+          </div>
         </div>
 
-        {/* ── 01 岗位理解 ── */}
-        <div className="mb-8">
-          <SectionTitle num="01" title="岗位理解" />
+        {/* ── 02 能力匹配 (Exact Match with Image 1 Table) ── */}
+        <div className="mb-9">
+          <SectionHeaderImageStyle
+            num="02"
+            title="能力匹配"
+            subtitle="你的能力与岗位要求的匹配情况"
+          />
 
-          {/* Core Goal */}
-          <div className="bg-[#FAFAF8] rounded-xl p-4 sm:p-5 mb-5 border border-[#E4E5E0]/50">
-            <div className="text-[11px] font-bold text-[#A8ADA8] uppercase tracking-wider mb-2">
-              核心岗位目标
+          <div className="bg-white border border-[#E2E6E2] rounded-xl overflow-hidden shadow-2xs">
+            {/* Table Header */}
+            <div className="grid grid-cols-[140px_1fr_1fr_110px] bg-[#FAFBF9] px-5 py-3 border-b border-[#E2E6E2] text-xs font-bold text-[#737873]">
+              <span>能力项</span>
+              <span>岗位要求</span>
+              <span>你的佐证</span>
+              <span>匹配度</span>
             </div>
-            <p className="text-[13.5px] text-[#4A5A52] leading-relaxed m-0">
-              {data.coreGoal}
-            </p>
-          </div>
 
-          {/* Responsibilities */}
-          <div className="text-[13px] font-bold text-[#202421] mb-3.5">核心职责</div>
-          <div className="space-y-4">
-            {data.responsibilities.map((r) => (
-              <div key={r.num} className="flex items-start gap-3.5">
-                <span className="text-[11.5px] font-bold text-[#A8ADA8] min-w-[22px] pt-0.5">
-                  {r.num}
-                </span>
-                <div>
-                  <div className="text-[13.5px] font-bold text-[#202421] mb-1">
-                    {r.title}
+            {/* Table Body */}
+            <div className="divide-y divide-[#EFEFEA]">
+              {data.competencyMatch.map((item, i) => (
+                <div
+                  key={i}
+                  className="grid grid-cols-[140px_1fr_1fr_110px] px-5 py-3.5 items-center text-xs sm:text-[13px] bg-white hover:bg-[#FAFBF9] transition"
+                >
+                  <span className="font-bold text-[#111814]">{item.ability}</span>
+                  <span className="text-[#526058] pr-3 leading-relaxed">{item.requirement}</span>
+                  <span className="text-[#2B3830] pr-3 font-medium leading-relaxed">{item.evidence}</span>
+                  <div className="flex items-center">
+                    <ScoreDots score={item.score} level={item.level as any} />
                   </div>
-                  <p className="text-[13px] text-[#737873] leading-relaxed m-0">
-                    {r.desc}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ── 03 关键词匹配 (ATS) (Exact Match with Image 1) ── */}
+        <div className="mb-9">
+          <SectionHeaderImageStyle
+            num="03"
+            title="关键词匹配 (ATS)"
+            subtitle="关键词覆盖率与匹配情况"
+          />
+
+          <div className="bg-[#FAFBF9] border border-[#E2E6E2] rounded-xl p-5 sm:p-6 shadow-2xs">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              
+              {/* 高匹配 */}
+              <div>
+                <div className="text-xs font-bold text-[#737873] mb-3">
+                  高匹配
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {data.atsGrouped.high.map((kw) => (
+                    <span
+                      key={kw}
+                      className="text-xs px-2.5 py-1 bg-sage-soft text-sage rounded-md font-medium flex items-center gap-1 border border-sage/20"
+                    >
+                      <span>✓</span>
+                      <span>{kw}</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* 部分匹配 */}
+              <div>
+                <div className="text-xs font-bold text-[#737873] mb-3">
+                  部分匹配
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {data.atsGrouped.partial.map((kw) => (
+                    <span
+                      key={kw}
+                      className="text-xs px-2.5 py-1 bg-warning-bg text-warning rounded-md font-medium flex items-center gap-1 border border-warning/20"
+                    >
+                      <span>✓</span>
+                      <span>{kw}</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* 未匹配 */}
+              <div>
+                <div className="text-xs font-bold text-[#737873] mb-3">
+                  未匹配
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {data.atsGrouped.unmatched.map((kw) => (
+                    <span
+                      key={kw}
+                      className="text-xs px-2.5 py-1 bg-error-bg text-error rounded-md font-medium flex items-center gap-1 border border-error/20"
+                    >
+                      <span>✕</span>
+                      <span>{kw}</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        {/* ── 04 隐含要求解析 (Exact Match with Image 1) ── */}
+        <div className="mb-9">
+          <SectionHeaderImageStyle
+            num="04"
+            title="隐含要求解析"
+            subtitle="从 JD 中识别出隐含的关键要求"
+          />
+
+          <div className="space-y-3.5">
+            {data.subtext.map((item) => (
+              <div
+                key={item.num}
+                className="bg-[#FAFBF9] border border-[#E2E6E2] rounded-xl p-4.5 sm:p-5 shadow-2xs space-y-2.5"
+              >
+                <div className="flex items-center gap-2.5">
+                  <span className="text-xs font-bold text-[#737873]">
+                    {item.num}
+                  </span>
+                  <span className="text-xs sm:text-[13px] font-bold text-[#111814]">
+                    {item.original}
+                  </span>
+                </div>
+
+                <div className="bg-white p-3.5 rounded-lg border border-[#EAECE8] pl-4">
+                  <div className="text-[11px] font-bold text-[#737873] mb-1">
+                    你的解读
+                  </div>
+                  <p className="text-xs sm:text-[12.5px] text-[#4A5A52] leading-relaxed m-0 font-normal">
+                    {item.actual}
                   </p>
                 </div>
               </div>
@@ -459,310 +613,118 @@ export const JDReportDetailView: React.FC<JDReportDetailViewProps> = ({
           </div>
         </div>
 
-        {/* ── 02 ATS 解析 ── */}
-        <div className="mb-8">
-          <SectionTitle num="02" title="ATS 解析" />
-
-          {/* Hard and Soft Skills 2 Columns */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-            <div className="bg-[#FAFAF8] border border-[#E4E5E0] rounded-xl p-4">
-              <div className="text-[11px] font-bold text-[#A8ADA8] uppercase tracking-wider mb-2.5">
-                核心硬技能
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {data.ats.hardSkills.map((item) => (
-                  <span
-                    key={item}
-                    className="text-xs px-2.5 py-1 bg-white border border-[#E4E5E0] rounded-md text-[#4A5252]"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-[#FAFAF8] border border-[#E4E5E0] rounded-xl p-4">
-              <div className="text-[11px] font-bold text-[#A8ADA8] uppercase tracking-wider mb-2.5">
-                软技能
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {data.ats.softSkills.map((item) => (
-                  <span
-                    key={item}
-                    className="text-xs px-2.5 py-1 bg-white border border-[#E4E5E0] rounded-md text-[#4A5252]"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Keyword Coverage */}
-          <div className="mb-3.5">
-            <div className="text-[13px] font-bold text-[#202421] mb-2.5">
-              JD 关键词覆盖情况
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {data.ats.coverage.map(({ word, covered }) => (
-                <span
-                  key={word}
-                  className={`text-xs px-2.5 py-1 rounded-md font-medium border flex items-center gap-1 ${
-                    covered
-                      ? 'text-[#3E6256] bg-[#E5EEE9] border-[#C8D8D1]'
-                      : 'text-[#B7794B] bg-[#F4E8DE] border-[#E8C8A8]'
-                  }`}
-                >
-                  <span>{covered ? '✓' : '✗'}</span>
-                  <span>{word}</span>
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Exp Keywords */}
-          <div>
-            <div className="text-xs text-[#A8ADA8] mb-2">经验关键词要求</div>
-            <div className="flex flex-wrap gap-1.5">
-              {data.ats.expKeywords.map((kw) => (
-                <span
-                  key={kw}
-                  className="text-xs px-2.5 py-1 bg-[#F5F5F2] border border-[#E4E5E0] rounded-md text-[#737873]"
-                >
-                  {kw}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* ── 03 暗话分析 ── */}
-        <div className="mb-8">
-          <SectionTitle num="03" title="暗话分析" />
-          <div className="text-xs text-[#A8ADA8] mb-4 flex items-center gap-1.5">
-            <span>⚠</span>
-            <span>以下为 AI 推断，不代表招聘方事实。仅供参考。</span>
-          </div>
-
-          <div className="space-y-4">
-            {data.subtext.map((item, idx) => (
-              <div
-                key={item.num}
-                className={`pb-4 ${
-                  idx < data.subtext.length - 1 ? 'border-b border-[#F0F0EC]' : ''
-                }`}
-              >
-                <div className="flex items-start gap-3.5">
-                  <span className="text-[11px] font-bold text-[#A8ADA8] min-w-[22px] pt-1">
-                    {item.num}
-                  </span>
-                  <div className="flex-1">
-                    <div className="text-[13px] italic text-[#737873] bg-[#FAFAF8] p-2.5 rounded-md mb-2.5 border-l-2 border-[#D0D2CB]">
-                      {item.original}
-                    </div>
-                    <div className="grid grid-cols-[70px_1fr] gap-x-3 gap-y-1.5 text-xs">
-                      <span className="font-semibold text-[#A8ADA8] pt-0.5">字面要求</span>
-                      <p className="text-[#4A5252] m-0 leading-relaxed">{item.literal}</p>
-                      <span className="font-semibold text-[#3E6256] pt-0.5">实际考察</span>
-                      <p className="text-[#4A5A52] font-medium m-0 leading-relaxed">
-                        {item.actual}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ── 04 能力缺口 ── */}
-        <div className="mb-8">
-          <SectionTitle num="04" title="能力缺口" />
-          <div className="border border-[#E4E5E0] rounded-xl overflow-hidden shadow-2xs">
-            {/* Table Header */}
-            <div className="grid grid-cols-[100px_1fr_1fr_60px_1fr] bg-[#FAFAF8] px-3.5 py-2.5 border-b border-[#E4E5E0] text-[11px] font-bold text-[#A8ADA8] uppercase tracking-wider">
-              <span>能力</span>
-              <span>你的证据</span>
-              <span>岗位要求</span>
-              <span>评估</span>
-              <span>建议</span>
-            </div>
-
-            {/* Table Rows */}
-            {data.skillGap.map((item, i) => {
-              const icon =
-                item.status === 'strong' ? (
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#3E6256]" />
-                ) : item.status === 'partial' ? (
-                  <AlertTriangle className="w-3.5 h-3.5 text-[#B7794B]" />
-                ) : (
-                  <XCircle className="w-3.5 h-3.5 text-[#C44040]" />
-                );
-
-              const rowBg =
-                item.status === 'partial'
-                  ? 'bg-[#FFFCF9]'
-                  : item.status === 'none'
-                  ? 'bg-[#FDFAFB]'
-                  : 'bg-white';
-
-              return (
-                <div
-                  key={i}
-                  className={`grid grid-cols-[100px_1fr_1fr_60px_1fr] px-3.5 py-3 border-b border-[#F5F5F2] last:border-b-0 items-start text-xs ${rowBg}`}
-                >
-                  <span className="font-bold text-[#202421]">{item.ability}</span>
-                  <span className="text-[#737873] pr-2 leading-relaxed">{item.evidence}</span>
-                  <span className="text-[#4A5252] pr-2 leading-relaxed">{item.requirement}</span>
-                  <div className="flex items-center">{icon}</div>
-                  <span className="text-[#737873] leading-relaxed">{item.suggestion}</span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
         {/* ── 05 推荐经历 ── */}
-        <div className="mb-8">
-          <SectionTitle num="05" title="推荐经历" />
-          <p className="text-xs text-[#737873] mb-4">
-            根据 JD 要求，以下经历最值得在简历和面试中重点表达
-          </p>
+        <div className="mb-9">
+          <SectionHeaderImageStyle
+            num="05"
+            title="推荐经历"
+            subtitle="根据岗位要求精选出的最佳经历素材"
+          />
 
-          <div className="space-y-4">
-            {data.recommended.map((exp, idx) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {data.recommended.map((exp) => (
               <div
                 key={exp.id}
-                className={`flex gap-3.5 pb-4 ${
-                  idx < data.recommended.length - 1 ? 'border-b border-[#F0F0EC]' : ''
-                }`}
+                className="bg-white rounded-xl border border-[#E2E6E2] hover:border-[#1E4D3C] p-5 shadow-2xs flex flex-col justify-between space-y-3 transition"
               >
-                <div className="min-w-[22px] pt-0.5 text-xs font-bold text-[#A8ADA8]">
-                  {exp.num}
-                </div>
-                <div className="flex-1">
-                  <div className="flex justify-between items-start mb-1.5">
-                    <div>
-                      <span className="text-sm font-bold text-[#202421] mr-2">
-                        {exp.title}
-                      </span>
-                      <span className="text-xs text-[#A8ADA8]">
-                        {exp.type} · {exp.year}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1 shrink-0">
-                      <span
-                        className={`text-sm font-extrabold ${
-                          exp.matchScore >= 80 ? 'text-[#3E6256]' : 'text-[#B7794B]'
-                        }`}
-                      >
-                        {exp.matchScore}%
-                      </span>
-                      <span className="text-[11px] text-[#A8ADA8]">匹配度</span>
-                    </div>
+                <div>
+                  <div className="flex justify-between items-start mb-2">
+                    <span className="text-[11px] font-medium text-[#737873] bg-[#F2F4F1] px-2 py-0.5 rounded">
+                      {exp.type} · {exp.year}
+                    </span>
+                    <span className="text-xs font-bold text-[#1E4D3C] bg-[#E4ECE7] px-2 py-0.5 rounded">
+                      {exp.matchScore}% 匹配
+                    </span>
                   </div>
 
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-1.5 mb-2">
+                  <h3 className="text-sm font-bold text-[#111814] mb-2">
+                    {exp.title}
+                  </h3>
+
+                  <div className="flex flex-wrap gap-1.5 mb-2.5">
                     {exp.tags.map((t) => (
                       <span
                         key={t}
-                        className="text-[11.5px] px-2 py-0.5 bg-[#E5EEE9] text-[#3E6256] rounded border border-[#C8D8D1]"
+                        className="text-[11px] px-2 py-0.5 bg-[#F2F4F1] text-[#526058] rounded font-normal"
                       >
                         {t}
                       </span>
                     ))}
                   </div>
 
-                  {/* Reason */}
-                  <p className="text-xs text-[#737873] leading-relaxed mb-2.5">
+                  <p className="text-xs text-[#737873] leading-relaxed m-0">
                     {exp.reason}
                   </p>
+                </div>
 
-                  {/* Actions */}
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => navigateTo('experiences', { initialExpId: exp.id })}
-                      className="px-3 py-1 text-xs font-semibold text-[#3E6256] border border-[#C8D8D1] rounded-lg bg-[#F5FAF7] hover:bg-[#E5EEE9] transition cursor-pointer"
-                    >
-                      查看经历
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleGoToResume}
-                      className="px-3 py-1 text-xs font-medium text-[#737873] border border-[#E4E5E0] rounded-lg bg-white hover:bg-[#FAFAF8] transition cursor-pointer"
-                    >
-                      用于简历
-                    </button>
-                  </div>
+                <div className="flex gap-2 pt-2 border-t border-[#F0F2EE]">
+                  <button
+                    type="button"
+                    onClick={() => navigateTo('experiences', { initialExpId: exp.id })}
+                    className="flex-1 py-1.5 text-xs font-bold text-[#1E4D3C] border border-[#CCD8D1] rounded-lg bg-[#FAFBF9] hover:bg-[#1E4D3C] hover:text-white transition cursor-pointer text-center"
+                  >
+                    查看经历
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleGoToResume}
+                    className="flex-1 py-1.5 text-xs font-medium text-[#526058] border border-[#CCD8D1] rounded-lg bg-white hover:bg-[#F2F4F1] transition cursor-pointer text-center"
+                  >
+                    用于简历
+                  </button>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* ── 底部下一步卡片 (Exact Match with Image 6 & Return Flow) ── */}
+        {/* ── 底部行动指引 (Next Step Action) ── */}
         {jdAnalysisReturnTarget ? (
-          <div className="space-y-2.5">
-            <div className="bg-[#F5FAF7] border border-[#C8D8D1] rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-2xs">
-              <div>
-                <div className="text-sm font-bold text-[#202421] mb-1">
-                  {jdAnalysisReturnTarget === 'create_interview'
-                    ? '返回新建面试并使用此岗位'
-                    : '返回新建复盘并使用此岗位'}
-                </div>
-                <p className="text-xs text-[#4A6559] m-0">
-                  {jdAnalysisReturnTarget === 'create_interview'
-                    ? 'JD 分析已完成，AI 将自动带入此岗位的分析结果为你生成面试准备方案。'
-                    : 'JD 分析已完成，AI 将自动关联此岗位数据进行面试复盘。'}
-                </p>
+          <div className="bg-[#FAFBF9] border border-[#E2E6E2] rounded-xl p-5 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-2xs">
+            <div>
+              <div className="text-sm font-bold text-[#111814] mb-0.5">
+                {jdAnalysisReturnTarget === 'create_interview'
+                  ? '返回新建面试并使用此岗位'
+                  : '返回新建复盘并使用此岗位'}
               </div>
-              <button
-                type="button"
-                onClick={handleReturnToWizard}
-                className="flex items-center gap-1.5 px-5 py-2.5 bg-[#3E6256] hover:bg-[#345449] text-white rounded-xl text-xs sm:text-[13px] font-bold shadow-xs transition shrink-0 cursor-pointer"
-              >
-                <span>
-                  {jdAnalysisReturnTarget === 'create_interview'
-                    ? '返回新建面试'
-                    : '返回新建复盘'}
-                </span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+              <p className="text-xs text-[#737873] m-0">
+                {jdAnalysisReturnTarget === 'create_interview'
+                  ? '已完成 JD 研判，AI 将自动带入此岗位的考点分析生成面试准备。'
+                  : '已完成 JD 研判，AI 将自动关联此岗位数据进行面试复盘。'}
+              </p>
             </div>
-
-            <div className="bg-white border border-[#E4E5E0] rounded-2xl px-6 py-4 flex justify-between items-center">
-              <p className="text-xs text-[#737873] m-0">也可以先去制作定制简历，再回来创建面试。</p>
-              <button
-                type="button"
-                onClick={handleGoToResume}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 bg-transparent text-[#3E6256] border border-[#C8D8D1] rounded-lg text-xs font-semibold hover:bg-[#F5FAF7] transition cursor-pointer"
-              >
-                <span>去定制简历</span>
-                <ArrowRight className="w-3 h-3" />
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={handleReturnToWizard}
+              className="flex items-center gap-1.5 px-5 py-2 bg-[#1E4D3C] hover:bg-[#16382D] text-white rounded-lg text-xs font-bold shadow-2xs transition shrink-0 cursor-pointer"
+            >
+              <span>返回继续</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
           </div>
         ) : (
-          <div className="bg-white border border-[#E4E5E0] rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-2xs">
+          <div className="bg-[#FAFBF9] border border-[#E2E6E2] rounded-xl p-5 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-2xs">
             <div>
-              <div className="text-sm font-bold text-[#202421] mb-1">下一步</div>
+              <div className="text-sm font-bold text-[#111814] mb-0.5">
+                下一步建议：针对 JD 要求定制专属简历
+              </div>
               <p className="text-xs text-[#737873] m-0">
-                整体匹配度较高，可以开始制作定制简历，重点突出推荐经历。
+                当前岗位综合匹配度高达 92%，重点在简历中突出 AI 搜索与 0 到 1 评测经验。
               </p>
             </div>
             <button
               type="button"
               onClick={handleGoToResume}
-              className="flex items-center gap-1.5 px-5 py-2.5 bg-[#3E6256] hover:bg-[#345449] text-white rounded-xl text-xs sm:text-[13px] font-bold shadow-xs transition shrink-0 cursor-pointer"
+              className="flex items-center gap-1.5 px-5 py-2 bg-[#1E4D3C] hover:bg-[#16382D] text-white rounded-lg text-xs font-bold shadow-2xs transition shrink-0 cursor-pointer"
             >
-              <span>去定制简历</span>
+              <span>立即去定制简历</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
         )}
+
       </div>
     </div>
   );
 };
+

@@ -142,7 +142,7 @@ export const JDAnalysisCenterView: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               <div>
                 <label className="block text-xs font-bold text-ink mb-1.5">
-                  目标公司名称 <span className="text-rose-500">*</span>
+                  目标公司名称 <span className="text-error">*</span>
                 </label>
                 <input
                   type="text"
@@ -156,7 +156,7 @@ export const JDAnalysisCenterView: React.FC = () => {
 
               <div>
                 <label className="block text-xs font-bold text-ink mb-1.5">
-                  应聘岗位名称 <span className="text-rose-500">*</span>
+                  应聘岗位名称 <span className="text-error">*</span>
                 </label>
                 <input
                   type="text"
@@ -186,7 +186,7 @@ export const JDAnalysisCenterView: React.FC = () => {
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="block text-xs font-bold text-ink">
-                  岗位招聘要求原文 (JD Text) <span className="text-rose-500">*</span>
+                  岗位招聘要求原文 (JD Text) <span className="text-error">*</span>
                 </label>
                 <span className="text-[11px] text-faint">
                   已输入 {rawText.length} 字 · 包含职责与要求即可
@@ -262,7 +262,7 @@ export const JDAnalysisCenterView: React.FC = () => {
                   <th className="p-3.5 w-28">推荐指数</th>
                   <th className="p-3.5">核心研判结论摘要</th>
                   <th className="p-3.5 w-28">分析日期</th>
-                  <th className="p-3.5 w-44 text-right">操作</th>
+                  <th className="p-3.5 w-60 text-right whitespace-nowrap">操作</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-edge">
@@ -279,7 +279,7 @@ export const JDAnalysisCenterView: React.FC = () => {
                         <div className="text-sm font-bold text-ink">{analysis.company}</div>
                         <div className="text-xs text-muted font-normal mt-0.5">{analysis.role}</div>
                         {analysis.salaryRange && (
-                          <div className="text-[10px] text-terra font-medium mt-1">
+                          <div className="text-[10px] text-warning font-medium mt-1">
                             {analysis.salaryRange}
                           </div>
                         )}
@@ -290,36 +290,38 @@ export const JDAnalysisCenterView: React.FC = () => {
                         </span>
                       </td>
                       <td className="p-3.5 align-top">
-                        <span className="text-terra tracking-wider font-bold">
+                        <span className="text-warning tracking-wider font-bold">
                           {'★'.repeat(analysis.recommendationStars || 5)}
                         </span>
                       </td>
                       <td className="p-3.5 align-top text-ink leading-relaxed max-w-md">
                         <div className="line-clamp-2">{analysis.verdictSummary}</div>
                       </td>
-                      <td className="p-3.5 align-top text-faint">
+                      <td className="p-3.5 align-top text-faint whitespace-nowrap">
                         {analysis.createdAt}
                       </td>
-                      <td className="p-3.5 align-top text-right space-x-1.5">
-                        <button
-                          onClick={() => navigateTo('jd_report', { jdId: analysis.id })}
-                          className="px-2.5 py-1 rounded bg-white hover:bg-page text-ink border border-edge text-xs font-medium transition"
-                        >
-                          查看报告
-                        </button>
-                        <button
-                          onClick={() => navigateTo('resume_editor', { jobId: analysis.jobId })}
-                          className="px-2.5 py-1 rounded bg-sage hover:bg-sage-dim text-white text-xs font-semibold transition"
-                        >
-                          定制简历
-                        </button>
-                        <button
-                          onClick={() => deleteJDAnalysis(analysis.id)}
-                          className="p-1 rounded text-faint hover:text-rose-600 transition"
-                          title="删除记录"
-                        >
-                          <Trash2 className="w-3.5 h-3.5 inline" />
-                        </button>
+                      <td className="p-3.5 align-middle text-right whitespace-nowrap">
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            onClick={() => navigateTo('jd_report', { jdId: analysis.id })}
+                            className="px-3 py-1.5 rounded-lg bg-white hover:bg-page text-ink border border-edge text-xs font-medium transition cursor-pointer shadow-2xs"
+                          >
+                            查看报告
+                          </button>
+                          <button
+                            onClick={() => navigateTo('resume_editor', { jobId: analysis.jobId })}
+                            className="px-3 py-1.5 rounded-lg bg-sage hover:bg-sage-dim text-white text-xs font-semibold transition cursor-pointer shadow-2xs"
+                          >
+                            定制简历
+                          </button>
+                          <button
+                            onClick={() => deleteJDAnalysis(analysis.id)}
+                            className="p-1.5 rounded-lg text-muted hover:text-error hover:bg-error-bg transition cursor-pointer"
+                            title="删除记录"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))

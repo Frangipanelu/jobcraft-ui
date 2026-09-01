@@ -106,14 +106,14 @@ function SectionHeader({
   done?: boolean;
 }) {
   return (
-    <div className="flex items-center gap-2.5 mb-3.5">
-      <span className="text-[11px] font-bold text-[#A8ADA8] min-w-[20px]">
+    <div className="flex items-center gap-2.5 mb-5 pb-3 border-b border-[#E2E8E4]">
+      <span className="w-6 h-6 rounded-full bg-[#204E3F] inline-flex items-center justify-center text-[11px] font-bold text-white shrink-0 shadow-xs">
         {String(num).padStart(2, '0')}
       </span>
-      <span className="text-[15px] font-bold text-[#202421] tracking-tight">{title}</span>
+      <h2 className="text-[16px] font-extrabold text-[#111814] tracking-tight">{title}</h2>
       {done && (
-        <span className="text-[11px] text-[#3E6256] bg-[#E5EEE9] px-1.5 py-0.5 rounded font-medium">
-          已完成
+        <span className="text-[11px] text-[#134D3A] bg-[#DCEDE4] border border-[#B6DBCB] px-2 py-0.5 rounded-md font-extrabold ml-1.5">
+          ✓ 已准备就绪
         </span>
       )}
     </div>
@@ -190,76 +190,87 @@ export const InterviewPrepWorkspaceView: React.FC<InterviewPrepWorkspaceViewProp
 
   const renderContent = () => {
     switch (activeSection) {
-      // ── Tab 1: 01 公司研究 (Exact match with Image 1) ──
+      // ── Tab 1: 01 公司研究 ──
       case '公司研究':
         return (
-          <div className="space-y-4 animate-in fade-in duration-200">
-            <SectionHeader num={1} title="公司研究" done />
+          <div className="space-y-6 animate-in fade-in duration-200">
+            <SectionHeader num={1} title="目标雇主背景与业务全景研究" done />
 
-            {/* Basic Info & Strategy Focus (2 Cards) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 mb-4">
-              <div className="bg-[#FAFAF8] border border-[#E4E5E0] rounded-xl p-4 sm:p-5 shadow-2xs">
-                <div className="text-[11px] font-bold text-[#A8ADA8] uppercase tracking-wider mb-2.5">
-                  基本信息
+            {/* Basic Info & Strategy Focus (2 Cards Responsive) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+              <div className="bg-white border-2 border-[#CCD8D1] rounded-2xl p-5 sm:p-6 shadow-2xs">
+                <div className="text-xs font-black text-[#1A5340] uppercase tracking-wider mb-3">
+                  公司基本概况
                 </div>
-                <div className="space-y-2 text-xs">
-                  <div className="flex justify-between py-1.5 border-b border-[#F0F0EC]">
-                    <span className="text-[#737873]">成立</span>
-                    <span className="text-[#202421] font-medium">{companyData.founded}</span>
+                <div className="space-y-2.5 text-xs sm:text-[13px]">
+                  <div className="flex justify-between py-2 border-b border-[#E8EEEB]">
+                    <span className="text-[#526058] font-medium">创立时间</span>
+                    <span className="text-[#111814] font-extrabold">{companyData.founded}</span>
                   </div>
-                  <div className="flex justify-between py-1.5 border-b border-[#F0F0EC]">
-                    <span className="text-[#737873]">员工</span>
-                    <span className="text-[#202421] font-medium">{companyData.headcount}</span>
+                  <div className="flex justify-between py-2 border-b border-[#E8EEEB]">
+                    <span className="text-[#526058] font-medium">团队规模</span>
+                    <span className="text-[#111814] font-extrabold">{companyData.headcount}</span>
                   </div>
                 </div>
-                <div className="flex flex-wrap gap-1.5 mt-3.5">
-                  {companyData.products.map((p) => (
-                    <span
-                      key={p}
-                      className="text-[11.5px] px-2.5 py-1 bg-[#E5EEE9] text-[#3E6256] rounded-md font-medium"
-                    >
-                      {p}
-                    </span>
-                  ))}
+                <div className="mt-4 pt-3 border-t border-[#E8EEEB]">
+                  <div className="text-[11px] font-bold text-[#526058] mb-2">代表产品矩阵</div>
+                  <div className="flex flex-wrap gap-2">
+                    {companyData.products.map((p) => (
+                      <span
+                        key={p}
+                        className="text-xs px-3 py-1 bg-[#F2F8F5] text-[#134D3A] rounded-lg font-bold border border-[#B6DBCB]"
+                      >
+                        {p}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              <div className="bg-[#FAFAF8] border border-[#E4E5E0] rounded-xl p-4 sm:p-5 shadow-2xs">
-                <div className="text-[11px] font-bold text-[#A8ADA8] uppercase tracking-wider mb-2.5">
-                  战略重心
+              <div className="bg-[#F2F8F5] border-2 border-[#A2CAB8] rounded-2xl p-5 sm:p-6 shadow-2xs flex flex-col justify-between">
+                <div>
+                  <div className="text-xs font-black text-[#1A5340] uppercase tracking-wider mb-2.5">
+                    战略重心与当前关键战役
+                  </div>
+                  <p className="text-xs sm:text-[13.5px] text-[#1B3327] leading-relaxed m-0 font-medium">
+                    {companyData.focus}
+                  </p>
                 </div>
-                <p className="text-[12.5px] text-[#4A5A52] leading-relaxed m-0">
-                  {companyData.focus}
-                </p>
+                <div className="mt-4 pt-3 border-t border-[#BBDDD0] text-xs text-[#204E3F] font-bold flex items-center gap-1.5">
+                  <span>💡</span>
+                  <span>面试提示：建议在表述中紧扣 AI 转型与核心产品赋能场景。</span>
+                </div>
               </div>
             </div>
 
             {/* Recent News */}
-            <div className="mb-4">
-              <div className="text-[13px] font-bold text-[#202421] mb-2.5">近期动态</div>
-              <div className="space-y-2">
+            <div className="bg-white border-2 border-[#CCD8D1] rounded-2xl p-5 sm:p-6 shadow-2xs mb-5">
+              <div className="text-sm font-extrabold text-[#111814] mb-3.5">
+                近期重大业务动态 (面试破冰与行业思考素材)
+              </div>
+              <div className="space-y-3">
                 {companyData.news.map((n, i) => (
                   <div
                     key={i}
-                    className="flex gap-2.5 py-2 border-b border-[#F5F5F2] text-xs items-start"
+                    className="flex gap-3 p-3 rounded-xl bg-[#F8FAF9] border border-[#E0E7E3] text-xs sm:text-[13px] items-start"
                   >
-                    <span className="font-bold text-[#A8ADA8] min-w-[18px] mt-0.5">
-                      {i + 1}.
+                    <span className="w-5 h-5 rounded-full bg-[#204E3F] text-white inline-flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 shadow-2xs">
+                      {i + 1}
                     </span>
-                    <p className="text-[#4A5252] leading-relaxed m-0">{n}</p>
+                    <p className="text-[#1B2721] font-semibold leading-relaxed m-0">{n}</p>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Cultural Keywords */}
-            <div>
-              <div className="text-[13px] font-bold text-[#202421] mb-2.5">文化关键词</div>
-              <div className="flex flex-wrap gap-2">
+            <div className="bg-[#FAFBF9] border border-[#CCD8D1] rounded-2xl p-5 sm:p-6 shadow-2xs">
+              <div className="text-sm font-extrabold text-[#111814] mb-3">企业文化与核心价值观</div>
+              <div className="flex flex-wrap gap-2.5">
                 {companyData.culture.map((c) => (
                   <span
                     key={c}
-                    className="text-[12.5px] px-3 py-1.5 bg-[#F0F0EC] text-[#737873] rounded-lg border border-[#E8E8E4]"
+                    className="text-xs px-3.5 py-1.5 bg-white text-[#111814] font-bold rounded-xl border border-[#CCD8D1] shadow-2xs"
                   >
                     {c}
                   </span>
@@ -269,62 +280,64 @@ export const InterviewPrepWorkspaceView: React.FC<InterviewPrepWorkspaceViewProp
           </div>
         );
 
-      // ── Tab 2: 02 本场面试判断 (Exact match with Image 2) ──
+      // ── Tab 2: 02 本场面试判断 ──
       case '本场面试判断':
         return (
-          <div className="space-y-4 animate-in fade-in duration-200">
-            <SectionHeader num={2} title="本场面试判断" done />
+          <div className="space-y-6 animate-in fade-in duration-200">
+            <SectionHeader num={2} title="本场面试定位与考察维度研判" done />
 
-            {/* AI Strategy Analysis Box */}
-            <div className="bg-[#F5FAF7] border border-[#C8D8D1] rounded-2xl p-5 sm:p-6 mb-5 shadow-2xs">
-              <div className="text-[11px] font-bold text-[#3E6256] uppercase tracking-wider mb-2">
-                AI 策略分析
+            {/* AI Strategy Analysis Box (High Contrast) */}
+            <div className="bg-[#F2F8F5] border-2 border-[#A2CAB8] rounded-2xl p-6 sm:p-7 mb-5 shadow-xs">
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-xs font-black text-[#1A5340] uppercase tracking-wider bg-[#DCEDE4] px-2.5 py-1 rounded-md border border-[#B6DBCB]">
+                  AI 策略研判
+                </span>
+                <span className="text-xs font-bold text-[#1F4D3D] bg-white px-3 py-1 rounded-full border border-[#B6DBCB] shadow-2xs">
+                  预计时长：45–60 分钟
+                </span>
               </div>
-              <div className="text-[14.5px] font-bold text-[#202421] mb-2">
-                业务面试 · 聚焦产品经验与思维
+              <div className="text-lg sm:text-[19px] font-black text-[#0F3528] tracking-tight mb-2">
+                业务面试 · 深度聚焦产品思维与落地闭环
               </div>
-              <p className="text-[13px] text-[#4A6559] leading-relaxed mb-3.5">
+              <p className="text-xs sm:text-[13.5px] text-[#254135] leading-relaxed m-0 font-medium">
                 第1轮业务面通常由产品总监/组长把关，核心考察你的产品感、思考框架和过往经历的深度。
-                建议重点准备 AI 产品案例与 0 到 1 经历，避免泛泛而谈。
+                建议重点准备 AI 产品案例与 0 到 1 经历，用量化指标和明确的 trade-off 支撑你的业务观点。
               </p>
-              <div className="text-xs font-semibold text-[#3E6256]">
-                预计时长：45–60 分钟
-              </div>
             </div>
 
-            {/* Key Focus Directions */}
+            {/* Key Focus Directions (Grid on Wide Screen) */}
             <div>
-              <div className="text-[13px] font-bold text-[#202421] mb-3">重点方向</div>
-              <div className="space-y-3.5">
+              <div className="text-sm font-extrabold text-[#111814] mb-3.5">核心考察方向拆解</div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {[
                   {
                     focus: '深挖 AI 产品经历',
-                    desc: '需要有完整闭环的案例，准备 Challenge & Iteration 细节'
+                    desc: '需要有完整闭环的案例，准备 Challenge & Iteration 细节，清晰阐述评估体系从 0 到 1 过程。'
                   },
                   {
                     focus: '搜索 / 推荐类产品认知',
-                    desc: '可能追问你对该类产品指标体系和优化方向的理解'
+                    desc: '可能追问你对大模型重塑搜索交互的理解，以及多模态生成质量与时延成本的平衡。'
                   },
                   {
-                    focus: '数据驱动决策',
-                    desc: '举例时注意量化 Impact，避免用模糊词语描述结果'
+                    focus: '数据驱动与度量决策',
+                    desc: '举例时注意量化 Impact（如 nDCG、NPS、耗时降幅），避免用模糊词语描述结果。'
                   }
                 ].map((item, i) => (
                   <div
                     key={i}
-                    className="flex gap-3 py-2.5 border-b border-[#F5F5F2] items-start"
+                    className="bg-white p-5 rounded-2xl border-2 border-[#CCD8D1] shadow-2xs hover:border-[#204E3F] transition space-y-2"
                   >
-                    <span className="text-xs font-bold text-[#A8ADA8] min-w-[20px] mt-0.5">
-                      {i + 1}.
-                    </span>
-                    <div>
-                      <div className="text-[13.5px] font-bold text-[#202421] mb-1">
+                    <div className="flex items-center gap-2">
+                      <span className="w-5 h-5 rounded-full bg-[#204E3F] text-white inline-flex items-center justify-center text-xs font-bold shrink-0">
+                        {i + 1}
+                      </span>
+                      <div className="text-sm font-bold text-[#111814]">
                         {item.focus}
                       </div>
-                      <div className="text-[12.5px] text-[#737873] leading-relaxed">
-                        {item.desc}
-                      </div>
                     </div>
+                    <p className="text-xs sm:text-[12.5px] text-[#4E5B53] leading-relaxed m-0 font-medium">
+                      {item.desc}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -335,62 +348,66 @@ export const InterviewPrepWorkspaceView: React.FC<InterviewPrepWorkspaceViewProp
       // ── Tab 3: 03 推荐经历 ──
       case '推荐经历':
         return (
-          <div className="space-y-4 animate-in fade-in duration-200">
-            <SectionHeader num={3} title="推荐经历" done />
-            <p className="text-xs text-[#737873] mb-4">
-              基于本场面试需求，AI 推荐以下经历重点讲述
+          <div className="space-y-6 animate-in fade-in duration-200">
+            <SectionHeader num={3} title="推荐经历库资产 (针对本场面试重点讲述)" done />
+            <p className="text-xs sm:text-[13px] text-[#4E5B53] font-medium mb-4">
+              基于本场业务面试的岗位画像，AI 建议将以下经历作为主干故事准备：
             </p>
 
-            <div className="space-y-3.5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {[
                 {
-                  title: 'AI 搜索优化项目',
-                  level: '首推',
-                  lc: 'text-[#3E6256]',
-                  lb: 'bg-[#E5EEE9]',
-                  border: 'border-[#C8D8D1]',
-                  bg: 'bg-[#FAFCFB]',
+                  title: 'AI 搜索优化与评测项目',
+                  level: '首推主讲',
+                  lc: 'text-[#134D3A]',
+                  lb: 'bg-[#DCEDE4]',
+                  border: 'border-[#A2CAB8]',
+                  bg: 'bg-[#F2F8F5]',
                   match: '与岗位直接相关，包含 AI + 搜索 + 数据分析三大核心标签',
                   tips: [
-                    '强调从 0 建立评估体系的完整过程',
-                    '量化提升指标：nDCG 提升 0.12，效率提升 4×'
+                    '强调从 0 建立评估体系的完整过程与工程权衡',
+                    '量化提升指标：nDCG 提升 0.12，评测耗时下降 4×'
                   ]
                 },
                 {
-                  title: 'AI 产品 MVP 项目',
-                  level: '重要',
-                  lc: 'text-[#B7794B]',
-                  lb: 'bg-[#F4E8DE]',
-                  border: 'border-[#E4E5E0]',
-                  bg: 'bg-[#FAFAF8]',
-                  match: '有完整产品闭环和用户验证，展示产品感和推动力',
+                  title: 'AI 产品 MVP 孵化落地项目',
+                  level: '重要备选',
+                  lc: 'text-warning',
+                  lb: 'bg-warning-bg',
+                  border: 'border-[#CCD8D1]',
+                  bg: 'bg-white',
+                  match: '有完整产品闭环和真实用户验证，展示 0 到 1 产品感和推动力',
                   tips: [
-                    '准备 1-2 个关键决策点的 trade-off 说明',
-                    '强调 NPS 42 与 3 个月上线成果'
+                    '准备 1-2 个关键决策点的 trade-off 与灰度测试说明',
+                    '强调 NPS 达到 42 与 3 个月敏捷上线的成果'
                   ]
                 }
               ].map((exp, i) => (
                 <div
                   key={i}
-                  className={`border ${exp.border} ${exp.bg} rounded-xl p-4 sm:p-5 shadow-2xs`}
+                  className={`border-2 ${exp.border} ${exp.bg} rounded-2xl p-6 shadow-2xs flex flex-col justify-between space-y-3.5`}
                 >
-                  <div className="flex justify-between items-start mb-2">
-                    <div className="text-sm font-bold text-[#202421]">{exp.title}</div>
-                    <span
-                      className={`text-[11.5px] font-bold px-2 py-0.5 rounded ${exp.lc} ${exp.lb}`}
-                    >
-                      {exp.level}
-                    </span>
-                  </div>
-                  <p className="text-xs text-[#737873] mb-3">{exp.match}</p>
-                  <div className="text-xs font-bold text-[#202421] mb-1.5">讲述提示</div>
-                  <div className="space-y-1">
-                    {exp.tips.map((tip, ti) => (
-                      <div key={ti} className="flex items-start gap-1.5 text-xs text-[#4A5A52]">
-                        <span className="text-[#3E6256] font-bold">·</span>
-                        <span>{tip}</span>
-                      </div>
-                    ))}
+                  <div>
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="text-base font-extrabold text-[#111814]">{exp.title}</div>
+                      <span
+                        className={`text-xs font-black px-2.5 py-1 rounded-md border border-black/10 ${exp.lc} ${exp.lb}`}
+                      >
+                        {exp.level}
+                      </span>
+                    </div>
+                    <p className="text-xs sm:text-[13px] text-[#4E5B53] font-medium mb-3.5 leading-relaxed">
+                      {exp.match}
+                    </p>
+                    <div className="text-xs font-extrabold text-[#111814] mb-2">核心讲述要点建议：</div>
+                    <div className="space-y-1.5 bg-white/80 p-3 rounded-xl border border-black/5">
+                      {exp.tips.map((tip, ti) => (
+                        <div key={ti} className="flex items-start gap-2 text-xs sm:text-[12.5px] text-[#254135] font-medium">
+                          <span className="text-[#204E3F] font-bold">✓</span>
+                          <span>{tip}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -398,76 +415,84 @@ export const InterviewPrepWorkspaceView: React.FC<InterviewPrepWorkspaceViewProp
           </div>
         );
 
-      // ── Tab 4: 04 高频问题 (Exact match with Image 3) ──
+      // ── Tab 4: 04 高频问题 ──
       case '高频问题':
         return (
-          <div className="space-y-4 animate-in fade-in duration-200">
-            <SectionHeader num={4} title="高频问题" />
-            <p className="text-xs text-[#737873] mb-4">
-              AI 根据岗位 JD 和面试类型生成，共 {questions.length} 道
+          <div className="space-y-6 animate-in fade-in duration-200">
+            <SectionHeader num={4} title="高频高概率面试真题预测" />
+            <p className="text-xs sm:text-[13px] text-[#4E5B53] font-medium mb-4">
+              AI 根据岗位 JD、公司面试风格及往期面经预测，共 {questions.length} 道精选题目：
             </p>
 
-            <div className="space-y-2">
+            <div className="space-y-3">
               {questions.map((q) => {
                 const dStars =
                   q.difficulty === 'high'
-                    ? '★★★'
+                    ? '★★★ (难)'
                     : q.difficulty === 'medium'
-                    ? '★★'
-                    : '★';
+                    ? '★★ (中)'
+                    : '★ (易)';
                 const dColor =
                   q.difficulty === 'high'
-                    ? 'text-[#B7794B]'
+                    ? 'text-warning bg-warning-bg'
                     : q.difficulty === 'medium'
-                    ? 'text-[#737873]'
-                    : 'text-[#A8ADA8]';
+                    ? 'text-[#204E3F] bg-[#E3EFE9]'
+                    : 'text-[#526058] bg-[#F2F4F1]';
 
                 const isExpanded = expandedQ === q.id;
 
                 return (
                   <div
                     key={q.id}
-                    className="border border-[#E4E5E0] rounded-xl overflow-hidden bg-white shadow-2xs"
+                    className="border-2 border-[#CCD8D1] hover:border-[#204E3F]/70 rounded-2xl overflow-hidden bg-white shadow-2xs transition"
                   >
                     <div
                       onClick={() => setExpandedQ(isExpanded ? null : q.id)}
-                      className="w-full flex justify-between items-center px-4 py-3.5 cursor-pointer hover:bg-[#FAFAF8] transition text-left"
+                      className="w-full flex justify-between items-center px-5 py-4 cursor-pointer hover:bg-[#F9FCFA] transition text-left"
                     >
-                      <div className="flex items-center gap-2.5 flex-1 pr-3">
+                      <div className="flex items-center gap-3 flex-1 pr-4">
                         <button
                           type="button"
                           onClick={(e) => toggleQuestionPrepared(q.id, e)}
-                          className="shrink-0 cursor-pointer"
+                          className="shrink-0 cursor-pointer p-0.5 hover:scale-110 transition"
                           title="标记为已准备"
                         >
                           {q.prepared ? (
-                            <CheckCircle2 className="w-4 h-4 text-[#3E6256]" />
+                            <CheckCircle2 className="w-5 h-5 text-[#204E3F] fill-[#DCEDE4]" />
                           ) : (
-                            <span className="w-4 h-4 rounded-full border border-[#D0D2CB] inline-block" />
+                            <span className="w-5 h-5 rounded-full border-2 border-[#CCD8D1] inline-block hover:border-[#204E3F]" />
                           )}
                         </button>
-                        <span className="text-[13.5px] font-medium text-[#202421]">
+                        <span className="text-sm sm:text-[15px] font-bold text-[#111814]">
                           {q.q}
                         </span>
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-[11px] text-[#737873] bg-[#F0F0EC] px-2 py-0.5 rounded">
+                        <span className="text-xs font-bold text-[#3A4A41] bg-[#EEF2F0] px-2.5 py-1 rounded-md">
                           {q.type}
                         </span>
-                        <span className={`text-xs ${dColor}`}>{dStars}</span>
+                        <span className={`text-xs font-extrabold px-2 py-0.5 rounded-md ${dColor}`}>
+                          {dStars}
+                        </span>
                       </div>
                     </div>
 
                     {isExpanded && (
-                      <div className="px-4 pb-3.5 pt-1 bg-[#FAFAF8] border-t border-[#F0F0EC]">
-                        <button
-                          type="button"
-                          onClick={() => handleQuickPrepare(q.id)}
-                          className="mt-2 px-3 py-1.5 text-xs font-semibold text-[#3E6256] border border-[#C8D8D1] rounded-lg bg-white hover:bg-[#F5FAF7] shadow-2xs transition cursor-pointer"
-                        >
-                          去准备这道题
-                        </button>
+                      <div className="px-5 pb-5 pt-2 bg-[#F6FAF8] border-t border-[#E8EEEB] space-y-3">
+                        <div className="text-xs sm:text-[13px] text-[#254135] leading-relaxed font-medium bg-white p-3.5 rounded-xl border border-[#CCDCD4]">
+                          <strong className="text-[#11382A]">💡 STAR 应答要点建议：</strong>
+                          {q.starSuggestion}
+                        </div>
+                        <div className="flex justify-end">
+                          <button
+                            type="button"
+                            onClick={() => handleQuickPrepare(q.id)}
+                            className="px-4 py-2 text-xs sm:text-[13px] font-bold text-white bg-[#204E3F] hover:bg-[#16382D] rounded-xl shadow-xs transition cursor-pointer"
+                          >
+                            去草稿箱准备这道题 →
+                          </button>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -477,18 +502,18 @@ export const InterviewPrepWorkspaceView: React.FC<InterviewPrepWorkspaceViewProp
           </div>
         );
 
-      // ── Tab 5: 05 回答准备 (Exact match with Image 4) ──
+      // ── Tab 5: 05 回答准备 ──
       case '回答准备':
         return (
-          <div className="space-y-4 animate-in fade-in duration-200">
-            <SectionHeader num={5} title="回答准备" />
-            <p className="text-xs text-[#737873] mb-4">
-              选择问题并练习你的回答，AI 给出优化建议
+          <div className="space-y-6 animate-in fade-in duration-200">
+            <SectionHeader num={5} title="针对性回答草稿与 STAR 结构推演" />
+            <p className="text-xs sm:text-[13px] text-[#4E5B53] font-medium mb-4">
+              选择左侧问题并撰写你的作答思路，右侧实时参考 AI STAR 优化框架：
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
               {/* Left Column: Questions List */}
-              <div className="space-y-1.5">
+              <div className="space-y-2">
                 {questions.map((q) => {
                   const isSelected = selectedQIdForAnswer === q.id;
                   return (
@@ -503,10 +528,10 @@ export const InterviewPrepWorkspaceView: React.FC<InterviewPrepWorkspaceViewProp
                           setSelectedQIdForAnswer(q.id);
                         }
                       }}
-                      className={`w-full text-left p-3 rounded-xl border transition cursor-pointer flex items-start gap-2 ${
+                      className={`w-full text-left p-3.5 rounded-2xl border-2 transition cursor-pointer flex items-start gap-3 ${
                         isSelected
-                          ? 'border-[#3E6256] bg-[#E5EEE9] text-[#3E6256]'
-                          : 'border-[#E4E5E0] bg-white text-[#202421] hover:bg-[#FAFAF8]'
+                          ? 'border-[#204E3F] bg-[#F2F8F5] text-[#0F3528] shadow-xs'
+                          : 'border-[#CCD8D1] bg-white text-[#111814] hover:bg-[#FAFBF9]'
                       }`}
                     >
                       <button
@@ -516,14 +541,14 @@ export const InterviewPrepWorkspaceView: React.FC<InterviewPrepWorkspaceViewProp
                         title={q.prepared ? '标记为未准备' : '标记为已准备'}
                       >
                         {q.prepared ? (
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#3E6256]" />
+                          <CheckCircle2 className="w-4.5 h-4.5 text-[#204E3F] fill-[#DCEDE4]" />
                         ) : (
-                          <span className="w-3.5 h-3.5 rounded-full border border-[#D0D2CB] inline-block" />
+                          <span className="w-4.5 h-4.5 rounded-full border-2 border-[#CCD8D1] inline-block" />
                         )}
                       </button>
                       <span
-                        className={`text-xs leading-relaxed ${
-                          isSelected ? 'font-bold' : 'font-medium'
+                        className={`text-xs sm:text-[13px] leading-relaxed ${
+                          isSelected ? 'font-black' : 'font-semibold'
                         }`}
                       >
                         {q.q}
@@ -534,28 +559,30 @@ export const InterviewPrepWorkspaceView: React.FC<InterviewPrepWorkspaceViewProp
               </div>
 
               {/* Right Column: Active Question, Answer Box & AI Suggestions */}
-              <div className="space-y-3.5">
+              <div className="space-y-4">
                 {/* Active Question Box */}
-                <div className="bg-[#F5FAF7] border border-[#C8D8D1] rounded-xl p-4 shadow-2xs">
-                  <div className="text-xs font-bold text-[#3E6256] mb-1.5">当前问题</div>
-                  <div className="text-sm font-bold text-[#202421]">{currentQObj.q}</div>
+                <div className="bg-[#F2F8F5] border-2 border-[#A2CAB8] rounded-2xl p-5 shadow-2xs">
+                  <div className="text-xs font-black text-[#1A5340] uppercase tracking-wider mb-1.5">
+                    当前选定问题
+                  </div>
+                  <div className="text-base font-extrabold text-[#0F3528]">{currentQObj.q}</div>
                 </div>
 
                 {/* My Answer Editor Box */}
-                <div>
-                  <div className="flex justify-between items-center mb-1.5">
-                    <span className="text-xs font-semibold text-[#737873]">我的回答</span>
+                <div className="bg-white border-2 border-[#CCD8D1] rounded-2xl p-5 shadow-2xs">
+                  <div className="flex justify-between items-center mb-2.5">
+                    <span className="text-xs font-bold text-[#111814]">我的应答草稿 / 核心讲点 (STAR)</span>
                     <button
                       type="button"
                       onClick={handleSaveAnswer}
-                      className="text-xs font-bold text-[#3E6256] hover:underline flex items-center gap-1 cursor-pointer"
+                      className="px-3.5 py-1.5 bg-[#204E3F] hover:bg-[#16382D] text-white rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs transition"
                     >
-                      <Save className="w-3 h-3" />
-                      <span>保存作答草稿</span>
+                      <Save className="w-3.5 h-3.5" />
+                      <span>保存草稿并标记就绪</span>
                     </button>
                   </div>
                   <textarea
-                    rows={6}
+                    rows={7}
                     value={answerDrafts[selectedQIdForAnswer] || ''}
                     onChange={(e) =>
                       setAnswerDrafts((prev) => ({
@@ -563,18 +590,18 @@ export const InterviewPrepWorkspaceView: React.FC<InterviewPrepWorkspaceViewProp
                         [selectedQIdForAnswer]: e.target.value
                       }))
                     }
-                    placeholder="输入你的回答思路或草稿..."
-                    className="w-full p-3.5 bg-white border border-[#E4E5E0] focus:border-[#3E6256] rounded-xl text-xs sm:text-[13px] text-[#202421] placeholder:text-[#A8ADA8] outline-none resize-y leading-relaxed font-sans shadow-2xs"
+                    placeholder="按 STAR 结构列出你的作答提纲（Situation 背景 / Task 任务 / Action 行动 / Result 结果）..."
+                    className="w-full p-4 bg-[#F8FAF9] border border-[#CCDCD4] focus:border-[#204E3F] focus:bg-white rounded-xl text-xs sm:text-[13.5px] text-[#111814] placeholder:text-[#8D9A92] outline-none resize-y leading-relaxed font-sans shadow-inner transition"
                   />
                 </div>
 
                 {/* AI STAR Optimization Suggestions */}
-                <div className="bg-[#FAFAF8] border border-[#E4E5E0] rounded-xl p-4 shadow-2xs">
-                  <div className="text-xs font-bold text-[#202421] mb-2 flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-[#3E6256]" />
-                    <span>AI 优化建议（示例）</span>
+                <div className="bg-[#FAFBF9] border-2 border-[#CCD8D1] rounded-2xl p-5 shadow-2xs">
+                  <div className="text-xs font-extrabold text-[#111814] mb-2 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-[#204E3F]" />
+                    <span>AI STAR 结构优化指南</span>
                   </div>
-                  <p className="text-xs sm:text-[12.5px] text-[#4A5A52] leading-relaxed m-0">
+                  <p className="text-xs sm:text-[13px] text-[#334239] leading-relaxed m-0 font-medium">
                     {currentQObj.starSuggestion}
                   </p>
                 </div>
@@ -583,25 +610,27 @@ export const InterviewPrepWorkspaceView: React.FC<InterviewPrepWorkspaceViewProp
           </div>
         );
 
-      // ── Tab 6: 06 模拟面试 (Exact match with Image 5) ──
+      // ── Tab 6: 06 模拟面试 ──
       case '模拟面试':
         return (
-          <div className="space-y-4 animate-in fade-in duration-200">
-            <SectionHeader num={6} title="模拟面试" />
-            <div className="bg-[#F5FAF7] border border-[#C8D8D1] rounded-2xl p-8 md:p-10 text-center shadow-2xs">
-              <div className="text-3xl mb-3">🎤</div>
-              <div className="text-base font-bold text-[#202421] mb-2 tracking-tight">
-                AI 模拟面试官
+          <div className="space-y-6 animate-in fade-in duration-200">
+            <SectionHeader num={6} title="AI 实时对练与模拟实战" />
+            <div className="bg-[#F2F8F5] border-2 border-[#A2CAB8] rounded-3xl p-10 md:p-14 text-center shadow-xs">
+              <div className="w-16 h-16 rounded-2xl bg-[#DCEDE4] border border-[#B6DBCB] flex items-center justify-center mx-auto mb-4 text-3xl shadow-2xs">
+                🎤
               </div>
-              <p className="text-xs sm:text-[13.5px] text-[#4A6559] leading-relaxed max-w-md mx-auto mb-6">
-                模拟真实面试场景，AI 将按业务面逻辑提问，并在每轮问答后给出反馈。
+              <div className="text-xl font-black text-[#0F3528] mb-2 tracking-tight">
+                AI 模拟面试官即刻开练
+              </div>
+              <p className="text-xs sm:text-sm text-[#254135] leading-relaxed max-w-lg mx-auto mb-8 font-medium">
+                模拟真实业务面场景，AI 面试官将基于本岗位 JD 展开追问，并在每轮问答后给出即时反馈与打分建议。
               </p>
               <button
                 type="button"
                 onClick={() => onOpenMockInterview(currentInterview.id)}
-                className="px-6 py-2.5 bg-[#3E6256] hover:bg-[#345449] text-white rounded-xl text-xs sm:text-sm font-bold shadow-xs transition cursor-pointer"
+                className="px-8 py-3.5 bg-[#204E3F] hover:bg-[#16382D] text-white rounded-2xl text-sm font-extrabold shadow-md transition cursor-pointer"
               >
-                开始模拟面试
+                开始全流程模拟面试 →
               </button>
             </div>
           </div>
@@ -614,46 +643,36 @@ export const InterviewPrepWorkspaceView: React.FC<InterviewPrepWorkspaceViewProp
 
   return (
     <div className="min-h-full bg-white pb-24">
-      {/* ── Sticky Header (Exact Match with Image 1-5) ── */}
-      <div className="bg-white border-b border-[#E4E5E0] sticky top-0 z-10">
-        <div className="max-w-[800px] mx-auto px-6 sm:px-8 pt-4">
-          {/* Breadcrumb back link */}
-          <button
-            type="button"
-            onClick={() => navigateTo('interview_prep_center')}
-            className="flex items-center gap-1 text-xs text-[#737873] hover:text-[#202421] transition cursor-pointer mb-2.5"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>面试准备</span>
-          </button>
-
+      {/* ── Sticky Header (Responsive & High Contrast) ── */}
+      <div className="bg-white border-b border-[#CCD8D1] sticky top-0 z-10 shadow-2xs">
+        <div className="w-full max-w-5xl xl:max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 pt-4 sm:pt-5">
           {/* Job Title & Readiness Indicator */}
-          <div className="flex justify-between items-start mb-3">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
             <div>
-              <h1 className="text-lg font-bold text-[#202421] tracking-tight">
+              <h1 className="text-xl sm:text-2xl font-black text-[#111814] tracking-tight">
                 {iv.company} · {iv.position}
               </h1>
-              <div className="text-xs text-[#737873] mt-0.5">
-                {iv.round} · {iv.time}
+              <div className="text-xs sm:text-[13px] text-[#526058] font-medium mt-1">
+                {iv.round} · 预约时间：{iv.time}
               </div>
             </div>
 
             {/* Readiness */}
-            <div className="flex items-center gap-2.5">
-              <div>
+            <div className="flex items-center gap-3 bg-[#F4F8F6] px-4 py-2 rounded-xl border border-[#CCD8D1]">
+              <div className="text-right">
                 <div
-                  className={`text-lg font-extrabold leading-none ${
-                    iv.readiness >= 80 ? 'text-[#3E6256]' : 'text-[#B7794B]'
+                  className={`text-xl font-black leading-none ${
+                    iv.readiness >= 80 ? 'text-[#0F3528]' : 'text-warning'
                   }`}
                 >
                   {iv.readiness}%
                 </div>
-                <div className="text-[11px] text-[#A8ADA8] text-right mt-0.5">准备度</div>
+                <div className="text-[11px] text-[#526058] font-bold mt-0.5">综合备战度</div>
               </div>
-              <div className="w-16 h-1.5 bg-[#F0F0EC] rounded-full overflow-hidden">
+              <div className="w-20 h-2 bg-[#DDE5E1] rounded-full overflow-hidden">
                 <div
                   className={`h-full rounded-full transition-all duration-500 ${
-                    iv.readiness >= 80 ? 'bg-[#3E6256]' : 'bg-[#B7794B]'
+                    iv.readiness >= 80 ? 'bg-[#204E3F]' : 'bg-warning'
                   }`}
                   style={{ width: `${iv.readiness}%` }}
                 />
@@ -662,7 +681,7 @@ export const InterviewPrepWorkspaceView: React.FC<InterviewPrepWorkspaceViewProp
           </div>
 
           {/* Section Tabs (6 items with ✓ badge) */}
-          <div className="flex gap-1 overflow-x-auto custom-scrollbar">
+          <div className="flex gap-2 overflow-x-auto custom-scrollbar">
             {SECTIONS.map((s, i) => {
               const isDone = sectionStatus[s];
               const isActive = activeSection === s;
@@ -671,13 +690,13 @@ export const InterviewPrepWorkspaceView: React.FC<InterviewPrepWorkspaceViewProp
                   key={s}
                   type="button"
                   onClick={() => setActiveSection(s)}
-                  className={`flex items-center gap-1 px-3.5 py-2 text-xs transition cursor-pointer whitespace-nowrap border-b-2 -mb-px ${
+                  className={`flex items-center gap-1.5 px-4 py-2.5 text-xs sm:text-[13px] transition cursor-pointer whitespace-nowrap border-b-2 -mb-px ${
                     isActive
-                      ? 'font-bold text-[#202421] border-[#3E6256]'
-                      : 'text-[#737873] hover:text-[#202421] border-transparent'
+                      ? 'font-black text-[#111814] border-[#204E3F]'
+                      : 'text-[#526058] hover:text-[#111814] font-semibold border-transparent'
                   }`}
                 >
-                  {isDone && <span className="text-[#3E6256] text-xs">✓</span>}
+                  {isDone && <span className="text-[#204E3F] font-bold text-xs">✓</span>}
                   <span>
                     {String(i + 1).padStart(2, '0')} {s}
                   </span>
@@ -688,8 +707,8 @@ export const InterviewPrepWorkspaceView: React.FC<InterviewPrepWorkspaceViewProp
         </div>
       </div>
 
-      {/* ── Content Container (Max 800px width as in images) ── */}
-      <div className="max-w-[800px] mx-auto px-6 sm:px-8 pt-6">
+      {/* ── Content Container (Responsive Width) ── */}
+      <div className="w-full max-w-5xl xl:max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 pt-6 sm:pt-8">
         {renderContent()}
       </div>
     </div>
