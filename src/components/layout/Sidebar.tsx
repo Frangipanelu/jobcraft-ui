@@ -17,14 +17,10 @@ import {
 
 interface SidebarProps {
   onOpenNewJob: () => void;
-  onOpenNewInterview: () => void;
-  onOpenNewReview?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
-  onOpenNewJob,
-  onOpenNewInterview,
-  onOpenNewReview
+  onOpenNewJob
 }) => {
   const { currentTab, navigateTo, jobs, interviews } = useJobCraft();
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -69,7 +65,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           label: '我的岗位',
           icon: <Briefcase className="w-4 h-4" />,
           badge: interviewingJobsCount > 0 ? `${interviewingJobsCount}` : undefined,
-          badgeColor: 'bg-[#E8F1EC] text-[#2D4B41]'
+          badgeColor: 'bg-sage-soft text-sage'
         },
         {
           id: 'jd_analysis',
@@ -91,7 +87,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           label: '面试复盘',
           icon: <RotateCcw className="w-4 h-4" />,
           badge: pendingReviewCount > 0 ? `${pendingReviewCount}` : undefined,
-          badgeColor: 'bg-[#F8EFE9] text-[#935427]'
+          badgeColor: 'bg-terra-soft text-terra'
         }
       ]
     }
@@ -99,18 +95,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <aside
-      className={`h-screen bg-[#1D201F] text-[#A6ACA8] flex flex-col justify-between shrink-0 select-none border-r border-[#2C302E] transition-all duration-300 ${
+      className={`h-screen bg-ink text-faint flex flex-col justify-between shrink-0 select-none border-r border-ink transition-all duration-300 ${
         isCollapsed ? 'w-16' : 'w-60'
       }`}
     >
       {/* Brand Header */}
       <div className="flex-1 flex flex-col min-h-0">
-        <div className="p-4 border-b border-[#2C302E] flex items-center justify-between">
+        <div className="p-4 border-b border-ink flex items-center justify-between">
           <div className="flex items-center gap-2.5 min-w-0 overflow-hidden">
             <div
               onClick={() => isCollapsed && setIsCollapsed(false)}
-              className={`w-8 h-8 rounded-lg bg-[#3E6256] flex items-center justify-center text-white shadow-sm shadow-[#3E6256]/30 shrink-0 ${
-                isCollapsed ? 'cursor-pointer hover:bg-[#325046]' : ''
+              className={`w-8 h-8 rounded-lg bg-sage flex items-center justify-center text-white shadow-sm shadow-sage/30 shrink-0 ${
+                isCollapsed ? 'cursor-pointer hover:bg-sage-dim' : ''
               }`}
               title="JobCraft"
             >
@@ -121,11 +117,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
                   <span className="font-bold text-white tracking-tight text-sm">JobCraft</span>
-                  <span className="text-[10px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-[#3E6256]/30 text-[#8EBAAB] border border-[#3E6256]/50 shrink-0">
+                  <span className="text-[10px] font-bold tracking-wide uppercase px-1.5 py-0.5 rounded bg-sage/30 text-sage-dim border border-sage/50 shrink-0">
                     V2
                   </span>
                 </div>
-                <p className="text-[11px] text-[#8A908C] font-medium truncate">求职与经历闭环</p>
+                <p className="text-[11px] text-faint font-medium truncate">求职与经历闭环</p>
               </div>
             )}
           </div>
@@ -133,11 +129,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* Collapse/Expand toggle button */}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-1 rounded-md text-[#8A908C] hover:text-white hover:bg-white/10 transition shrink-0 ml-1"
+            className="p-1 rounded-md text-faint hover:text-white hover:bg-white/10 transition shrink-0 ml-1"
             title={isCollapsed ? '展开侧边栏' : '收起侧边栏'}
           >
             {isCollapsed ? (
-              <PanelLeftOpen className="w-4 h-4 text-[#8EBAAB]" />
+              <PanelLeftOpen className="w-4 h-4 text-sage-dim" />
             ) : (
               <PanelLeftClose className="w-4 h-4" />
             )}
@@ -149,7 +145,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {navItems.map((group, gIdx) => (
             <div key={gIdx} className="space-y-1">
               {!isCollapsed && group.section && (
-                <div className="px-3 py-1 text-[11px] font-semibold text-[#6C726E] uppercase tracking-wider">
+                <div className="px-3 py-1 text-[11px] font-semibold text-muted uppercase tracking-wider">
                   {group.section}
                 </div>
               )}
@@ -170,12 +166,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       isCollapsed ? 'justify-center px-2 py-2.5' : 'justify-between px-3 py-2'
                     } rounded-lg text-xs font-medium transition-all ${
                       isActivewk
-                        ? 'bg-[#3E6256] text-white font-semibold shadow-xs'
-                        : 'text-[#A6ACA8] hover:text-white hover:bg-white/5'
+                        ? 'bg-sage text-white font-semibold shadow-xs'
+                        : 'text-faint hover:text-white hover:bg-white/5'
                     }`}
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <span className={isActivewk ? 'text-white' : 'text-[#8A908C]'}>
+                      <span className={isActivewk ? 'text-white' : 'text-faint'}>
                         {item.icon}
                       </span>
                       {!isCollapsed && <span className="truncate">{item.label}</span>}
@@ -184,7 +180,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     {!isCollapsed && item.badge && (
                       <span
                         className={`text-[10px] px-1.5 py-0.5 rounded-md font-semibold shrink-0 ${
-                          item.badgeColor || 'bg-[#2C302E] text-[#D0D5D2]'
+                          item.badgeColor || 'bg-ink text-faint'
                         }`}
                       >
                         {item.badge}
@@ -192,7 +188,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     )}
 
                     {isCollapsed && item.badge && (
-                      <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#B7794B]" />
+                      <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-terra" />
                     )}
                   </button>
                 );

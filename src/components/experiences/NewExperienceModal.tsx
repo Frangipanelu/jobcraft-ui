@@ -91,17 +91,17 @@ export const NewExperienceModal: React.FC<NewExperienceModalProps> = ({ isOpen, 
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#1D201F]/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl border border-[#E6E6E1] shadow-xl max-w-2xl w-full overflow-hidden animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-50 bg-ink/60 backdrop-blur-xs flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl border border-edge shadow-xl max-w-2xl w-full overflow-hidden animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="p-5 md:p-6 border-b border-[#E6E6E1] flex items-center justify-between bg-[#FAFAFA]">
+        <div className="p-5 md:p-6 border-b border-edge flex items-center justify-between bg-canvas">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#E8F1EC] text-[#2D4B41] flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-sage-soft text-sage flex items-center justify-center">
               <Layers className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#1D201F]">新建经历资产卡片</h3>
-              <p className="text-xs text-[#6B726F]">
+              <h3 className="text-base font-bold text-ink">新建经历资产卡片</h3>
+              <p className="text-xs text-muted">
                 以 STAR 原则深度结构化你的职业成果，构建可复用的王牌证据库
               </p>
             </div>
@@ -110,14 +110,14 @@ export const NewExperienceModal: React.FC<NewExperienceModalProps> = ({ isOpen, 
             <button
               type="button"
               onClick={handleUseTemplate}
-              className="text-xs text-[#3E6256] hover:text-[#2D4B41] font-semibold flex items-center gap-1 cursor-pointer bg-[#E8F1EC] px-2.5 py-1 rounded-md border border-[#D3E2DB]"
+              className="text-xs text-sage hover:text-sage font-semibold flex items-center gap-1 cursor-pointer bg-sage-soft px-2.5 py-1 rounded-md border border-sage-soft"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>填入高质范本</span>
             </button>
             <button
               onClick={onClose}
-              className="p-1 rounded-lg text-[#8A908C] hover:text-[#1D201F] hover:bg-[#F5F5F2] transition cursor-pointer"
+              className="p-1 rounded-lg text-faint hover:text-ink hover:bg-page transition cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -128,7 +128,7 @@ export const NewExperienceModal: React.FC<NewExperienceModalProps> = ({ isOpen, 
         <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto flex-1 custom-scrollbar">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-[#1D201F] mb-1">
+              <label className="block text-xs font-semibold text-ink mb-1">
                 经历名称 <span className="text-rose-500">*</span>
               </label>
               <input
@@ -137,18 +137,18 @@ export const NewExperienceModal: React.FC<NewExperienceModalProps> = ({ isOpen, 
                 placeholder="例如：AI 搜索评测体系建设"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-[#E6E6E1] bg-white text-[#1D201F] focus:border-[#3E6256] focus:outline-none"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-edge bg-white text-ink focus:border-sage focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#1D201F] mb-1">
+              <label className="block text-xs font-semibold text-ink mb-1">
                 经历分类
               </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as ExperienceCategory)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-[#E6E6E1] bg-white text-[#1D201F] focus:border-[#3E6256] focus:outline-none"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-edge bg-white text-ink focus:border-sage focus:outline-none"
               >
                 <option value="project">项目经历</option>
                 <option value="work">工作经历</option>
@@ -163,7 +163,7 @@ export const NewExperienceModal: React.FC<NewExperienceModalProps> = ({ isOpen, 
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-[#1D201F] mb-1">
+              <label className="block text-xs font-semibold text-ink mb-1">
                 所在机构 / 公司
               </label>
               <input
@@ -171,12 +171,12 @@ export const NewExperienceModal: React.FC<NewExperienceModalProps> = ({ isOpen, 
                 placeholder="例如：快知智能科技"
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-[#E6E6E1] bg-white text-[#1D201F] focus:border-[#3E6256] focus:outline-none"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-edge bg-white text-ink focus:border-sage focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#1D201F] mb-1">
+              <label className="block text-xs font-semibold text-ink mb-1">
                 担任角色
               </label>
               <input
@@ -184,12 +184,12 @@ export const NewExperienceModal: React.FC<NewExperienceModalProps> = ({ isOpen, 
                 placeholder="例如：AI 产品专家"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-[#E6E6E1] bg-white text-[#1D201F] focus:border-[#3E6256] focus:outline-none"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-edge bg-white text-ink focus:border-sage focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#1D201F] mb-1">
+              <label className="block text-xs font-semibold text-ink mb-1">
                 时间周期
               </label>
               <input
@@ -197,20 +197,20 @@ export const NewExperienceModal: React.FC<NewExperienceModalProps> = ({ isOpen, 
                 placeholder="例如：2024.03 - 2025.12"
                 value={period}
                 onChange={(e) => setPeriod(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-[#E6E6E1] bg-white text-[#1D201F] focus:border-[#3E6256] focus:outline-none"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-edge bg-white text-ink focus:border-sage focus:outline-none"
               />
             </div>
           </div>
 
           {/* STAR Fields */}
-          <div className="p-4 rounded-xl bg-[#FAFAFA] border border-[#E6E6E1] space-y-3">
-            <div className="text-xs font-bold text-[#1D201F] flex items-center gap-1.5">
+          <div className="p-4 rounded-xl bg-canvas border border-edge space-y-3">
+            <div className="text-xs font-bold text-ink flex items-center gap-1.5">
               <span>STAR 结构化拆解</span>
-              <span className="text-[10px] text-[#8A908C] font-normal">（标准化沉淀）</span>
+              <span className="text-[10px] text-faint font-normal">（标准化沉淀）</span>
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold text-[#6B726F] mb-0.5">
+              <label className="block text-[11px] font-semibold text-muted mb-0.5">
                 S · 业务背景与痛点 (Situation)
               </label>
               <textarea
@@ -218,12 +218,12 @@ export const NewExperienceModal: React.FC<NewExperienceModalProps> = ({ isOpen, 
                 placeholder="当时面临什么业务挑战、技术瓶颈或痛点？"
                 value={background}
                 onChange={(e) => setBackground(e.target.value)}
-                className="w-full p-2.5 text-xs rounded-lg border border-[#E6E6E1] bg-white text-[#1D201F] resize-none focus:border-[#3E6256] focus:outline-none"
+                className="w-full p-2.5 text-xs rounded-lg border border-edge bg-white text-ink resize-none focus:border-sage focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold text-[#6B726F] mb-0.5">
+              <label className="block text-[11px] font-semibold text-muted mb-0.5">
                 T · 任务与目标 (Task / Responsibility)
               </label>
               <textarea
@@ -231,12 +231,12 @@ export const NewExperienceModal: React.FC<NewExperienceModalProps> = ({ isOpen, 
                 placeholder="你的核心职责与设定的定量/定性攻坚目标是什么？"
                 value={responsibility}
                 onChange={(e) => setResponsibility(e.target.value)}
-                className="w-full p-2.5 text-xs rounded-lg border border-[#E6E6E1] bg-white text-[#1D201F] resize-none focus:border-[#3E6256] focus:outline-none"
+                className="w-full p-2.5 text-xs rounded-lg border border-edge bg-white text-ink resize-none focus:border-sage focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold text-[#6B726F] mb-0.5">
+              <label className="block text-[11px] font-semibold text-muted mb-0.5">
                 A · 行动与策略 (Actions - 支持多条换行)
               </label>
               <textarea
@@ -244,12 +244,12 @@ export const NewExperienceModal: React.FC<NewExperienceModalProps> = ({ isOpen, 
                 placeholder="具体采取了哪些关键技术、架构设计、产品策略或跨团队推进动作？"
                 value={actionsInput}
                 onChange={(e) => setActionsInput(e.target.value)}
-                className="w-full p-2.5 text-xs rounded-lg border border-[#E6E6E1] bg-white text-[#1D201F] resize-none focus:border-[#3E6256] focus:outline-none"
+                className="w-full p-2.5 text-xs rounded-lg border border-edge bg-white text-ink resize-none focus:border-sage focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold text-[#6B726F] mb-0.5">
+              <label className="block text-[11px] font-semibold text-muted mb-0.5">
                 R · 结果与收益 (Results - 支持多条换行)
               </label>
               <textarea
@@ -257,14 +257,14 @@ export const NewExperienceModal: React.FC<NewExperienceModalProps> = ({ isOpen, 
                 placeholder="取得了怎样的业务成果、指标改善或行业认可？"
                 value={resultsInput}
                 onChange={(e) => setResultsInput(e.target.value)}
-                className="w-full p-2.5 text-xs rounded-lg border border-[#E6E6E1] bg-white text-[#1D201F] resize-none focus:border-[#3E6256] focus:outline-none"
+                className="w-full p-2.5 text-xs rounded-lg border border-edge bg-white text-ink resize-none focus:border-sage focus:outline-none"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-[#1D201F] mb-1">
+              <label className="block text-xs font-semibold text-ink mb-1">
                 核心量化指标 (英文或中文逗号分隔)
               </label>
               <input
@@ -272,12 +272,12 @@ export const NewExperienceModal: React.FC<NewExperienceModalProps> = ({ isOpen, 
                 placeholder="例如：幻觉率 -34.2%, NDCG@5 +18.5%"
                 value={metricsInput}
                 onChange={(e) => setMetricsInput(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-[#E6E6E1] bg-white text-[#1D201F] focus:border-[#3E6256] focus:outline-none"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-edge bg-white text-ink focus:border-sage focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#1D201F] mb-1">
+              <label className="block text-xs font-semibold text-ink mb-1">
                 能力标签 (逗号分隔)
               </label>
               <input
@@ -285,23 +285,23 @@ export const NewExperienceModal: React.FC<NewExperienceModalProps> = ({ isOpen, 
                 placeholder="例如：大模型评测, Prompt工程, 质量基准"
                 value={tagsInput}
                 onChange={(e) => setTagsInput(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-[#E6E6E1] bg-white text-[#1D201F] focus:border-[#3E6256] focus:outline-none"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-edge bg-white text-ink focus:border-sage focus:outline-none"
               />
             </div>
           </div>
 
           {/* Footer actions */}
-          <div className="pt-3 border-t border-[#E6E6E1] flex items-center justify-end gap-2">
+          <div className="pt-3 border-t border-edge flex items-center justify-end gap-2">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs text-[#6B726F] hover:bg-[#F5F5F2] rounded-lg transition cursor-pointer"
+              className="px-4 py-2 text-xs text-muted hover:bg-page rounded-lg transition cursor-pointer"
             >
               取消
             </button>
             <button
               type="submit"
-              className="px-5 py-2 text-xs bg-[#3E6256] hover:bg-[#325046] text-white font-bold rounded-lg shadow-xs transition cursor-pointer"
+              className="px-5 py-2 text-xs bg-sage hover:bg-sage-dim text-white font-bold rounded-lg shadow-xs transition cursor-pointer"
             >
               保存至经历资产库
             </button>

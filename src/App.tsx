@@ -18,11 +18,16 @@ import { InterviewReviewCenterView } from './components/review/InterviewReviewCe
 import { InterviewReviewDetailView } from './components/review/InterviewReviewDetailView';
 import { UserProfileView } from './components/user/UserProfileView';
 
+// Pages
+import { CreateInterview } from './pages/CreateInterview';
+import { CreateReview } from './pages/CreateReview';
+import { NewInterviewPrep } from './pages/NewInterviewPrep';
+import { NewReview } from './pages/NewReview';
+
 // Modals
 import { NewJobModal } from './components/jobs/NewJobModal';
-import { NewInterviewModal } from './components/interview/NewInterviewModal';
 import { MockInterviewModal } from './components/interview/MockInterviewModal';
-import { NewReviewModal } from './components/review/NewReviewModal';
+import { NewInterviewModal } from './components/interview/NewInterviewModal';
 
 const MainLayout: React.FC = () => {
   const {
@@ -35,9 +40,10 @@ const MainLayout: React.FC = () => {
 
   // Modals state
   const [isNewJobModalOpen, setIsNewJobModalOpen] = useState(false);
-  const [isNewInterviewModalOpen, setIsNewInterviewModalOpen] = useState(false);
-  const [isNewReviewModalOpen, setIsNewReviewModalOpen] = useState(false);
   const [mockInterviewId, setMockInterviewId] = useState<string | null>(null);
+  const [isNewInterviewModalOpen, setIsNewInterviewModalOpen] = useState(false);
+  const [newInterviewModalMode, setNewInterviewModalMode] = useState<'standalone' | 'from-job'>('standalone');
+  const [newInterviewModalJobId, setNewInterviewModalJobId] = useState<string | undefined>(undefined);
 
   const handleOpenMockInterview = (interviewId: string) => {
     setMockInterviewId(interviewId);
@@ -47,13 +53,23 @@ const MainLayout: React.FC = () => {
     setMockInterviewId(null);
   };
 
+  const handleOpenNewInterview = (mode: 'standalone' | 'from-job' = 'standalone', jobId?: string) => {
+    setNewInterviewModalMode(mode);
+    setNewInterviewModalJobId(jobId);
+    setIsNewInterviewModalOpen(true);
+  };
+
+  const handleCloseNewInterview = () => {
+    setIsNewInterviewModalOpen(false);
+    setNewInterviewModalJobId(undefined);
+  };
+
   const renderActiveView = () => {
     switch (currentTab) {
       case 'workbench':
         return (
           <WorkbenchView
             onOpenNewJob={() => setIsNewJobModalOpen(true)}
-            onOpenNewInterview={() => setIsNewInterviewModalOpen(true)}
           />
         );
 
@@ -66,8 +82,8 @@ const MainLayout: React.FC = () => {
       case 'job_workspace':
         return (
           <JobWorkspaceView
-            onOpenNewInterview={() => setIsNewInterviewModalOpen(true)}
             onOpenMockInterview={handleOpenMockInterview}
+            onOpenNewInterview={(jobId) => handleOpenNewInterview('from-job', jobId)}
           />
         );
 
@@ -84,8 +100,8 @@ const MainLayout: React.FC = () => {
       case 'interview_prep_center':
         return (
           <InterviewPrepCenterView
-            onOpenNewInterview={() => setIsNewInterviewModalOpen(true)}
             onOpenMockInterview={handleOpenMockInterview}
+            onOpenNewInterview={() => handleOpenNewInterview('standalone')}
           />
         );
 
@@ -94,16 +110,18 @@ const MainLayout: React.FC = () => {
           <InterviewPrepWorkspaceView
             interviewId={selectedInterviewId}
             onOpenMockInterview={handleOpenMockInterview}
-            onOpenNewReview={() => setIsNewReviewModalOpen(true)}
+            onOpenNewInterview={(jobId) => handleOpenNewInterview('from-job', jobId)}
           />
         );
 
+      case 'create_interview':
+        return <NewInterviewPrep mode="standalone" />;
+
       case 'interview_review_center':
-        return (
-          <InterviewReviewCenterView
-            onOpenNewReview={() => setIsNewReviewModalOpen(true)}
-          />
-        );
+        return <InterviewReviewCenterView />;
+
+      case 'create_review':
+        return <NewReview />;
 
       case 'interview_review_detail':
         return (
@@ -119,49 +137,30 @@ const MainLayout: React.FC = () => {
         return (
           <WorkbenchView
             onOpenNewJob={() => setIsNewJobModalOpen(true)}
-            onOpenNewInterview={() => setIsNewInterviewModalOpen(true)}
           />
         );
     }
   };
 
   return (
-    <div className="flex h-screen bg-slate-100 font-sans text-slate-900 antialiased overflow-hidden selection:bg-emerald-200 selection:text-emerald-900">
-      {/* 1. Left Vertical Fixed Navigation (Section 5) */}
+    <div className="flex h-screen bg-page font-sans text-ink antialiased overflow-hidden selection:bg-sage-soft selection:text-sage">
       <Sidebar
         onOpenNewJob={() => setIsNewJobModalOpen(true)}
-        onOpenNewInterview={() => setIsNewInterviewModalOpen(true)}
       />
 
-      {/* 2. Right Main Working Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Top Header */}
         <TopHeader
           onOpenNewJob={() => setIsNewJobModalOpen(true)}
-          onOpenNewInterview={() => setIsNewInterviewModalOpen(true)}
         />
 
-        {/* Dynamic Scrollable Content */}
         <main className="flex-1 overflow-y-auto custom-scrollbar">
           {renderActiveView()}
         </main>
       </div>
 
-      {/* Global Modals */}
       <NewJobModal
         isOpen={isNewJobModalOpen}
         onClose={() => setIsNewJobModalOpen(false)}
-      />
-
-      <NewInterviewModal
-        isOpen={isNewInterviewModalOpen}
-        onClose={() => setIsNewInterviewModalOpen(false)}
-      />
-
-      <NewReviewModal
-        isOpen={isNewReviewModalOpen}
-        onClose={() => setIsNewReviewModalOpen(false)}
-        defaultInterviewId={selectedInterviewId}
       />
 
       <MockInterviewModal
@@ -170,7 +169,13 @@ const MainLayout: React.FC = () => {
         interviewId={mockInterviewId || undefined}
       />
 
-      {/* Toast Notification Container */}
+      <NewInterviewModal
+        isOpen={isNewInterviewModalOpen}
+        onClose={handleCloseNewInterview}
+        mode={newInterviewModalMode}
+        jobId={newInterviewModalJobId}
+      />
+
       <ToastContainer />
     </div>
   );

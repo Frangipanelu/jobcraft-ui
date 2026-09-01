@@ -9,7 +9,9 @@ export type NavigationTab =
   | 'resume_editor'
   | 'interview_prep_center'
   | 'interview_prep_workspace'
+  | 'create_interview'
   | 'interview_review_center'
+  | 'create_review'
   | 'interview_review_detail'
   | 'user_profile'
   | 'settings';
@@ -394,4 +396,23 @@ export interface AISuggestionCard {
   actionText: string;
   targetTab: NavigationTab;
   jobId?: string;
+}
+
+export interface InterviewDraft {
+  step: 1 | 2 | 3 | 4;
+  selectedJobId: string;
+  isCustomJob: boolean;
+  customCompany: string;
+  customRole: string;
+  roundNumber: number;
+  roundName: string;
+  roundType: InterviewRoundType;
+  interviewTime: string;
+  interviewFormat: InterviewFormat;
+  platform: string;
+  interviewer: string;
+  supplementNotes: string;
+  remindUpload: boolean;
+  resumeVersion: 'ai' | 'general';
+  coverLetter: string;
 }

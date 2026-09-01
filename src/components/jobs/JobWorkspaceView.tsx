@@ -18,13 +18,13 @@ import { JDReportDetailView } from '../jd/JDReportDetailView';
 import { ResumeEditorView } from '../resume/ResumeEditorView';
 
 interface JobWorkspaceViewProps {
-  onOpenNewInterview: () => void;
   onOpenMockInterview: (interviewId: string) => void;
+  onOpenNewInterview: (jobId?: string) => void;
 }
 
 export const JobWorkspaceView: React.FC<JobWorkspaceViewProps> = ({
-  onOpenNewInterview,
-  onOpenMockInterview
+  onOpenMockInterview,
+  onOpenNewInterview
 }) => {
   const {
     selectedJobId,
@@ -93,19 +93,19 @@ export const JobWorkspaceView: React.FC<JobWorkspaceViewProps> = ({
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <div className="flex items-center gap-3 flex-wrap">
-                <h1 className="text-2xl font-bold text-[#1D201F] tracking-tight">
+                <h1 className="text-2xl font-bold text-ink tracking-tight">
                   {currentJob.company} · {currentJob.role}
                 </h1>
-                <span className="px-2.5 py-0.5 text-xs font-semibold rounded-md bg-[#E8F1EC] text-[#2D4B41] border border-[#D3E2DB]">
+                <span className="px-2.5 py-0.5 text-xs font-semibold rounded-md bg-sage-soft text-sage border border-sage-soft">
                   综合匹配度 {currentJob.matchScore}%
                 </span>
               </div>
-              <p className="text-xs text-[#6B726F] mt-1 flex items-center gap-2">
+              <p className="text-xs text-muted mt-1 flex items-center gap-2">
                 <span>{currentJob.department}</span>
                 <span>·</span>
-                <span className="font-medium text-[#1D201F]">{currentJob.salaryRange}</span>
+                <span className="font-medium text-ink">{currentJob.salaryRange}</span>
                 <span>·</span>
-                <span className="text-[#6B726F]">当前阶段：{currentJob.currentStage}</span>
+                <span className="text-muted">当前阶段：{currentJob.currentStage}</span>
               </p>
             </div>
 
@@ -113,15 +113,15 @@ export const JobWorkspaceView: React.FC<JobWorkspaceViewProps> = ({
             <div className="flex items-center gap-2.5 shrink-0">
               <button
                 onClick={() => onOpenMockInterview(jobInterviews[0]?.id || 'int-byte-2')}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#E8F1EC] hover:bg-[#D3E2DB] text-[#2D4B41] border border-[#D3E2DB] text-xs font-semibold transition"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-sage-soft hover:bg-edge-deep text-sage border border-sage-soft text-xs font-semibold transition"
               >
-                <Sparkles className="w-3.5 h-3.5 text-[#3E6256]" />
+                <Sparkles className="w-3.5 h-3.5 text-sage" />
                 <span>进入模拟面试</span>
               </button>
 
               <button
-                onClick={onOpenNewInterview}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#3E6256] hover:bg-[#325046] text-white text-xs font-semibold shadow-xs transition"
+                onClick={() => onOpenNewInterview(currentJob?.id)}
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-sage hover:bg-sage-dim text-white text-xs font-semibold shadow-xs transition"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>+ 新建面试</span>
@@ -130,19 +130,19 @@ export const JobWorkspaceView: React.FC<JobWorkspaceViewProps> = ({
           </div>
 
           {/* 2. Top Sub-Tabs Navigation (Section 8.2: JD分析 | 定制简历 | 面试) */}
-          <div className="flex items-center gap-2 pt-2 border-t border-[#E6E6E1]">
+          <div className="flex items-center gap-2 pt-2 border-t border-edge">
             <button
               onClick={() => setActiveTab('jd')}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition ${
                 activeTab === 'jd'
-                  ? 'bg-[#1D201F] text-white shadow-xs'
-                  : 'text-[#6B726F] hover:bg-[#F5F5F2]'
+                  ? 'bg-ink text-white shadow-xs'
+                  : 'text-muted hover:bg-page'
               }`}
             >
               <FileSearch className="w-4 h-4" />
               <span>JD 深度分析</span>
               {currentJD && (
-                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-[#3E6256] text-white">
+                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-sage text-white">
                   {currentJD.matchScore}% 匹配
                 </span>
               )}
@@ -152,13 +152,13 @@ export const JobWorkspaceView: React.FC<JobWorkspaceViewProps> = ({
               onClick={() => setActiveTab('resume')}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition ${
                 activeTab === 'resume'
-                  ? 'bg-[#1D201F] text-white shadow-xs'
-                  : 'text-[#6B726F] hover:bg-[#F5F5F2]'
+                  ? 'bg-ink text-white shadow-xs'
+                  : 'text-muted hover:bg-page'
               }`}
             >
               <FileText className="w-4 h-4" />
               <span>定制简历</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-[#E8F1EC] text-[#2D4B41]">
+              <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-sage-soft text-sage">
                 证据驱动
               </span>
             </button>
@@ -167,8 +167,8 @@ export const JobWorkspaceView: React.FC<JobWorkspaceViewProps> = ({
               onClick={() => setActiveTab('interview')}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition ${
                 activeTab === 'interview'
-                  ? 'bg-[#1D201F] text-white shadow-xs'
-                  : 'text-[#6B726F] hover:bg-[#F5F5F2]'
+                  ? 'bg-ink text-white shadow-xs'
+                  : 'text-muted hover:bg-page'
               }`}
             >
               <BookOpenCheck className="w-4 h-4" />
@@ -214,7 +214,7 @@ export const JobWorkspaceView: React.FC<JobWorkspaceViewProps> = ({
                 </p>
               </div>
               <button
-                onClick={onOpenNewInterview}
+                onClick={() => onOpenNewInterview(currentJob?.id)}
                 className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-700 text-white text-xs font-semibold hover:bg-emerald-800 transition"
               >
                 <Plus className="w-3.5 h-3.5" />
@@ -320,7 +320,7 @@ export const JobWorkspaceView: React.FC<JobWorkspaceViewProps> = ({
                 <div className="p-8 text-center bg-white rounded-xl border border-dashed border-slate-200">
                   <p className="text-sm text-slate-500">本岗位暂未安排面试轮次</p>
                   <button
-                    onClick={onOpenNewInterview}
+                    onClick={() => onOpenNewInterview(currentJob?.id)}
                     className="mt-3 px-4 py-2 bg-emerald-700 text-white text-xs font-semibold rounded-lg"
                   >
                     + 新建第1面准备

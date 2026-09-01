@@ -13,7 +13,8 @@ import {
   AISuggestionCard,
   PreparedAnswer,
   InterviewPreparation,
-  HistoricalResume
+  HistoricalResume,
+  InterviewDraft
 } from '../types/jobcraft';
 import {
   initialUser,
@@ -69,11 +70,16 @@ interface JobCraftContextType {
   aiSuggestions: AISuggestionCard[];
   historicalResumes: HistoricalResume[];
   toasts: ToastMessage[];
+  interviewDraft: InterviewDraft | null;
 
   // Actions
   showToast: (toast: Omit<ToastMessage, 'id'>) => void;
   dismissToast: (id: string) => void;
   updateUserProfile: (updates: Partial<UserProfile>) => void;
+  
+  // Interview Draft actions
+  saveInterviewDraft: (draft: InterviewDraft) => void;
+  clearInterviewDraft: () => void;
   
   // Historical Resumes actions
   addHistoricalResume: (resume: Omit<HistoricalResume, 'id' | 'uploadDate'>) => void;
@@ -166,6 +172,7 @@ export const JobCraftProvider: React.FC<{ children: ReactNode }> = ({ children }
   const [aiSuggestions, setAiSuggestions] = useState<AISuggestionCard[]>(initialAISuggestions);
   const [historicalResumes, setHistoricalResumes] = useState<HistoricalResume[]>(initialHistoricalResumes);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
+  const [interviewDraft, setInterviewDraft] = useState<InterviewDraft | null>(null);
 
   const showToast = (toast: Omit<ToastMessage, 'id'>) => {
     const id = Date.now().toString() + Math.random().toString(36).substring(2, 5);
@@ -177,6 +184,14 @@ export const JobCraftProvider: React.FC<{ children: ReactNode }> = ({ children }
 
   const dismissToast = (id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
+
+  const saveInterviewDraft = (draft: InterviewDraft) => {
+    setInterviewDraft(draft);
+  };
+
+  const clearInterviewDraft = () => {
+    setInterviewDraft(null);
   };
 
   const updateUserProfile = (updates: Partial<UserProfile>) => {
@@ -1424,6 +1439,9 @@ export const JobCraftProvider: React.FC<{ children: ReactNode }> = ({ children }
         deleteHistoricalResume,
         setDefaultHistoricalResume,
         toasts,
+        interviewDraft,
+        saveInterviewDraft,
+        clearInterviewDraft,
         showToast,
         dismissToast,
         createJob,

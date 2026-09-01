@@ -32,10 +32,10 @@ export const InterviewReviewDetailView: React.FC<InterviewReviewDetailViewProps>
   if (!currentInterview || !review) {
     return (
       <div className="max-w-4xl mx-auto p-12 text-center space-y-4">
-        <div className="text-base text-[#6B726F]">暂无本场面试的复盘报告</div>
+        <div className="text-base text-muted">暂无本场面试的复盘报告</div>
         <button
           onClick={() => navigateTo('interview_review_center')}
-          className="px-4 py-2 rounded-lg bg-[#3E6256] text-white text-xs font-semibold cursor-pointer"
+          className="px-4 py-2 rounded-lg bg-sage text-white text-xs font-semibold cursor-pointer"
         >
           返回复盘中心
         </button>
@@ -57,9 +57,9 @@ export const InterviewReviewDetailView: React.FC<InterviewReviewDetailViewProps>
 
   // Helper for score badge color
   const getScoreBadgeClass = (score: number) => {
-    if (score >= 80) return 'text-[#2D4B41] bg-[#E8F1EC] border-[#D3E2DB]';
-    if (score >= 70) return 'text-[#4B5563] bg-[#F3F4F6] border-[#E5E7EB]';
-    return 'text-[#991B1B] bg-[#FEE2E2] border-[#FECACA]';
+    if (score >= 80) return 'text-sage bg-sage-soft border-sage-soft';
+    if (score >= 70) return 'text-ink bg-page border-edge';
+    return 'text-hazard bg-hazard-soft border-hazard-soft';
   };
 
   // Metric cards fallback computation
@@ -110,41 +110,41 @@ export const InterviewReviewDetailView: React.FC<InterviewReviewDetailViewProps>
   );
 
   return (
-    <div className="min-h-full bg-[#F5F5F3] p-4 md:p-6 lg:p-7 space-y-4 max-w-[1440px] mx-auto animate-in fade-in duration-300 text-[#1D201F]">
+    <div className="min-h-full bg-page p-4 md:p-6 lg:p-7 space-y-4 max-w-[1440px] mx-auto animate-in fade-in duration-300 text-ink">
       {/* 1. Header Section */}
-      <div className="bg-white rounded-2xl border border-[#E6E6E1] p-5 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+      <div className="bg-white rounded-2xl border border-edge p-5 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         {/* Left Info */}
         <div className="space-y-2">
           <button
             onClick={() => navigateTo('interview_review_center')}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#6B726F] hover:text-[#1D201F] transition cursor-pointer group"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted hover:text-ink transition cursor-pointer group"
           >
             <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
             <span>面试复盘</span>
           </button>
 
           <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[#1D201F]">
+            <h1 className="text-xl md:text-2xl font-bold tracking-tight text-ink">
               {review.company} · {review.role}
             </h1>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#EFEFED] text-[#6B726F]">
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-edge text-muted">
               {review.roundName}
             </span>
           </div>
 
-          <div className="text-xs text-[#8A908C]">
+          <div className="text-xs text-faint">
             {review.reviewDate} · {review.duration || '共 54 分钟'} · 识别 {qaList.length || 12} 组 QA
           </div>
         </div>
 
         {/* Right Top Score Banner */}
-        <div className="flex items-center gap-6 bg-[#FAFAF8] rounded-xl border border-[#ECECE8] px-5 py-3 shrink-0">
+        <div className="flex items-center gap-6 bg-canvas rounded-xl border border-edge px-5 py-3 shrink-0">
           {/* Big Number */}
-          <div className="text-center pr-6 border-r border-[#E6E6E1]">
-            <div className="text-4xl font-extrabold text-[#1D201F] tracking-tight leading-none">
+          <div className="text-center pr-6 border-r border-edge">
+            <div className="text-4xl font-extrabold text-ink tracking-tight leading-none">
               {review.overallScore}
             </div>
-            <div className="text-[11px] text-[#8A908C] font-medium mt-1">综合评分</div>
+            <div className="text-[11px] text-faint font-medium mt-1">综合评分</div>
           </div>
 
           {/* 4 Dimension Progress Bars */}
@@ -156,14 +156,14 @@ export const InterviewReviewDetailView: React.FC<InterviewReviewDetailViewProps>
               { name: '表达清晰', score: 74 }
             ]).map((comp, idx) => (
               <div key={idx} className="flex items-center gap-2">
-                <span className="text-[11px] text-[#6B726F] font-medium w-14 shrink-0">{comp.name}</span>
-                <div className="flex-1 h-1.5 bg-[#E6E6E1] rounded-full overflow-hidden w-16">
+                <span className="text-[11px] text-muted font-medium w-14 shrink-0">{comp.name}</span>
+                <div className="flex-1 h-1.5 bg-edge rounded-full overflow-hidden w-16">
                   <div
-                    className="h-full bg-[#2D3748] rounded-full transition-all duration-500"
+                    className="h-full bg-ink rounded-full transition-all duration-500"
                     style={{ width: `${comp.score}%` }}
                   />
                 </div>
-                <span className="text-[11px] font-bold text-[#1D201F] w-5 text-right">{comp.score}</span>
+                <span className="text-[11px] font-bold text-ink w-5 text-right">{comp.score}</span>
               </div>
             ))}
           </div>
@@ -171,13 +171,13 @@ export const InterviewReviewDetailView: React.FC<InterviewReviewDetailViewProps>
       </div>
 
       {/* 2. Core Problems Alert Banner (本场核心问题) */}
-      <div className="bg-[#FAF5EF] border border-[#F2E7DC] rounded-xl px-4 py-3 flex flex-col md:flex-row md:items-center gap-3 text-xs shadow-2xs">
+      <div className="bg-terra-soft border border-terra-soft rounded-xl px-4 py-3 flex flex-col md:flex-row md:items-center gap-3 text-xs shadow-2xs">
         <div className="flex items-center gap-1.5 shrink-0">
-          <span className="font-bold text-[#8F5128] bg-[#F4E6D8] px-2.5 py-0.5 rounded-md text-[11px]">
+          <span className="font-bold text-terra bg-terra-soft px-2.5 py-0.5 rounded-md text-[11px]">
             本场核心问题
           </span>
         </div>
-        <div className="text-[#6B726F] leading-relaxed flex-1 flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-4">
+        <div className="text-muted leading-relaxed flex-1 flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-4">
           {(review.coreProblems || [
             '① 产品决策依据表达不足，面试官追问时缺少方案选择背景',
             '② 技术理解回答不够深入，停留在现象描述而非原理层',
@@ -193,10 +193,10 @@ export const InterviewReviewDetailView: React.FC<InterviewReviewDetailViewProps>
       {/* 3. Three-Column Workspace Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
         {/* Left Column: QA Question List (3 Cols) */}
-        <div className="lg:col-span-3 bg-white rounded-2xl border border-[#E6E6E1] p-3 shadow-xs space-y-2">
-          <div className="px-2 py-1 flex items-center justify-between text-xs font-bold text-[#6B726F] border-b border-[#F0F0EB] pb-2">
+        <div className="lg:col-span-3 bg-white rounded-2xl border border-edge p-3 shadow-xs space-y-2">
+          <div className="px-2 py-1 flex items-center justify-between text-xs font-bold text-muted border-b border-edge pb-2">
             <span>QA 题目清单 ({qaList.length})</span>
-            <span className="text-[10px] font-normal text-[#8A908C]">点击切换查看详情</span>
+            <span className="text-[10px] font-normal text-faint">点击切换查看详情</span>
           </div>
 
           <div className="space-y-1.5 max-h-[700px] overflow-y-auto custom-scrollbar pr-1">
@@ -210,29 +210,29 @@ export const InterviewReviewDetailView: React.FC<InterviewReviewDetailViewProps>
                   onClick={() => setSelectedQAIndex(index)}
                   className={`w-full text-left p-3 rounded-xl transition-all cursor-pointer border ${
                     isSelected
-                      ? 'bg-[#F9FAF9] border-[#3E6256] shadow-xs'
-                      : 'bg-white hover:bg-[#FAFAF8] border-[#EBEBE6]'
+                      ? 'bg-canvas border-sage shadow-xs'
+                      : 'bg-white hover:bg-canvas border-edge'
                   }`}
                 >
                   <div className="flex items-start gap-2">
                     <span
                       className={`text-xs font-bold shrink-0 mt-0.5 ${
-                        isSelected ? 'text-[#3E6256]' : 'text-[#8A908C]'
+                        isSelected ? 'text-sage' : 'text-faint'
                       }`}
                     >
                       Q{qa.qIndex || index + 1}
                     </span>
                     <p
                       className={`text-xs font-medium leading-snug line-clamp-2 ${
-                        isSelected ? 'text-[#1D201F] font-semibold' : 'text-[#4B5563]'
+                        isSelected ? 'text-ink font-semibold' : 'text-ink'
                       }`}
                     >
                       {qa.question}
                     </p>
                   </div>
 
-                  <div className="flex items-center justify-between mt-2.5 pt-1.5 border-t border-[#F0F0EB]/60 text-[11px]">
-                    <span className="text-[#8A908C] font-mono">{qa.duration || '3:15'}</span>
+                  <div className="flex items-center justify-between mt-2.5 pt-1.5 border-t border-edge/60 text-[11px]">
+                    <span className="text-faint font-mono">{qa.duration || '3:15'}</span>
                     <span
                       className={`px-2 py-0.2 rounded-md font-bold text-[10px] border ${getScoreBadgeClass(
                         qScore
@@ -249,92 +249,92 @@ export const InterviewReviewDetailView: React.FC<InterviewReviewDetailViewProps>
 
         {/* Middle Column: Main Question & Answer Detail (6 Cols) */}
         <div className="lg:col-span-6 space-y-4">
-          <div className="bg-white rounded-2xl border border-[#E6E6E1] p-5 shadow-xs space-y-5">
+          <div className="bg-white rounded-2xl border border-edge p-5 shadow-xs space-y-5">
             {/* Header: Question & Time */}
-            <div className="flex items-start justify-between gap-4 border-b border-[#F0F0EB] pb-3.5">
+            <div className="flex items-start justify-between gap-4 border-b border-edge pb-3.5">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded-md bg-[#3E6256] text-white font-bold text-xs">
+                  <span className="px-2 py-0.5 rounded-md bg-sage text-white font-bold text-xs">
                     Q{selectedQA?.qIndex || selectedQAIndex + 1}
                   </span>
-                  <h2 className="text-base md:text-lg font-bold text-[#1D201F] leading-snug">
+                  <h2 className="text-base md:text-lg font-bold text-ink leading-snug">
                     {selectedQA?.question}
                   </h2>
                 </div>
               </div>
-              <span className="text-xs font-mono text-[#8A908C] shrink-0 mt-1 bg-[#F5F5F3] px-2 py-1 rounded-md">
+              <span className="text-xs font-mono text-faint shrink-0 mt-1 bg-page px-2 py-1 rounded-md">
                 时长 {selectedQA?.duration || '4:32'}
               </span>
             </div>
 
             {/* Transcript / Answer Record (回答记录) */}
             <div className="space-y-2">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-[#6B726F]">
-                <Quote className="w-3.5 h-3.5 text-[#3E6256]" />
+              <div className="flex items-center gap-1.5 text-xs font-bold text-muted">
+                <Quote className="w-3.5 h-3.5 text-sage" />
                 <span>回答记录</span>
               </div>
-              <div className="p-4 rounded-xl bg-[#FAFAF8] border border-[#EEEEEC] text-xs text-[#374151] leading-relaxed whitespace-pre-line font-normal">
+              <div className="p-4 rounded-xl bg-canvas border border-edge text-xs text-ink leading-relaxed whitespace-pre-line font-normal">
                 {selectedQA?.transcript || selectedQA?.candidateAnswer}
               </div>
             </div>
 
             {/* 4 Dimension Cards (2x2 Grid) */}
             <div className="space-y-2">
-              <div className="text-xs font-bold text-[#6B726F]">回答质量维度诊断</div>
+              <div className="text-xs font-bold text-muted">回答质量维度诊断</div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {/* 1. 结构清晰度 */}
-                <div className="p-3.5 rounded-xl bg-[#FAFAF8] border border-[#EEEEEC] space-y-1">
+                <div className="p-3.5 rounded-xl bg-canvas border border-edge space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-[#6B726F]">结构清晰度</span>
-                    <span className="text-lg font-extrabold text-[#1D201F]">
+                    <span className="text-xs font-semibold text-muted">结构清晰度</span>
+                    <span className="text-lg font-extrabold text-ink">
                       {metricCards.clarityScore}
                     </span>
                   </div>
-                  <p className="text-[11px] text-[#4B5563] leading-relaxed">{metricCards.clarityDesc}</p>
+                  <p className="text-[11px] text-ink leading-relaxed">{metricCards.clarityDesc}</p>
                 </div>
 
                 {/* 2. 量化 Impact */}
-                <div className="p-3.5 rounded-xl bg-[#FAFAF8] border border-[#EEEEEC] space-y-1">
+                <div className="p-3.5 rounded-xl bg-canvas border border-edge space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-[#6B726F]">量化 Impact</span>
-                    <span className="text-lg font-extrabold text-[#1D201F]">
+                    <span className="text-xs font-semibold text-muted">量化 Impact</span>
+                    <span className="text-lg font-extrabold text-ink">
                       {metricCards.impactScore}
                     </span>
                   </div>
-                  <p className="text-[11px] text-[#4B5563] leading-relaxed">{metricCards.impactDesc}</p>
+                  <p className="text-[11px] text-ink leading-relaxed">{metricCards.impactDesc}</p>
                 </div>
 
                 {/* 3. 关键决策 */}
-                <div className="p-3.5 rounded-xl bg-[#FAFAF8] border border-[#EEEEEC] space-y-1">
+                <div className="p-3.5 rounded-xl bg-canvas border border-edge space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-[#6B726F]">关键决策</span>
-                    <span className="text-lg font-extrabold text-[#1D201F]">
+                    <span className="text-xs font-semibold text-muted">关键决策</span>
+                    <span className="text-lg font-extrabold text-ink">
                       {metricCards.decisionScore}
                     </span>
                   </div>
-                  <p className="text-[11px] text-[#4B5563] leading-relaxed">{metricCards.decisionDesc}</p>
+                  <p className="text-[11px] text-ink leading-relaxed">{metricCards.decisionDesc}</p>
                 </div>
 
                 {/* 4. 语言流畅度 */}
-                <div className="p-3.5 rounded-xl bg-[#FAFAF8] border border-[#EEEEEC] space-y-1">
+                <div className="p-3.5 rounded-xl bg-canvas border border-edge space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-[#6B726F]">语言流畅度</span>
-                    <span className="text-lg font-extrabold text-[#1D201F]">
+                    <span className="text-xs font-semibold text-muted">语言流畅度</span>
+                    <span className="text-lg font-extrabold text-ink">
                       {metricCards.fluencyScore}
                     </span>
                   </div>
-                  <p className="text-[11px] text-[#4B5563] leading-relaxed">{metricCards.fluencyDesc}</p>
+                  <p className="text-[11px] text-ink leading-relaxed">{metricCards.fluencyDesc}</p>
                 </div>
               </div>
             </div>
 
             {/* AI Advice & Next Step */}
-            <div className="p-4 rounded-xl bg-[#E8F1EC]/30 border border-[#D3E2DB] space-y-2">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-[#2D4B41]">
-                <Lightbulb className="w-4 h-4 text-[#3E6256]" />
+            <div className="p-4 rounded-xl bg-sage-soft/30 border border-sage-soft space-y-2">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-sage">
+                <Lightbulb className="w-4 h-4 text-sage" />
                 <span>下一轮优化建议与话术示范</span>
               </div>
-              <p className="text-xs text-[#2D4B41] leading-relaxed">
+              <p className="text-xs text-sage leading-relaxed">
                 {selectedQA?.suggestionAdvice ||
                   '建议在 1 分钟内补充双模型交叉判别机制，说明如何用 5% 金标抽检确保评测一致性达到 94.1%。'}
               </p>
@@ -343,27 +343,27 @@ export const InterviewReviewDetailView: React.FC<InterviewReviewDetailViewProps>
 
           {/* Experience Sync / Feedback Box if available */}
           {relatedFeedback && (
-            <div className="bg-white rounded-2xl border border-[#E6E6E1] p-4 shadow-xs flex items-center justify-between gap-4">
+            <div className="bg-white rounded-2xl border border-edge p-4 shadow-xs flex items-center justify-between gap-4">
               <div className="space-y-0.5">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-[#1D201F]">
-                  <Database className="w-3.5 h-3.5 text-[#3E6256]" />
+                <div className="flex items-center gap-1.5 text-xs font-bold text-ink">
+                  <Database className="w-3.5 h-3.5 text-sage" />
                   <span>已关联经历资产：{relatedFeedback.experienceTitle}</span>
                 </div>
-                <div className="text-[11px] text-[#6B726F]">
+                <div className="text-[11px] text-muted">
                   建议版本升级：{relatedFeedback.currentVersion} →{' '}
-                  <strong className="text-[#3E6256]">{relatedFeedback.proposedVersion}</strong>（沉淀本题反思与量化数据）
+                  <strong className="text-sage">{relatedFeedback.proposedVersion}</strong>（沉淀本题反思与量化数据）
                 </div>
               </div>
 
               {relatedFeedback.applied ? (
-                <span className="flex items-center gap-1 text-[#3E6256] font-bold text-xs bg-[#E8F1EC] px-3 py-1.5 rounded-lg border border-[#D3E2DB] shrink-0">
+                <span className="flex items-center gap-1 text-sage font-bold text-xs bg-sage-soft px-3 py-1.5 rounded-lg border border-sage-soft shrink-0">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   <span>已同步</span>
                 </span>
               ) : (
                 <button
                   onClick={() => feedbackIndex !== undefined && feedbackIndex >= 0 && handleApplyFeedback(feedbackIndex)}
-                  className="flex items-center gap-1 px-3.5 py-1.5 bg-[#3E6256] hover:bg-[#325046] text-white text-xs font-bold rounded-lg transition shadow-xs cursor-pointer shrink-0"
+                  className="flex items-center gap-1 px-3.5 py-1.5 bg-sage hover:bg-sage-dim text-white text-xs font-bold rounded-lg transition shadow-xs cursor-pointer shrink-0"
                 >
                   <span>沉淀至经历库</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -376,53 +376,53 @@ export const InterviewReviewDetailView: React.FC<InterviewReviewDetailViewProps>
         {/* Right Column: Analysis Panel (3 Cols) */}
         <div className="lg:col-span-3 space-y-4">
           {/* Card 1: 面试官意图 (Interviewer Intent) */}
-          <div className="bg-white rounded-2xl border border-[#E6E6E1] p-4 shadow-xs space-y-3.5">
-            <div className="flex items-center justify-between border-b border-[#F0F0EB] pb-2.5">
-              <h3 className="text-xs font-bold text-[#1D201F]">面试官意图</h3>
-              <span className="text-[10px] text-[#8A908C]">深层考量分析</span>
+          <div className="bg-white rounded-2xl border border-edge p-4 shadow-xs space-y-3.5">
+            <div className="flex items-center justify-between border-b border-edge pb-2.5">
+              <h3 className="text-xs font-bold text-ink">面试官意图</h3>
+              <span className="text-[10px] text-faint">深层考量分析</span>
             </div>
 
             <div className="space-y-3">
               {intentItems.map((item, idx) => (
                 <div key={idx} className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-[#1D201F]">{item.title}</span>
+                    <span className="text-xs font-semibold text-ink">{item.title}</span>
                     <div className="flex items-center gap-0.5">
                       {[1, 2, 3, 4, 5].map((starVal) => (
                         <Star
                           key={starVal}
                           className={`w-3 h-3 ${
                             starVal <= item.stars
-                              ? 'fill-[#D97706] text-[#D97706]'
-                              : 'fill-transparent text-[#D1D5DB]'
+                              ? 'fill-terra text-terra'
+                              : 'fill-transparent text-edge-deep'
                           }`}
                         />
                       ))}
                     </div>
                   </div>
-                  <p className="text-[11px] text-[#6B726F] leading-snug">{item.desc}</p>
+                  <p className="text-[11px] text-muted leading-snug">{item.desc}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Card 2: 回答分析 (Answer Analysis) */}
-          <div className="bg-white rounded-2xl border border-[#E6E6E1] p-4 shadow-xs space-y-3.5">
-            <div className="flex items-center justify-between border-b border-[#F0F0EB] pb-2.5">
-              <h3 className="text-xs font-bold text-[#1D201F]">回答分析</h3>
-              <span className="text-[10px] text-[#8A908C]">四维量化得分</span>
+          <div className="bg-white rounded-2xl border border-edge p-4 shadow-xs space-y-3.5">
+            <div className="flex items-center justify-between border-b border-edge pb-2.5">
+              <h3 className="text-xs font-bold text-ink">回答分析</h3>
+              <span className="text-[10px] text-faint">四维量化得分</span>
             </div>
 
             <div className="space-y-2.5">
               {analysisBars.map((bar, idx) => (
                 <div key={idx} className="space-y-1">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-[#6B726F] font-medium">{bar.label}</span>
-                    <span className="font-bold text-[#1D201F]">{bar.score}</span>
+                    <span className="text-muted font-medium">{bar.label}</span>
+                    <span className="font-bold text-ink">{bar.score}</span>
                   </div>
-                  <div className="h-1.5 bg-[#EAEAE6] rounded-full overflow-hidden">
+                  <div className="h-1.5 bg-edge rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-[#374151] rounded-full transition-all duration-500"
+                      className="h-full bg-ink rounded-full transition-all duration-500"
                       style={{ width: `${bar.score}%` }}
                     />
                   </div>
@@ -432,12 +432,12 @@ export const InterviewReviewDetailView: React.FC<InterviewReviewDetailViewProps>
           </div>
 
           {/* Card 3: 诊断与行动总结 (Action summary) */}
-          <div className="bg-[#FAF5EF] rounded-2xl border border-[#F2E7DC] p-4 shadow-2xs space-y-2 text-xs">
-            <div className="flex items-center gap-1.5 font-bold text-[#8F5128]">
-              <AlertTriangle className="w-3.5 h-3.5 text-[#8F5128]" />
+          <div className="bg-terra-soft rounded-2xl border border-terra-soft p-4 shadow-2xs space-y-2 text-xs">
+            <div className="flex items-center gap-1.5 font-bold text-terra">
+              <AlertTriangle className="w-3.5 h-3.5 text-terra" />
               <span>本题失分防范</span>
             </div>
-            <ul className="space-y-1 text-[#6B726F] text-[11px] list-disc list-inside">
+            <ul className="space-y-1 text-muted text-[11px] list-disc list-inside">
               {(selectedQA?.identifiedIssues || ['方案选型对比展开略浅', '可进一步补充如何解决大模型自身评测偏差']).map(
                 (issue, iIdx) => (
                   <li key={iIdx}>{issue}</li>

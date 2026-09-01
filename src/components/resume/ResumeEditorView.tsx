@@ -54,7 +54,7 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
   const [selectedBulletForSource, setSelectedBulletForSource] = useState<string | null>('bullet-exp1-1');
 
   if (!resume) {
-    return <div className="p-8 text-center text-[#6B726F]">未找到简历数据</div>;
+    return <div className="p-8 text-center text-muted">未找到简历数据</div>;
   }
 
   const handleStartEditBullet = (bulletId: string, currentText: string) => {
@@ -93,21 +93,21 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
     <div className="p-6 md:p-8 max-w-[1600px] mx-auto space-y-5 animate-in fade-in duration-300">
       {/* 1. Header Control Bar (Shown only when not embedded, or as a compact toolbar when embedded) */}
       {!embedded ? (
-        <div className="bg-white rounded-xl border border-[#E6E6E1] px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs">
+        <div className="bg-white rounded-xl border border-edge px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs">
           <div>
             <div className="flex items-center gap-2.5">
-              <h1 className="text-lg font-bold text-[#1D201F]">{resume.versionName}</h1>
-              <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-[#E8F1EC] text-[#2D4B41] border border-[#D3E2DB]">
+              <h1 className="text-lg font-bold text-ink">{resume.versionName}</h1>
+              <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-sage-soft text-sage border border-sage-soft">
                 针对 {resume.company} · {resume.jobTitle} 定制
               </span>
             </div>
-            <p className="text-xs text-[#8A908C] mt-0.5">上次保存：{resume.updatedAt} · 一页纸精炼排版</p>
+            <p className="text-xs text-faint mt-0.5">上次保存：{resume.updatedAt} · 一页纸精炼排版</p>
           </div>
 
           <div className="flex items-center gap-2.5 shrink-0">
             <button
               onClick={() => showToast({ type: 'success', title: '简历草稿已保存' })}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-[#E6E6E1] bg-white hover:bg-[#F5F5F2] text-[#1D201F] text-xs font-semibold transition cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-edge bg-white hover:bg-page text-ink text-xs font-semibold transition cursor-pointer"
             >
               <Save className="w-3.5 h-3.5" />
               <span>保存草稿</span>
@@ -115,7 +115,7 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
 
             <button
               onClick={handleExportPDF}
-              className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-[#3E6256] hover:bg-[#325046] text-white text-xs font-semibold shadow-xs transition cursor-pointer"
+              className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-sage hover:bg-sage-dim text-white text-xs font-semibold shadow-xs transition cursor-pointer"
             >
               <Download className="w-3.5 h-3.5" />
               <span>导出 PDF</span>
@@ -123,20 +123,20 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-[#E6E6E1] px-5 py-2.5 flex items-center justify-between gap-4 shadow-2xs">
+        <div className="bg-white rounded-xl border border-edge px-5 py-2.5 flex items-center justify-between gap-4 shadow-2xs">
           <div className="flex items-center gap-3">
-            <span className="text-xs font-bold text-[#1D201F]">{resume.versionName}</span>
-            <span className="text-xs text-[#6B726F]">·</span>
-            <span className="text-xs text-[#3E6256] font-medium bg-[#E8F1EC] px-2 py-0.5 rounded">
+            <span className="text-xs font-bold text-ink">{resume.versionName}</span>
+            <span className="text-xs text-muted">·</span>
+            <span className="text-xs text-sage font-medium bg-sage-soft px-2 py-0.5 rounded">
               100% 单页自适应布局
             </span>
-            <span className="text-xs text-[#8A908C]">上次同步：刚刚</span>
+            <span className="text-xs text-faint">上次同步：刚刚</span>
           </div>
 
           <div className="flex items-center gap-2.5">
             <button
               onClick={() => showToast({ type: 'success', title: '简历草稿已保存' })}
-              className="flex items-center gap-1 px-3 py-1 rounded-md border border-[#E6E6E1] bg-white hover:bg-[#F5F5F2] text-[#1D201F] text-xs font-semibold transition cursor-pointer"
+              className="flex items-center gap-1 px-3 py-1 rounded-md border border-edge bg-white hover:bg-page text-ink text-xs font-semibold transition cursor-pointer"
             >
               <Save className="w-3.5 h-3.5" />
               <span>保存草稿</span>
@@ -144,7 +144,7 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
 
             <button
               onClick={handleExportPDF}
-              className="flex items-center gap-1.5 px-3.5 py-1 rounded-md bg-[#3E6256] hover:bg-[#325046] text-white text-xs font-semibold shadow-xs transition cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-1 rounded-md bg-sage hover:bg-sage-dim text-white text-xs font-semibold shadow-xs transition cursor-pointer"
             >
               <Download className="w-3.5 h-3.5" />
               <span>导出 PDF</span>
@@ -157,18 +157,18 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column (3.5 cols): AI Optimization Suggestions */}
         <div className="lg:col-span-3 space-y-4">
-          <div className="bg-white rounded-xl border border-[#E6E6E1] p-4 shadow-2xs space-y-3">
-            <div className="flex items-center justify-between border-b border-[#F5F5F2] pb-3">
+          <div className="bg-white rounded-xl border border-edge p-4 shadow-2xs space-y-3">
+            <div className="flex items-center justify-between border-b border-page pb-3">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#3E6256]" />
-                <h3 className="text-sm font-bold text-[#1D201F]">
+                <Sparkles className="w-4 h-4 text-sage" />
+                <h3 className="text-sm font-bold text-ink">
                   AI 针对性优化 ({pendingSuggestions.length})
                 </h3>
               </div>
               {pendingSuggestions.length > 0 && (
                 <button
                   onClick={applyAllResumeAISuggestions}
-                  className="text-xs font-semibold text-[#3E6256] hover:text-[#325046] transition cursor-pointer"
+                  className="text-xs font-semibold text-sage hover:text-sage-dim transition cursor-pointer"
                 >
                   全部应用
                 </button>
@@ -181,48 +181,48 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
                   key={sug.id}
                   className={`p-3 rounded-xl border text-xs space-y-2 transition ${
                     sug.applied
-                      ? 'bg-[#E8F1EC]/60 border-[#D3E2DB] text-[#2D4B41]'
+                      ? 'bg-sage-soft/60 border-sage-soft text-sage'
                       : sug.rejected
-                      ? 'bg-[#F5F5F2] border-[#E6E6E1] text-[#8A908C] opacity-60'
-                      : 'bg-white border-[#E6E6E1] hover:border-[#3E6256]/50'
+                      ? 'bg-page border-edge text-faint opacity-60'
+                      : 'bg-white border-edge hover:border-sage/50'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <span className="font-bold text-[#1D201F] text-xs">
+                    <span className="font-bold text-ink text-xs">
                       {idx + 1}. {sug.title}
                     </span>
                     {sug.applied ? (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#E8F1EC] text-[#2D4B41] font-semibold flex items-center gap-1 border border-[#D3E2DB]">
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-sage-soft text-sage font-semibold flex items-center gap-1 border border-sage-soft">
                         <Check className="w-3 h-3" /> 已应用
                       </span>
                     ) : sug.rejected ? (
-                      <span className="text-[10px] text-[#8A908C]">已忽略</span>
+                      <span className="text-[10px] text-faint">已忽略</span>
                     ) : null}
                   </div>
 
                   <div className="space-y-1">
-                    <div className="text-[11px] text-[#8A908C]">
-                      <span className="text-[#6B726F] font-medium">原表达：</span>
+                    <div className="text-[11px] text-faint">
+                      <span className="text-muted font-medium">原表达：</span>
                       <span className="line-through">{sug.originalText}</span>
                     </div>
-                    <div className="text-xs text-[#2D4B41] font-medium bg-[#E8F1EC] p-2 rounded-lg border border-[#D3E2DB] leading-relaxed">
-                      <strong className="text-[#1D201F]">建议改写：</strong> {sug.suggestedText}
+                    <div className="text-xs text-sage font-medium bg-sage-soft p-2 rounded-lg border border-sage-soft leading-relaxed">
+                      <strong className="text-ink">建议改写：</strong> {sug.suggestedText}
                     </div>
                   </div>
 
-                  <p className="text-[11px] text-[#6B726F]">{sug.reason}</p>
+                  <p className="text-[11px] text-muted">{sug.reason}</p>
 
                   {!sug.applied && !sug.rejected && (
                     <div className="flex items-center gap-2 pt-1">
                       <button
                         onClick={() => applyResumeAISuggestion(sug.id)}
-                        className="flex-1 py-1 rounded bg-[#3E6256] hover:bg-[#325046] text-white text-xs font-semibold transition text-center shadow-2xs cursor-pointer"
+                        className="flex-1 py-1 rounded bg-sage hover:bg-sage-dim text-white text-xs font-semibold transition text-center shadow-2xs cursor-pointer"
                       >
                         应用优化
                       </button>
                       <button
                         onClick={() => rejectResumeAISuggestion(sug.id)}
-                        className="px-2.5 py-1 rounded bg-[#F5F5F2] hover:bg-[#E6E6E1] text-[#6B726F] text-xs transition cursor-pointer"
+                        className="px-2.5 py-1 rounded bg-page hover:bg-edge text-muted text-xs transition cursor-pointer"
                       >
                         忽略
                       </button>
@@ -235,23 +235,23 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
         </div>
 
         {/* Center Column (5.5 cols): Editable High-Fidelity A4 Resume Document */}
-        <div className="lg:col-span-6 bg-white rounded-xl border border-[#E6E6E1] shadow-sm p-8 space-y-6 min-h-[900px]">
+        <div className="lg:col-span-6 bg-white rounded-xl border border-edge shadow-sm p-8 space-y-6 min-h-[900px]">
           {/* Resume Header */}
-          <div className="text-center space-y-1.5 border-b border-[#E6E6E1] pb-5">
-            <h2 className="text-2xl font-bold text-[#1D201F] tracking-tight">
+          <div className="text-center space-y-1.5 border-b border-edge pb-5">
+            <h2 className="text-2xl font-bold text-ink tracking-tight">
               {resume.personalInfo.name}
             </h2>
-            <p className="text-xs text-[#6B726F] font-medium">
+            <p className="text-xs text-muted font-medium">
               {resume.personalInfo.title} · {resume.personalInfo.location} · {resume.personalInfo.phone} · {resume.personalInfo.email}
             </p>
           </div>
 
           {/* Personal Summary */}
           <div className="space-y-1.5">
-            <h3 className="text-xs font-bold text-[#1D201F] uppercase tracking-wider border-b border-[#F5F5F2] pb-1">
+            <h3 className="text-xs font-bold text-ink uppercase tracking-wider border-b border-page pb-1">
               个人优势与求职画像
             </h3>
-            <p className="text-xs text-[#2C302E] leading-relaxed text-justify">
+            <p className="text-xs text-ink leading-relaxed text-justify">
               {resume.summary}
             </p>
           </div>
@@ -259,7 +259,7 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
           {/* Sections */}
           {resume.sections.map((section) => (
             <div key={section.id} className="space-y-3">
-              <h3 className="text-xs font-bold text-[#1D201F] uppercase tracking-wider border-b border-[#F5F5F2] pb-1">
+              <h3 className="text-xs font-bold text-ink uppercase tracking-wider border-b border-page pb-1">
                 {section.title}
               </h3>
 
@@ -267,13 +267,13 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
                 {section.items.map((item) => (
                   <div key={item.id} className="space-y-1.5">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-[#1D201F]">{item.title}</span>
+                      <span className="font-bold text-ink">{item.title}</span>
                       {item.period && (
-                        <span className="text-[#8A908C] font-mono text-[11px]">{item.period}</span>
+                        <span className="text-faint font-mono text-[11px]">{item.period}</span>
                       )}
                     </div>
                     {item.subtitle && (
-                      <div className="text-xs font-medium text-[#6B726F] italic">
+                      <div className="text-xs font-medium text-muted italic">
                         {item.subtitle}
                       </div>
                     )}
@@ -288,10 +288,10 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
                           <li
                             key={bullet.id}
                             onClick={() => setSelectedBulletForSource(bullet.id)}
-                            className={`text-xs text-[#2C302E] rounded-lg p-2 transition group relative cursor-pointer border ${
+                            className={`text-xs text-ink rounded-lg p-2 transition group relative cursor-pointer border ${
                               isSelected
-                                ? 'border-[#3E6256] bg-[#E8F1EC]/30'
-                                : 'border-transparent hover:border-[#E6E6E1] hover:bg-[#F5F5F2]'
+                                ? 'border-sage bg-sage-soft/30'
+                                : 'border-transparent hover:border-edge hover:bg-page'
                             }`}
                           >
                             {isEditing迁移 ? (
@@ -300,12 +300,12 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
                                   value={tempBulletText}
                                   onChange={(e) => setTempBulletText(e.target.value)}
                                   rows={3}
-                                  className="w-full p-2 text-xs border border-[#3E6256] rounded-lg focus:outline-none bg-white font-sans leading-relaxed text-[#1D201F]"
+                                  className="w-full p-2 text-xs border border-sage rounded-lg focus:outline-none bg-white font-sans leading-relaxed text-ink"
                                 />
                                 <div className="flex items-center gap-2 justify-end">
                                   <button
                                     onClick={() => setEditingBulletId(null)}
-                                    className="px-2 py-1 text-xs text-[#8A908C] hover:bg-[#F5F5F2] rounded cursor-pointer"
+                                    className="px-2 py-1 text-xs text-faint hover:bg-page rounded cursor-pointer"
                                   >
                                     取消
                                   </button>
@@ -313,7 +313,7 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
                                     onClick={() =>
                                       handleSaveBulletEdit(section.id, item.id, bullet.id)
                                     }
-                                    className="px-3 py-1 text-xs bg-[#3E6256] text-white font-semibold rounded hover:bg-[#325046] shadow-2xs cursor-pointer"
+                                    className="px-3 py-1 text-xs bg-sage text-white font-semibold rounded hover:bg-sage-dim shadow-2xs cursor-pointer"
                                   >
                                     保存修改
                                   </button>
@@ -322,10 +322,10 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
                             ) : (
                               <div className="flex items-start justify-between gap-2">
                                 <div className="flex-1 leading-relaxed">
-                                  <span className="text-[#3E6256] font-bold mr-1.5">•</span>
+                                  <span className="text-sage font-bold mr-1.5">•</span>
                                   <span>{bullet.text}</span>
                                   {bullet.jdMatchTag && (
-                                    <span className="ml-2 inline-block text-[10px] px-1.5 py-0.2 rounded bg-[#FAF2EB] text-[#8F5128] font-semibold border border-[#F0DFD1]">
+                                    <span className="ml-2 inline-block text-[10px] px-1.5 py-0.2 rounded bg-terra-soft text-terra font-semibold border border-terra-soft">
                                       {bullet.jdMatchTag}
                                     </span>
                                   )}
@@ -337,7 +337,7 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
                                       e.stopPropagation();
                                       handleStartEditBullet(bullet.id, bullet.text);
                                     }}
-                                    className="p-1 text-[#8A908C] hover:text-[#3E6256] rounded transition cursor-pointer"
+                                    className="p-1 text-faint hover:text-sage rounded transition cursor-pointer"
                                     title="直接编辑"
                                   >
                                     <Edit2 className="w-3.5 h-3.5" />
@@ -347,7 +347,7 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
                                       e.stopPropagation();
                                       deleteResumeBullet(section.id, item.id, bullet.id);
                                     }}
-                                    className="p-1 text-[#8A908C] hover:text-rose-600 rounded transition cursor-pointer"
+                                    className="p-1 text-faint hover:text-rose-600 rounded transition cursor-pointer"
                                     title="删除要点"
                                   >
                                     <Trash2 className="w-3.5 h-3.5" />
@@ -368,46 +368,46 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
 
         {/* Right Column (3 cols): Evidence Traceability & Structure */}
         <div className="lg:col-span-3 space-y-4">
-          <div className="bg-white rounded-xl border border-[#E6E6E1] p-5 shadow-2xs space-y-4">
-            <div className="flex items-center gap-2 border-b border-[#F5F5F2] pb-3">
-              <Layers className="w-4 h-4 text-[#3E6256]" />
-              <h3 className="text-sm font-bold text-[#1D201F]">经历资产溯源与证据链</h3>
+          <div className="bg-white rounded-xl border border-edge p-5 shadow-2xs space-y-4">
+            <div className="flex items-center gap-2 border-b border-page pb-3">
+              <Layers className="w-4 h-4 text-sage" />
+              <h3 className="text-sm font-bold text-ink">经历资产溯源与证据链</h3>
             </div>
 
             {linkedExp ? (
               <div className="space-y-3 text-xs animate-in fade-in">
                 <div>
-                  <div className="text-[11px] text-[#8A908C] font-medium">关联职业经历资产：</div>
-                  <div className="font-bold text-[#1D201F] mt-0.5 leading-snug">
+                  <div className="text-[11px] text-faint font-medium">关联职业经历资产：</div>
+                  <div className="font-bold text-ink mt-0.5 leading-snug">
                     {linkedExp.title}
                   </div>
                 </div>
 
-                <div className="p-3 bg-[#F5F5F2] rounded-lg border border-[#E6E6E1] space-y-1.5">
-                  <div className="text-[11px] text-[#6B726F] font-medium">资产版本状态：</div>
+                <div className="p-3 bg-page rounded-lg border border-edge space-y-1.5">
+                  <div className="text-[11px] text-muted font-medium">资产版本状态：</div>
                   <div className="flex items-center justify-between">
-                    <span className="px-2 py-0.5 rounded bg-[#E8F1EC] text-[#2D4B41] font-bold border border-[#D3E2DB]">
+                    <span className="px-2 py-0.5 rounded bg-sage-soft text-sage font-bold border border-sage-soft">
                       当前资产库版本: {linkedExp.currentVersion}
                     </span>
-                    <span className="text-[10px] text-[#8A908C]">
+                    <span className="text-[10px] text-faint">
                       {linkedExp.company} · {linkedExp.period}
                     </span>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <div className="text-[11px] font-bold text-[#1D201F]">STAR 原始背景：</div>
-                  <div className="p-2.5 rounded-lg bg-[#FAFBF9] border border-[#E6E6E1] text-[#6B726F] leading-relaxed">
+                  <div className="text-[11px] font-bold text-ink">STAR 原始背景：</div>
+                  <div className="p-2.5 rounded-lg bg-canvas border border-edge text-muted leading-relaxed">
                     {linkedExp.background}
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <div className="text-[11px] font-bold text-[#1D201F]">核心动作与攻坚点：</div>
-                  <div className="p-2.5 rounded-lg bg-[#FAFBF9] border border-[#E6E6E1] text-[#2C302E] leading-relaxed space-y-1">
+                  <div className="text-[11px] font-bold text-ink">核心动作与攻坚点：</div>
+                  <div className="p-2.5 rounded-lg bg-canvas border border-edge text-ink leading-relaxed space-y-1">
                     {(linkedExp.actions || []).map((act, idx) => (
                       <div key={idx} className="flex items-start gap-1.5">
-                        <span className="text-[#3E6256] font-bold">•</span>
+                        <span className="text-sage font-bold">•</span>
                         <span>{act}</span>
                       </div>
                     ))}
@@ -415,12 +415,12 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
                 </div>
 
                 <div className="space-y-2">
-                  <div className="text-[11px] font-bold text-[#1D201F]">量化业务成果：</div>
+                  <div className="text-[11px] font-bold text-ink">量化业务成果：</div>
                   <div className="flex flex-wrap gap-1.5">
                     {(linkedExp.metrics || []).map((met, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-0.5 rounded bg-[#FAF2EB] text-[#8F5128] font-mono text-[11px] font-bold border border-[#F0DFD1]"
+                        className="px-2 py-0.5 rounded bg-terra-soft text-terra font-mono text-[11px] font-bold border border-terra-soft"
                       >
                         {met}
                       </span>
@@ -428,18 +428,18 @@ export const ResumeEditorView: React.FC<ResumeEditorViewProps> = ({
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-[#F5F5F2]">
+                <div className="pt-2 border-t border-page">
                   <button
                     onClick={() => navigateTo('experiences', { expId: linkedExp.id })}
-                    className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg bg-[#F5F5F2] hover:bg-[#EBEBE6] text-[#1D201F] font-semibold text-xs transition cursor-pointer"
+                    className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg bg-page hover:bg-edge text-ink font-semibold text-xs transition cursor-pointer"
                   >
                     <span>在经历资产库中查看与维护</span>
-                    <ArrowRight className="w-3.5 h-3.5 text-[#3E6256]" />
+                    <ArrowRight className="w-3.5 h-3.5 text-sage" />
                   </button>
                 </div>
               </div>
             ) : (
-              <div className="text-center py-6 text-xs text-[#8A908C]">
+              <div className="text-center py-6 text-xs text-faint">
                 点击中间简历要点，即可在此查看其对应的经历库 STAR 原文与证据链。
               </div>
             )}
