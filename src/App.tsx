@@ -35,7 +35,8 @@ const MainLayout: React.FC = () => {
     selectedJobId,
     selectedInterviewId,
     selectedJDId,
-    selectedExperienceId
+    selectedExperienceId,
+    navigateTo
   } = useJobCraft();
 
   // Modals state
@@ -101,7 +102,7 @@ const MainLayout: React.FC = () => {
         return (
           <InterviewPrepCenterView
             onOpenMockInterview={handleOpenMockInterview}
-            onOpenNewInterview={() => handleOpenNewInterview('standalone')}
+            onOpenNewInterview={() => navigateTo('create_interview')}
           />
         );
 
@@ -110,18 +111,18 @@ const MainLayout: React.FC = () => {
           <InterviewPrepWorkspaceView
             interviewId={selectedInterviewId}
             onOpenMockInterview={handleOpenMockInterview}
-            onOpenNewInterview={(jobId) => handleOpenNewInterview('from-job', jobId)}
+            onOpenNewInterview={() => navigateTo('create_interview')}
           />
         );
 
       case 'create_interview':
-        return <NewInterviewPrep mode="standalone" />;
+        return <CreateInterview />;
 
       case 'interview_review_center':
         return <InterviewReviewCenterView />;
 
       case 'create_review':
-        return <NewReview />;
+        return <CreateReview />;
 
       case 'interview_review_detail':
         return (

@@ -57,13 +57,8 @@ export const JDAnalysisCenterView: React.FC = () => {
       setSalaryRange('');
       setRawText('');
 
-      // If there's an interview draft, the modal will handle it
-      if (interviewDraft) {
-        // Draft is in localStorage, will be restored when modal opens
-        navigateTo('interview_prep_center');
-      } else {
-        navigateTo('jd_report', { jdId: newAnalysisId });
-      }
+      // Navigate to the full JD report to view results and provide return button
+      navigateTo('jd_report', { jdId: newAnalysisId });
     }, 800);
   };
 

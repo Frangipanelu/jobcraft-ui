@@ -43,6 +43,10 @@ interface JobCraftContextType {
   selectedInterviewId: string | null;
   selectedJDId: string | null;
   selectedExperienceId: string | null;
+  setSelectedJobId: (id: string | null) => void;
+  setSelectedInterviewId: (id: string | null) => void;
+  setSelectedJDId: (id: string | null) => void;
+  setSelectedExperienceId: (id: string | null) => void;
   jobWorkspaceSubTab: 'jd' | 'resume' | 'interview';
   userProfileTab: 'resumes' | 'profile' | 'preferences' | 'settings';
   setUserProfileTab: (tab: 'resumes' | 'profile' | 'preferences' | 'settings') => void;
@@ -71,6 +75,8 @@ interface JobCraftContextType {
   historicalResumes: HistoricalResume[];
   toasts: ToastMessage[];
   interviewDraft: InterviewDraft | null;
+  jdAnalysisReturnTarget: 'create_interview' | 'create_review' | null;
+  setJdAnalysisReturnTarget: (target: 'create_interview' | 'create_review' | null) => void;
 
   // Actions
   showToast: (toast: Omit<ToastMessage, 'id'>) => void;
@@ -173,6 +179,7 @@ export const JobCraftProvider: React.FC<{ children: ReactNode }> = ({ children }
   const [historicalResumes, setHistoricalResumes] = useState<HistoricalResume[]>(initialHistoricalResumes);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const [interviewDraft, setInterviewDraft] = useState<InterviewDraft | null>(null);
+  const [jdAnalysisReturnTarget, setJdAnalysisReturnTarget] = useState<'create_interview' | 'create_review' | null>(null);
 
   const showToast = (toast: Omit<ToastMessage, 'id'>) => {
     const id = Date.now().toString() + Math.random().toString(36).substring(2, 5);
@@ -386,6 +393,32 @@ export const JobCraftProvider: React.FC<{ children: ReactNode }> = ({ children }
       const existing = jobs.find((j) => j.company === data.company && j.role === data.role);
       if (existing) {
         targetJobId = existing.id;
+      } else {
+        targetJobId = 'job-' + Date.now();
+        const autoJob: Job = {
+          id: targetJobId,
+          company: data.company,
+          role: data.role,
+          department: '核心业务线',
+          salaryRange: '40K–60K · 16薪',
+          status: 'interviewing',
+          matchScore: 90,
+          applyDate: new Date().toISOString().split('T')[0],
+          lastUpdated: '刚刚',
+          currentStage: '准备面试 · 待安排',
+          nextAction: '已完成 JD 深度分析，可开始制定面试攻防策略',
+          steps: {
+            jdAnalysis: true,
+            expMatched: true,
+            customResume: false,
+            applied: true,
+            prepStage: 'in_progress',
+            reviewStage: 'pending'
+          },
+          jdAnalysisId: newId,
+          interviewIds: []
+        };
+        setJobs((prev) => [autoJob, ...prev]);
       }
     }
 
@@ -1420,6 +1453,10 @@ export const JobCraftProvider: React.FC<{ children: ReactNode }> = ({ children }
         selectedInterviewId,
         selectedJDId,
         selectedExperienceId,
+        setSelectedJobId,
+        setSelectedInterviewId,
+        setSelectedJDId,
+        setSelectedExperienceId,
         jobWorkspaceSubTab,
         navigateTo,
         userProfileTab,
@@ -1442,6 +1479,8 @@ export const JobCraftProvider: React.FC<{ children: ReactNode }> = ({ children }
         interviewDraft,
         saveInterviewDraft,
         clearInterviewDraft,
+        jdAnalysisReturnTarget,
+        setJdAnalysisReturnTarget,
         showToast,
         dismissToast,
         createJob,
